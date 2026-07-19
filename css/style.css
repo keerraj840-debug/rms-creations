@@ -167,6 +167,10 @@ font-weight:600;
 transition:.35s;
 }
 
+.whatsapp-btn i {
+    margin-right:6px;
+}
+
 .btn{
 background:linear-gradient(135deg,var(--pink),var(--darkPink));
 color:white;
@@ -193,6 +197,7 @@ color:white;
 background:#25D366;
 color:white;
 padding:12px 25px;
+gap:8px;
 }
 
 /* =========================
