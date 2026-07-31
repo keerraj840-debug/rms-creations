@@ -1,0 +1,39 @@
+.hamper-page-shell,
+.page-shell {
+  scroll-behavior: smooth;
+}
+
+.page-shell > section {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.page-shell .py-20,
+.page-shell .py-24 {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.page-shell .mt-16,
+.page-shell .mt-14 {
+  margin-top: 2rem !important;
+}
+
+.page-shell .gap-12 {
+  gap: 1.5rem !important;
+}
+
+.page-shell img {
+  display: block;
+}
+
+.page-shell .group:hover {
+  transform: translateY(-4px);
+}
+
+@media (max-width: 640px) {
+  .hamper-page-shell .rounded-\[2\.5rem\],
+  .page-shell .rounded-\[2\.5rem\] {
+    border-radius: 1.5rem;
+  }
+}
