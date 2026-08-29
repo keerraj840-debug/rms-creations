@@ -168,5 +168,4 @@ export const galleryHighlights: GalleryItem[] = [
     image: 'assets/gallery/chocolate-hamper.jpeg',
     route: '/hampers/chocolate-hamper'
   }
-  
 ];
