@@ -8,9 +8,12 @@ import { HampersPageComponent } from './pages/hampers-page.component';
 import { ReturnGiftPageComponent } from './pages/return-gift-page.component';
 import { ReturnGiftDetailPageComponent } from './pages/return-gift-detail-page.component';
 import { FolderGalleryPageComponent } from './pages/folder-gallery-page.component';
+import { GanpatiHampersPageComponent } from './pages/ganpati-hampers-page.component';
 
 export const routes: Routes = [
   { path: '', component: HomePageComponent },
+  { path: 'ganpati-hampers', component: GanpatiHampersPageComponent },
+  { path: 'ganpati', redirectTo: 'ganpati-hampers' },
   { path: 'hampers', component: HampersPageComponent },
   { path: 'hampers/:slug', component: FolderGalleryPageComponent },
   { path: 'return-gifts', component: ReturnGiftPageComponent },

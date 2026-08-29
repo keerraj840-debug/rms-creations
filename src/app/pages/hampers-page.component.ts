@@ -69,7 +69,7 @@ import { SeoService } from '../shared/seo.service';
                 <!-- Action Buttons -->
                 <div class="mt-5 flex flex-wrap items-center gap-2.5">
                   <a 
-                    [routerLink]="['/hampers', category.slug]" 
+                    [routerLink]="category.directRoute ? category.directRoute : ['/hampers', category.slug]" 
                     class="inline-flex flex-1 items-center justify-center rounded-full bg-rose-500 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-white shadow-md transition-all duration-300 hover:bg-rose-600 hover:shadow-lg active:scale-95"
                   >
                     See More
@@ -125,16 +125,26 @@ export class HampersPageComponent implements OnInit {
 
   ngOnInit() {
     this.seo.setPageMetadata({
-      title: 'Gift Hampers for Girls, Boys and Chocolate Lovers',
-      description: 'Explore premium hamper collections for girls, boys, and chocolate lovers with elegant styling and easy ordering at RMS Gift Hampers.',
-      keywords: 'girls hampers, boys hampers, chocolate hampers, premium gift hampers',
+      title: 'Gift Hampers for Ganesh Utsav, Girls, Boys and Chocolate Lovers',
+      description: 'Explore festive Ganpati pooja kits, and hamper collections for girls, boys, and chocolate lovers with elegant styling at RMS Gift Hampers.',
+      keywords: 'ganpati hampers, pooja kits, girls hampers, boys hampers, chocolate hampers, premium gift hampers',
       slug: 'hampers'
     });
   }
 
   categories = [
     {
+      slug: 'ganpati-hampers',
+      directRoute: '/ganpati-hampers',
+      title: 'Ganpati Hampers & Pooja Kits',
+      tag: '🌺 Ganesh Utsav 2026',
+      description: 'Sacred pooja kits and dry fruit hampers in leakproof partitioned boxes. Starting at ₹99 & ₹149.',
+      image: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
+      orderLink: 'https://wa.me/919284905118?text=Hello!%20I%20want%20to%20order%20Ganpati%20Hampers.'
+    },
+    {
       slug: 'girls-hampers',
+      directRoute: '',
       title: 'Girls Hampers',
       tag: 'Cute & Stylish',
       description: 'Soft, pretty gift boxes filled with sweet treats, little surprises, and lovely accessories.',
@@ -143,6 +153,7 @@ export class HampersPageComponent implements OnInit {
     },
     {
       slug: 'boys-hampers',
+      directRoute: '',
       title: 'Boys Hampers',
       tag: 'Cool & Modern',
       description: 'Neat and useful gift sets with stylish items, practical extras, and a modern look.',
@@ -151,6 +162,7 @@ export class HampersPageComponent implements OnInit {
     },
     {
       slug: 'chocolate-hamper',
+      directRoute: '',
       title: 'Chocolate Hampers',
       tag: 'Sweet & Yummy',
       description: 'Delicious chocolate treats and sweet surprises made for birthdays, festivals, and celebrations.',

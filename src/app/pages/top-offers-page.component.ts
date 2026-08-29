@@ -188,12 +188,16 @@ export class TopOffersPageComponent implements OnInit, OnDestroy {
       orderLink: 'https://wa.me/919284905118?text=Hello%20RMS%20Gift%20Hampers!%20I%20am%20interested%20in%20Friendship%20Day%20Collections.'
     },
     {
-      title: 'Ganpati Special Offers',
-      description: 'Festive hamper ideas and celebration-ready gifting for Ganpati with bright and joyful presentation.',
-      image: 'assets/top_offers/ganpati/ganpati.jpg',
-      images: ['assets/top_offers/ganpati/ganpati.jpg'],
-      route: '/top-offers/ganpati',
-      orderLink: 'https://wa.me/919284905118?text=Hello%20RMS%20Gift%20Hampers!%20I%20am%20interested%20in%20Ganpati%20Special%20Offers.'
+      title: 'Ganpati Hampers & Pooja Kits',
+      description: 'Authentic Ganpati Pooja Kits and festive dry fruit hampers in compartmentalized spill-proof boxes starting at ₹99 and ₹149.',
+      image: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
+      images: [
+        'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
+        'assets/ganpati-pooja-kit-hamper-2026/99_hamper.png',
+        'assets/top_offers/ganpati/ganpati.jpg'
+      ],
+      route: '/ganpati-hampers',
+      orderLink: 'https://wa.me/919284905118?text=Hello%20RMS%20Gift%20Hampers!%20I%20am%20interested%20in%20Ganpati%20Hampers%20and%20Pooja%20Kits.'
     },
     {
       title: 'Rakshabandhan Favorites',

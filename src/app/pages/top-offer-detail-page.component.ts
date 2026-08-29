@@ -35,17 +35,20 @@ const offerCategories: TopOfferCategory[] = [
   },
   {
     key: 'ganpati',
-    title: 'Ganpati Special Offers',
-    description: 'Bright festive hamper styling for Ganpati celebrations with rich colors and celebratory charm.',
+    title: 'Ganpati Hampers & Pooja Kits',
+    description: 'Auspicious Ganpati Pooja Kits and festive dry fruit hampers starting at ₹99 and ₹149. Packed with Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad, Kumkum, and premium dry fruits in leakproof partitioned boxes.',
     images: [
+      'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
+      'assets/ganpati-pooja-kit-hamper-2026/99_hamper.png',
       'assets/top_offers/ganpati/ganpati.jpg'
     ],
     details: [
-      'Festival-ready gifting ideas',
-      'Premium presentation and warm colors',
-      'Perfect for home celebrations and gifting'
+      '₹99 Kit: Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad & Kumkum',
+      '₹149 Kit: All 6 pooja essentials PLUS crystal acrylic box of Dry Fruits',
+      'Form-fitted compartments to ensure 100% zero powder spillage',
+      'Ideal for home welcoming aarti, housing societies & bulk return gifting'
     ],
-    orderLink: 'https://wa.me/919284905118?text=Hello!%20I%20am%20interested%20in%20Ganpati%20Special%20Offers.'
+    orderLink: 'https://wa.me/919284905118?text=Hello!%20I%20am%20interested%20in%20Ganpati%20Hampers%20and%20Pooja%20Kits.'
   },
   {
     key: 'rakshabandhan',
@@ -105,6 +108,14 @@ const offerCategories: TopOfferCategory[] = [
 
                 <!-- Action Navigation Buttons -->
                 <div class="mt-8 flex flex-wrap items-center gap-4">
+                  <a 
+                    *ngIf="category.key === 'ganpati'"
+                    routerLink="/ganpati-hampers"
+                    class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-rose-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-orange-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
+                  >
+                    <span>🌺 Watch Video Demo & Order Kits</span>
+                  </a>
+
                   <a 
                     routerLink="/top-offers" 
                     class="inline-flex items-center justify-center gap-2 rounded-full border border-rose-300/80 bg-white/80 px-8 py-3.5 text-sm font-semibold text-rose-700 backdrop-blur-sm transition-all duration-300 hover:border-rose-400 hover:bg-rose-50 active:scale-95 shadow-sm"

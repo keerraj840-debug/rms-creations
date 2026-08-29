@@ -84,6 +84,40 @@ import { SeoService } from '../shared/seo.service';
         </div>
       </section>
 
+      <!-- GANESH UTSAV FESTIVE SPOTLIGHT BANNER -->
+      <section class="relative bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 py-6 text-white shadow-lg">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4 text-center md:text-left">
+              <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-3xl backdrop-blur-md shadow-sm">
+                🌺
+              </div>
+              <div>
+                <span class="inline-block rounded-full bg-white/25 px-2.5 py-0.5 text-[11px] font-extrabold uppercase tracking-wider text-white">
+                  Trending Now • Ganesh Utsav 2026 Special
+                </span>
+                <h2 class="text-lg sm:text-xl font-extrabold text-white mt-1">
+                  Ganpati Pooja Kits & Dry Fruit Hampers Starting at ₹99!
+                </h2>
+                <p class="text-xs text-amber-100/90 mt-0.5">
+                  100% pure sacred samagri, zero-leak compartment boxes, live unboxing video preview & society bulk rates.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 shrink-0">
+              <a 
+                routerLink="/ganpati-hampers" 
+                class="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-xs sm:text-sm font-bold text-orange-700 shadow-xl hover:bg-amber-50 hover:scale-105 transition-all active:scale-95"
+              >
+                <span>Explore Ganpati Kits</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- VALUE PROPOSITION GRID -->
       <section class="py-8 md:py-10 bg-white">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -242,13 +276,16 @@ import { SeoService } from '../shared/seo.service';
               <span class="mt-4 inline-flex items-center text-xs font-semibold text-pink-300 group-hover:underline">View Gallery →</span>
             </a>
 
-            <a routerLink="/top-offers" class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg transition duration-500 hover:-translate-y-2 hover:border-pink-300/40 hover:bg-white/10">
+            <a routerLink="/ganpati-hampers" class="group relative overflow-hidden rounded-3xl border border-amber-400/40 bg-gradient-to-b from-amber-500/20 to-orange-500/10 p-6 backdrop-blur-lg transition duration-500 hover:-translate-y-2 hover:border-amber-300 hover:bg-white/10">
               <div class="overflow-hidden rounded-2xl">
-                <img src="assets/top_offers/friendship_day/friendship_day_girls.jpg" alt="Top offers" class="h-60 w-full object-cover transition duration-500 group-hover:scale-110" />
+                <img src="assets/ganpati-pooja-kit-hamper-2026/149_hamper.png" alt="Ganpati Hampers" class="h-60 w-full object-cover transition duration-500 group-hover:scale-110" />
               </div>
-              <h3 class="mt-6 text-xl font-bold text-white">Festive Specials</h3>
-              <p class="mt-2 text-xs leading-relaxed text-pink-100/70">Limited-edition seasonal bundles designed for current holidays.</p>
-              <span class="mt-4 inline-flex items-center text-xs font-semibold text-pink-300 group-hover:underline">View Specials →</span>
+              <div class="mt-6 flex items-center justify-between">
+                <h3 class="text-xl font-bold text-white">Ganpati Special Kits</h3>
+                <span class="rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-white">Festive</span>
+              </div>
+              <p class="mt-2 text-xs leading-relaxed text-pink-100/70">Pure sacred pooja samagri & dry fruit hampers from ₹99.</p>
+              <span class="mt-4 inline-flex items-center text-xs font-semibold text-amber-300 group-hover:underline">Explore Kits & Unboxing Video →</span>
             </a>
           </div>
 
@@ -285,16 +322,16 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   topOfferSlides = [
     {
+      title: 'Ganesh Utsav Pooja Kits & Hampers',
+      description: 'Pure sacred puja samagri and festive dry fruit hampers from ₹99. Packed with Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad, Kumkum, and premium dry fruits.',
+      image: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
+      route: '/ganpati-hampers'
+    },
+    {
       title: 'Friendship Day Collection',
       description: 'Bright and cheerful gift sets crafted with aesthetic delights and personalized keepsakes for your closest friends.',
       image: 'assets/top_offers/friendship_day/friendship_day_hamper.jpg',
       route: '/top-offers/friendship-day'
-    },
-    {
-      title: 'Ganpati Special Hamper',
-      description: 'Festive gifting curated with traditional elegance, artisanal sweets, and vibrant celebration touches.',
-      image: 'assets/top_offers/ganpati/ganpati.jpg',
-      route: '/top-offers/ganpati'
     },
     {
       title: 'Rakshabandhan Favorites',

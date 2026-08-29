@@ -116,10 +116,40 @@ export const folderPageConfigs: Record<string, FolderPageConfig> = {
         orderLink: 'https://wa.me/919284905118?text=Hello!%20I%20want%20a%20Chocolate%20Hamper.'
       }
     ]
+  },
+  'ganpati-hampers': {
+    slug: 'ganpati-hampers',
+    title: 'Ganpati Hampers & Pooja Kits',
+    description: 'Auspicious Ganpati Pooja Kits and festive dry fruit hampers crafted with 100% pure sacred samagri in partitioned spill-proof boxes.',
+    heroTag: 'Ganesh Utsav Specials',
+    heroImage: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
+    heroNote: 'Compartmentalized packaging ensures zero spillage and pristine sacred purity for Lord Ganesha aarti.',
+    items: [
+      {
+        title: 'Ganpati Essential Pooja Kit ₹99',
+        price: 99,
+        description: 'Complete sacred samagri: Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad & Kumkum in partitioned eco box.',
+        image: 'assets/ganpati-pooja-kit-hamper-2026/99_hamper.png',
+        orderLink: 'https://wa.me/919284905118?text=Hello!%20I%20want%20the%20Ganpati%20Essential%20Pooja%20Kit%20₹99.'
+      },
+      {
+        title: 'Ganpati Deluxe Pooja Kit & Dry Fruits ₹149',
+        price: 149,
+        description: 'Complete sacred essentials (Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad, Kumkum) + Acrylic Box of Premium Dry Fruits.',
+        image: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
+        orderLink: 'https://wa.me/919284905118?text=Hello!%20I%20want%20the%20Ganpati%20Deluxe%20Pooja%20Kit%20%26%20Dry%20Fruits%20₹149.'
+      }
+    ]
   }
 };
 
 export const galleryHighlights: GalleryItem[] = [
+  {
+    title: 'Ganpati Special Deluxe Hamper',
+    description: 'Festive pooja kit with premium dry fruits and sacred samagri.',
+    image: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
+    route: '/ganpati-hampers'
+  },
   {
     title: 'Girls Special Hamper',
     description: 'Soft pink textures and elegant accessories.',

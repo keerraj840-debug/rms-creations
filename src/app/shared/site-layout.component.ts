@@ -12,12 +12,13 @@ import { OrderTrackingService } from './order-tracking.service';
     <!-- Main Shell -->
     <div class="flex min-h-screen flex-col bg-slate-50 font-sans text-slate-900 selection:bg-pink-500 selection:text-white">
       
-      <!-- Top Announcement Bar -->
-      <aside aria-label="Announcement" class="relative z-50 bg-gradient-to-r from-pink-600 via-rose-600 to-pink-600 px-4 py-2 text-center text-xs font-semibold text-white shadow-sm sm:text-sm">
-        <div class="flex items-center justify-center gap-2">
-          <span>✨</span>
-          <span>Free shipping on all hamper orders over ₹2,000! Use code <strong class="rounded bg-white/20 px-1.5 py-0.5 font-mono text-white">GIFT26</strong></span>
-          <span>✨</span>
+      <!-- Top Announcement Bar (Ganesh Utsav Festive Special) -->
+      <aside aria-label="Announcement" class="relative z-50 bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 px-4 py-2 text-center text-xs font-semibold text-white shadow-sm sm:text-sm">
+        <div class="flex items-center justify-center gap-2 flex-wrap">
+          <span>🌺</span>
+          <span><strong>Ganesh Utsav Special:</strong> Pure Ganpati Pooja Kits & Festive Hampers starting at ₹99!</span>
+          <a routerLink="/ganpati-hampers" class="rounded-full bg-white/20 px-2 py-0.5 font-bold text-white hover:bg-white/30 transition">Order for Bappa &rarr;</a>
+          <span>🪔</span>
         </div>
       </aside>
 
@@ -49,7 +50,7 @@ import { OrderTrackingService } from './order-tracking.service';
             </a>
 
             <!-- Desktop Navigation -->
-            <nav class="hidden md:flex md:items-center md:gap-6 lg:gap-8">
+            <nav class="hidden md:flex md:items-center md:gap-5 lg:gap-7">
               <a 
                 routerLink="/" 
                 routerLinkActive="text-pink-600 font-semibold" 
@@ -57,6 +58,14 @@ import { OrderTrackingService } from './order-tracking.service';
                 class="relative text-sm font-medium text-slate-600 transition-colors hover:text-pink-600 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-pink-600 after:transition-all hover:after:w-full"
               >
                 Home
+              </a>
+              <a 
+                routerLink="/ganpati-hampers" 
+                routerLinkActive="text-orange-600 font-bold" 
+                class="relative inline-flex items-center gap-1.5 text-sm font-bold text-orange-600 transition-colors hover:text-orange-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-orange-600 after:transition-all hover:after:w-full"
+              >
+                <span>🌺 Ganpati Hampers</span>
+                <span class="rounded-full bg-orange-100 px-1.5 py-0.2 text-[10px] font-extrabold text-orange-700 border border-orange-200 animate-pulse">New</span>
               </a>
               <a 
                 routerLink="/hampers" 
@@ -133,6 +142,10 @@ import { OrderTrackingService } from './order-tracking.service';
         >
           <nav class="flex flex-col space-y-1 px-4 pb-6 pt-3 sm:px-6">
             <a routerLink="/" (click)="closeMenu()" routerLinkActive="bg-pink-50 text-pink-700 font-semibold" [routerLinkActiveOptions]="{ exact: true }" class="block rounded-xl px-4 py-3 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-pink-600">Home</a>
+            <a routerLink="/ganpati-hampers" (click)="closeMenu()" routerLinkActive="bg-orange-100 text-orange-800 font-bold" class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-bold text-orange-700 bg-orange-50/80 border border-orange-200 shadow-sm">
+              <span>🌺 Ganpati Hampers & Pooja Kits</span>
+              <span class="rounded-full bg-orange-500 text-white px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold">Trending</span>
+            </a>
             <a routerLink="/hampers" (click)="closeMenu()" routerLinkActive="bg-pink-50 text-pink-700 font-semibold" class="block rounded-xl px-4 py-3 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-pink-600">All Hampers</a>
             <a routerLink="/return-gifts" (click)="closeMenu()" routerLinkActive="bg-pink-50 text-pink-700 font-semibold" class="block rounded-xl px-4 py-3 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-pink-600">Return Gifts</a>
             <a routerLink="/gallery" (click)="closeMenu()" routerLinkActive="bg-pink-50 text-pink-700 font-semibold" class="block rounded-xl px-4 py-3 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-pink-600">Gallery</a>
@@ -194,6 +207,7 @@ import { OrderTrackingService } from './order-tracking.service';
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900">Discover</h3>
               <ul class="mt-4 space-y-3 text-sm font-medium text-slate-500">
                 <li><a routerLink="/" class="transition-colors hover:text-pink-600">Home</a></li>
+                <li><a routerLink="/ganpati-hampers" class="text-orange-600 font-bold hover:text-orange-700">🌺 Ganpati Hampers (From ₹99)</a></li>
                 <li><a routerLink="/hampers" class="transition-colors hover:text-pink-600">All Hampers</a></li>
                 <li><a routerLink="/return-gifts" class="transition-colors hover:text-pink-600">Return Gifts</a></li>
                 <li><a routerLink="/top-offers" class="transition-colors hover:text-pink-600">Top Offers</a></li>
