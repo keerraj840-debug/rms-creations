@@ -189,7 +189,7 @@ export class TopOffersPageComponent implements OnInit, OnDestroy {
     },
     {
       title: 'Ganpati Hampers & Pooja Kits',
-      description: 'Authentic Ganpati Pooja Kits and festive dry fruit hampers in compartmentalized spill-proof boxes starting at ₹99 and ₹149.',
+      description: 'Ready Ganpati pooja boxes and dry fruit hampers in strong spill-proof boxes starting at ₹99 and ₹149.',
       image: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
       images: [
         'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
@@ -201,7 +201,7 @@ export class TopOffersPageComponent implements OnInit, OnDestroy {
     },
     {
       title: 'Rakshabandhan Favorites',
-      description: 'Beautifully wrapped gifts and hamper inspiration for the beloved Rakshabandhan season.',
+      description: 'Heartfelt gift hampers with beautiful Rakhis and tasty chocolates for brother and sister.',
       image: 'assets/top_offers/rakshabandhan/rakshabandhan_299.jpg',
       images: ['assets/top_offers/rakshabandhan/rakshabandhan_299.jpg'],
       route: '/top-offers/rakshabandhan',

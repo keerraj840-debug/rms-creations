@@ -100,7 +100,7 @@ import { SeoService } from '../shared/seo.service';
                   Ganpati Pooja Kits & Dry Fruit Hampers Starting at ₹99!
                 </h2>
                 <p class="text-xs text-amber-100/90 mt-0.5">
-                  100% pure sacred samagri, zero-leak compartment boxes, live unboxing video preview & society bulk rates.
+                  Clean pooja items in strong partitioned boxes with zero spilling. Special discounted rates for societies!
                 </p>
               </div>
             </div>
@@ -110,7 +110,7 @@ import { SeoService } from '../shared/seo.service';
                 routerLink="/ganpati-hampers" 
                 class="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-xs sm:text-sm font-bold text-orange-700 shadow-xl hover:bg-amber-50 hover:scale-105 transition-all active:scale-95"
               >
-                <span>Explore Ganpati Kits</span>
+                <span>View Ganpati Boxes</span>
                 <span>&rarr;</span>
               </a>
             </div>
@@ -272,7 +272,7 @@ import { SeoService } from '../shared/seo.service';
                 <img src="assets/gallery/girls_199.jpeg" alt="Gallery collections" class="h-60 w-full object-cover transition duration-500 group-hover:scale-110" />
               </div>
               <h3 class="mt-6 text-xl font-bold text-white">Lookbook Gallery</h3>
-              <p class="mt-2 text-xs leading-relaxed text-pink-100/70">Browse our portfolio of completed bespoke commissions.</p>
+              <p class="mt-2 text-xs leading-relaxed text-pink-100/70">See real photos of gift hampers we have made.</p>
               <span class="mt-4 inline-flex items-center text-xs font-semibold text-pink-300 group-hover:underline">View Gallery →</span>
             </a>
 
@@ -284,32 +284,80 @@ import { SeoService } from '../shared/seo.service';
                 <h3 class="text-xl font-bold text-white">Ganpati Special Kits</h3>
                 <span class="rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-white">Festive</span>
               </div>
-              <p class="mt-2 text-xs leading-relaxed text-pink-100/70">Pure sacred pooja samagri & dry fruit hampers from ₹99.</p>
-              <span class="mt-4 inline-flex items-center text-xs font-semibold text-amber-300 group-hover:underline">Explore Kits & Unboxing Video →</span>
+              <p class="mt-2 text-xs leading-relaxed text-pink-100/70">Ready pooja kits & dry fruit boxes starting at ₹99.</p>
+              <span class="mt-4 inline-flex items-center text-xs font-semibold text-amber-300 group-hover:underline">View Boxes & Video →</span>
             </a>
           </div>
 
           <!-- Custom Consult Banner -->
           <div class="mt-16 grid items-center gap-8 rounded-[2.5rem] border border-rose-300/20 bg-gradient-to-r from-pink-900/30 to-rose-900/20 p-8 lg:grid-cols-12 lg:p-12">
             <div class="lg:col-span-9">
-              <span class="rounded-full bg-rose-500/20 px-3 py-1 text-xs font-semibold text-rose-300 border border-rose-400/20">Tailored Gifts</span>
-              <h3 class="mt-4 text-2xl font-bold text-white lg:text-3xl">Have a specific theme or budget in mind?</h3>
-              <p class="mt-3 text-sm leading-relaxed text-pink-100/80">Connect with our design team on WhatsApp. Share your reference images or budget limits, and we will assemble tailored options.</p>
+              <span class="rounded-full bg-rose-500/20 px-3 py-1 text-xs font-semibold text-rose-300 border border-rose-400/20">Custom Hampers</span>
+              <h3 class="mt-4 text-2xl font-bold text-white lg:text-3xl">Want a custom hamper within your budget?</h3>
+              <p class="mt-3 text-sm leading-relaxed text-pink-100/80">Chat with us on WhatsApp. Tell us your budget or send photo ideas, and we will make the perfect hamper for you.</p>
               <a 
                 href="https://wa.me/919284905118?text=Hello%20RMS%20Gift%20Hampers!%20I%20would%20like%20a%20custom%20gift%20hamper." 
                 target="_blank"
                 rel="noopener noreferrer"
-                class="mt-6 inline-flex items-center gap-2 rounded-full bg-rose-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition hover:bg-rose-600 active:scale-95"
+                class="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-xs font-bold text-slate-900 shadow-xl transition-all duration-300 hover:scale-105"
               >
-                <span>💬 Start Custom Order</span>
+                <span>💬 Chat on WhatsApp</span>
               </a>
             </div>
-            <div class="overflow-hidden rounded-2xl border border-white/10 lg:col-span-3">
-              <img src="assets/top_offers/real_whatsapp_chat.jpg" alt="WhatsApp chat interaction preview" class="w-full object-contain transition duration-500 hover:scale-105" />
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SEASONAL HIGHLIGHTS SLIDER -->
+      <section class="py-12 md:py-16 bg-[#fffaf5] border-t border-rose-100/80">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="mx-auto max-w-3xl text-center">
+            <span class="rounded-full bg-rose-100 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-rose-700">Top Offers & Favorites</span>
+            <h2 class="mt-3 text-2xl font-bold text-[#433535] sm:text-3xl">Trending Hampers This Season</h2>
+            <p class="mt-2 text-xs text-[#6d4d4d] sm:text-sm">Click any offer below to view details and order directly on WhatsApp.</p>
+          </div>
+
+          <div class="relative mt-8">
+            <div class="overflow-hidden rounded-[2.5rem] bg-white border border-rose-200/80 shadow-xl">
+              <div 
+                *ngFor="let slide of topOfferSlides; let idx = index"
+                [class.hidden]="idx !== activeSlideIndex"
+                class="grid md:grid-cols-12 items-center"
+              >
+                <div class="md:col-span-6 p-6 sm:p-10 lg:p-12">
+                  <span class="inline-block rounded-full bg-rose-50 border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 mb-4">
+                    Season Special
+                  </span>
+                  <h3 class="text-2xl sm:text-3xl font-extrabold text-[#432c2c] leading-tight">
+                    {{ slide.title }}
+                  </h3>
+                  <p class="mt-4 text-sm leading-relaxed text-[#6d4d4d]">
+                    {{ slide.description }}
+                  </p>
+                  <div class="mt-8 flex items-center gap-4">
+                    <a 
+                      [routerLink]="slide.route"
+                      class="inline-flex items-center gap-2 rounded-full bg-rose-500 px-7 py-3 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-rose-600 transition"
+                    >
+                      <span>View Collection</span>
+                      <span>&rarr;</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="md:col-span-6 h-64 md:h-96">
+                  <img 
+                    [src]="slide.image" 
+                    [alt]="slide.title"
+                    class="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
+
       </div>
     </app-site-layout>
   `
@@ -323,19 +371,19 @@ export class HomePageComponent implements OnInit, OnDestroy {
   topOfferSlides = [
     {
       title: 'Ganesh Utsav Pooja Kits & Hampers',
-      description: 'Pure sacred puja samagri and festive dry fruit hampers from ₹99. Packed with Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad, Kumkum, and premium dry fruits.',
+      description: 'Ready pooja kits starting from ₹99. Contains Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad, Kumkum & Dry Fruits in a strong partitioned box.',
       image: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
       route: '/ganpati-hampers'
     },
     {
       title: 'Friendship Day Collection',
-      description: 'Bright and cheerful gift sets crafted with aesthetic delights and personalized keepsakes for your closest friends.',
+      description: 'Cute and cheerful gift sets with chocolates, goodies, and personalized keepsakes for your best friends.',
       image: 'assets/top_offers/friendship_day/friendship_day_hamper.jpg',
       route: '/top-offers/friendship-day'
     },
     {
       title: 'Rakshabandhan Favorites',
-      description: 'Heartfelt hamper concepts designed with custom Rakhis, gourmet chocolates, and personalized tokens.',
+      description: 'Heartfelt hampers with beautiful Rakhis, tasty chocolates, and sweet surprises for brother and sister.',
       image: 'assets/top_offers/rakshabandhan/rakshabandhan_299.jpg',
       route: '/top-offers/rakshabandhan'
     }

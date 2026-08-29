@@ -36,17 +36,17 @@ const offerCategories: TopOfferCategory[] = [
   {
     key: 'ganpati',
     title: 'Ganpati Hampers & Pooja Kits',
-    description: 'Auspicious Ganpati Pooja Kits and festive dry fruit hampers starting at ₹99 and ₹149. Packed with Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad, Kumkum, and premium dry fruits in leakproof partitioned boxes.',
+    description: 'Ready Ganpati Pooja Kits starting at ₹99 and ₹149. Packed with Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad, Kumkum, and dry fruits in clean, spill-proof boxes.',
     images: [
       'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
       'assets/ganpati-pooja-kit-hamper-2026/99_hamper.png',
       'assets/top_offers/ganpati/ganpati.jpg'
     ],
     details: [
-      '₹99 Kit: Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad & Kumkum',
-      '₹149 Kit: All 6 pooja essentials PLUS crystal acrylic box of Dry Fruits',
-      'Form-fitted compartments to ensure 100% zero powder spillage',
-      'Ideal for home welcoming aarti, housing societies & bulk return gifting'
+      '₹99 Box: Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad & Kumkum',
+      '₹149 Box: All 6 pooja items PLUS a separate box of Kaju, Badam & Manuka',
+      'Separate box sections so halad and kumkum will not spill',
+      'Perfect for home aarti and return gifts for society visitors & relatives'
     ],
     orderLink: 'https://wa.me/919284905118?text=Hello!%20I%20am%20interested%20in%20Ganpati%20Hampers%20and%20Pooja%20Kits.'
   },

@@ -48,30 +48,30 @@ interface HamperProduct {
 
               <!-- Main Headline -->
               <h1 class="mt-6 text-3xl font-extrabold tracking-tight text-[#432c2c] sm:text-5xl lg:text-6xl">
-                Welcome Bappa with <br class="hidden sm:inline" />
+                Ready Ganpati Pooja Kits <br class="hidden sm:inline" />
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600">
-                  Pure Pooja Kits & Hampers
+                  Starting at just ₹99!
                 </span>
               </h1>
 
               <!-- Subtitle -->
               <p class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#6d4d4d] sm:text-lg">
-                Complete, ready-to-use Ganpati Pooja Kits and festive hampers packed in premium, spill-proof partitioned boxes. Starting at just <strong class="text-rose-600 font-bold">₹99</strong>!
+                All essential pooja items neatly packed in one clean box. No rushing around to different shops on pooja day. Ready to use for Bappa's welcoming and daily aarti!
               </p>
 
               <!-- Trust Pillars -->
               <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-[#7c5140]">
                 <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-200/80 bg-amber-50/80 px-3.5 py-1.5 shadow-sm">
-                  ✨ 100% Pure Sacred Samagri
+                  ✨ 100% Clean & Pure Items
                 </span>
                 <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-200/80 bg-rose-50/80 px-3.5 py-1.5 shadow-sm">
-                  📦 Leakproof Compartments
+                  📦 Separate Pockets (No Spilling)
                 </span>
                 <span class="inline-flex items-center gap-1.5 rounded-full border border-orange-200/80 bg-orange-50/80 px-3.5 py-1.5 shadow-sm">
-                  ⚡ Express Festive Dispatch
+                  ⚡ Quick Delivery Before Ganpati
                 </span>
                 <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50/80 px-3.5 py-1.5 shadow-sm">
-                  🤝 Bulk Society Discounts
+                  🤝 Special Discounts for Societies
                 </span>
               </div>
 
@@ -81,7 +81,7 @@ interface HamperProduct {
                   href="#hamper-selection" 
                   class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-orange-500 via-rose-500 to-pink-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-orange-500/25 transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
                 >
-                  <span>🎁 Explore ₹99 & ₹149 Kits</span>
+                  <span>🎁 View ₹99 & ₹149 Boxes</span>
                   <span>↓</span>
                 </a>
 
@@ -93,7 +93,7 @@ interface HamperProduct {
                   <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.124.551 4.195 1.597 6.02L.055 24l6.105-1.602c1.745.952 3.712 1.455 5.871 1.455 6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm3.896 17.266c-.183.513-1.045.962-1.464 1.002-.42.04-1.001.077-2.923-.717-2.316-.957-3.805-3.32-3.921-3.475-.116-.155-.936-1.246-.936-2.378 0-1.132.585-1.688.794-1.921.209-.233.456-.291.608-.291.152 0 .304 0 .436.007.14.008.33.025.517.47.195.467.666 1.632.724 1.748.058.116.097.252.019.408-.078.155-.116.252-.233.388-.116.136-.245.298-.348.396-.115.109-.239.229-.107.457.132.228.588.973 1.259 1.573.864.773 1.603 1.012 1.832 1.127.228.116.363.097.498-.058.136-.155.585-.68.74-.913.155-.233.228-.155.443.058.558.214.724.348 1.267.504 1.344.155.077.33.078.503-.131z"/>
                   </svg>
-                  <span>Quick WhatsApp Order</span>
+                  <span>Order on WhatsApp (Fast Reply)</span>
                 </button>
               </div>
 
@@ -185,7 +185,7 @@ interface HamperProduct {
 
                   <!-- Badge Below Reel -->
                   <p class="mt-3 text-center text-xs font-medium text-amber-800">
-                    📹 Real unboxing preview • Strictly as demonstrated
+                    📹 Real box video • What you see is what you get!
                   </p>
                 </div>
               </div>
@@ -193,16 +193,16 @@ interface HamperProduct {
               <!-- Right: Content & Why The Packaging Matters -->
               <div class="lg:col-span-7">
                 <div class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3.5 py-1 text-xs font-semibold text-orange-700">
-                  <span>✨ Premium Box Engineering</span>
+                  <span>✨ Neat & Strong Box Packing</span>
                 </div>
 
                 <h2 class="mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#432c2c]">
-                  Carefully Crafted for <br />
-                  <span class="text-orange-600">Zero Spillage & Sacred Purity</span>
+                  See How Clean It Is Packed: <br />
+                  <span class="text-orange-600">Nothing Spills, Nothing Breaks</span>
                 </h2>
 
                 <p class="mt-4 text-base leading-relaxed text-[#6d4d4d]">
-                  In the video, notice how every sacred pooja item is arranged in its dedicated, secure compartment. Unlike ordinary loose bags, this sturdy partitioned box keeps haldi, kumkum, pure kapur, and incense sticks perfectly preserved and intact during transport.
+                  In this 10-second video, watch how every item has its own separate pocket inside the box. Halad and kumkum will not spill or mix with other items, and batti will not break. Clean, neat, and ready to open for pooja!
                 </p>
 
                 <!-- Feature Highlights -->
@@ -212,8 +212,8 @@ interface HamperProduct {
                       📦
                     </div>
                     <div>
-                      <h3 class="text-sm font-bold text-[#432c2c]">Custom Form-Fitted Compartments</h3>
-                      <p class="text-xs text-[#6d4d4d] leading-relaxed">Each sacred component sits snugly in its slot. No powder mixing, no crushed wicks, and no broken agarbattis.</p>
+                      <h3 class="text-sm font-bold text-[#432c2c]">Separate Pockets for Each Item</h3>
+                      <p class="text-xs text-[#6d4d4d] leading-relaxed">Halad, kumkum, kapoor, and dhup have their own sections so there is zero mess or powder mixing.</p>
                     </div>
                   </div>
 
@@ -222,8 +222,8 @@ interface HamperProduct {
                       🌸
                     </div>
                     <div>
-                      <h3 class="text-sm font-bold text-[#432c2c]">Sealed for Fresh Fragrance & Purity</h3>
-                      <p class="text-xs text-[#6d4d4d] leading-relaxed">Pure camphor and agarbatti aromas remain locked inside until you unbox them for Lord Ganesha's welcoming aarti.</p>
+                      <h3 class="text-sm font-bold text-[#432c2c]">Stays Fresh with Nice Fragrance</h3>
+                      <p class="text-xs text-[#6d4d4d] leading-relaxed">Pure kapoor and dhup batti stay fresh in sealed pouches with great natural fragrance until you open them for aarti.</p>
                     </div>
                   </div>
 
@@ -232,8 +232,8 @@ interface HamperProduct {
                       🪔
                     </div>
                     <div>
-                      <h3 class="text-sm font-bold text-[#432c2c]">Ideal Gifting & Society Return Gift</h3>
-                      <p class="text-xs text-[#6d4d4d] leading-relaxed">Auspicious kraft presentation looks rich and dignified when handing over to guests, relatives, and society members.</p>
+                      <h3 class="text-sm font-bold text-[#432c2c]">Perfect Return Gift for Guests</h3>
+                      <p class="text-xs text-[#6d4d4d] leading-relaxed">Looks very respectable and thoughtful to gift to guests, relatives, building society members, and mandal visitors.</p>
                     </div>
                   </div>
                 </div>
@@ -244,14 +244,14 @@ interface HamperProduct {
                     href="#hamper-selection" 
                     class="rounded-full bg-orange-500 px-7 py-3 text-sm font-bold text-white shadow-md hover:bg-orange-600 transition"
                   >
-                    View Both Hamper Options
+                    View ₹99 & ₹149 Boxes
                   </a>
                   <button
                     type="button"
                     (click)="openDirectWhatsapp('Box Quality Inquiry')"
                     class="rounded-full border border-amber-300 bg-white px-7 py-3 text-sm font-bold text-amber-800 shadow-sm hover:bg-amber-50 transition"
                   >
-                    Inquire on WhatsApp
+                    Ask Us on WhatsApp
                   </button>
                 </div>
 
@@ -267,13 +267,13 @@ interface HamperProduct {
             
             <div class="mx-auto max-w-3xl text-center">
               <span class="rounded-full bg-rose-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-rose-600 border border-rose-100">
-                Ganesh Utsav Hampers
+                Ganesh Utsav Specials
               </span>
               <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-[#432c2c] sm:text-4xl">
-                Choose Your Ganpati Hamper
+                Choose Your Ganpati Box
               </h2>
               <p class="mt-3 text-sm leading-relaxed text-[#6d4d4d] sm:text-base">
-                Both hampers are crafted with 100% pure samagri in high-quality presentation boxes. Select the one that matches your celebration.
+                Choose between our ₹99 Essential Kit and ₹149 Deluxe Box with Dry Fruits. Both are clean, ready to use, and packed with care.
               </p>
             </div>
 
@@ -307,7 +307,7 @@ interface HamperProduct {
                     />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4">
                       <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#432c2c] shadow">
-                        🔍 Tap to Inspect High-Res Photo
+                        🔍 Click to see photo
                       </span>
                     </div>
                   </div>
@@ -322,7 +322,7 @@ interface HamperProduct {
 
                   <!-- Included Items Checklist -->
                   <div class="mt-6">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900">What's Inside the Box:</h4>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900">Items inside the box:</h4>
                     <ul class="mt-3 space-y-2.5">
                       <li *ngFor="let item of products[0].items" class="flex items-center gap-2.5 text-xs sm:text-sm text-[#5a3f3f]">
                         <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-100 text-xs">{{ item.icon }}</span>
@@ -334,7 +334,7 @@ interface HamperProduct {
 
                   <!-- Ideal For Pills -->
                   <div class="mt-6 border-t border-amber-100 pt-4">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Best Suited For:</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Best used for:</span>
                     <div class="mt-2 flex flex-wrap gap-1.5">
                       <span *ngFor="let use of products[0].idealFor" class="rounded-md bg-white border border-amber-200/80 px-2.5 py-1 text-xs text-[#6d4d4d]">
                         {{ use }}
@@ -353,7 +353,7 @@ interface HamperProduct {
                     (click)="trackOrder(products[0].name, 'Ganpati Hampers', products[0].price)"
                     class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-amber-600 px-6 py-4 text-sm font-bold text-white shadow-md hover:bg-amber-700 hover:shadow-lg transition-all active:scale-95"
                   >
-                    <span>💬 Order ₹99 Kit on WhatsApp</span>
+                    <span>💬 Order ₹99 Box on WhatsApp</span>
                   </a>
                 </div>
 
@@ -364,7 +364,7 @@ interface HamperProduct {
                 
                 <!-- "Most Loved" Top Banner Strip -->
                 <div class="absolute top-0 right-0 bg-gradient-to-l from-rose-600 to-pink-600 px-5 py-1 text-[11px] font-bold tracking-wider text-white uppercase rounded-bl-xl shadow-sm">
-                  ★ Most Popular & Best Value
+                  ★ Most Popular Choice
                 </div>
 
                 <div>
@@ -391,7 +391,7 @@ interface HamperProduct {
                     />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4">
                       <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#432c2c] shadow">
-                        🔍 Tap to Inspect High-Res Photo
+                        🔍 Click to see photo
                       </span>
                     </div>
                   </div>
@@ -406,7 +406,7 @@ interface HamperProduct {
 
                   <!-- Included Items Checklist -->
                   <div class="mt-6">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-rose-900">What's Inside the Box:</h4>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-rose-900">Items inside the box:</h4>
                     <ul class="mt-3 space-y-2.5">
                       <li *ngFor="let item of products[1].items" class="flex items-center gap-2.5 text-xs sm:text-sm text-[#5a3f3f]">
                         <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-rose-100 text-xs">{{ item.icon }}</span>
@@ -418,7 +418,7 @@ interface HamperProduct {
 
                   <!-- Ideal For Pills -->
                   <div class="mt-6 border-t border-rose-100 pt-4">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Best Suited For:</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Best used for:</span>
                     <div class="mt-2 flex flex-wrap gap-1.5">
                       <span *ngFor="let use of products[1].idealFor" class="rounded-md bg-white border border-rose-200/80 px-2.5 py-1 text-xs text-[#6d4d4d]">
                         {{ use }}
@@ -437,7 +437,7 @@ interface HamperProduct {
                     (click)="trackOrder(products[1].name, 'Ganpati Hampers', products[1].price)"
                     class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-rose-500 via-pink-600 to-rose-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-rose-500/25 hover:from-rose-600 hover:to-pink-700 hover:shadow-xl transition-all active:scale-95"
                   >
-                    <span>💬 Order ₹149 Deluxe Hamper on WhatsApp</span>
+                    <span>💬 Order ₹149 Box on WhatsApp</span>
                   </a>
                 </div>
 
@@ -455,13 +455,13 @@ interface HamperProduct {
               
               <div class="text-center">
                 <span class="rounded-full bg-amber-100 px-3.5 py-1 text-xs font-bold text-amber-800">
-                  Instant Order Estimator
+                  Easy Price Calculator
                 </span>
                 <h3 class="mt-3 text-2xl sm:text-3xl font-extrabold text-[#432c2c]">
-                  Calculate Your Festive Order
+                  Check Your Total & Order
                 </h3>
                 <p class="mt-2 text-xs sm:text-sm text-[#6d4d4d]">
-                  Pick your quantities below. We'll automatically generate your WhatsApp order message with exact totals!
+                  Select how many boxes you need. We will calculate the total and help you order directly on WhatsApp!
                 </p>
               </div>
 
@@ -541,17 +541,17 @@ interface HamperProduct {
                   <input 
                     type="text" 
                     [(ngModel)]="customerName" 
-                    placeholder="e.g. Ramesh Patil"
+                    placeholder="e.g. Rahul Sharma"
                     class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                   />
                 </div>
 
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">Delivery City / Society (Optional):</label>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">City / Society Name (Optional):</label>
                   <input 
                     type="text" 
                     [(ngModel)]="customerLocation" 
-                    placeholder="e.g. Pune / Gokuldham Society"
+                    placeholder="e.g. Mumbai / Sunrise Apartments"
                     class="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100"
                   />
                 </div>
@@ -561,9 +561,9 @@ interface HamperProduct {
               <div class="mt-6 rounded-2xl bg-amber-50/80 p-5 border border-amber-200">
                 <div class="flex items-center justify-between">
                   <div>
-                    <p class="text-xs text-amber-900 font-medium">Estimated Total ({{ totalQuantity }} Kits)</p>
+                    <p class="text-xs text-amber-900 font-medium">Estimated Total ({{ totalQuantity }} Boxes)</p>
                     <p *ngIf="totalQuantity >= 10" class="text-[11px] text-emerald-700 font-bold mt-0.5">
-                      🎉 Bulk order qualifies for society special pricing & free consultation!
+                      🎉 Bulk order! Special discounted rates will apply on WhatsApp!
                     </p>
                   </div>
                   <span class="text-2xl sm:text-3xl font-extrabold text-amber-900">₹{{ calculatedTotal }}</span>
@@ -597,18 +597,18 @@ interface HamperProduct {
               
               <div class="lg:col-span-8">
                 <span class="inline-block rounded-full bg-amber-500/20 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-amber-300 border border-amber-500/30">
-                  Housing Societies • Mandals • Corporates
+                  Housing Societies • Ganesh Mandals • Offices
                 </span>
                 <h3 class="mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">
-                  Bulk Orders for Housing Societies & Ganesh Mandals
+                  Ordering in Bulk for Your Society or Mandal?
                 </h3>
                 <p class="mt-3 text-sm sm:text-base leading-relaxed text-amber-100/80">
-                  Planning Ganpati return gifts for your housing society residents, visiting devotees, or corporate team? We supply bulk quantities with attractive discounted pricing, timely dispatch, and optional custom society sticker branding.
+                  Planning Ganpati return gifts for your society residents, visiting devotees, or office staff? We provide special discount prices on 10+ boxes with quick on-time delivery. We can also add your society or company name sticker on the box!
                 </p>
                 <div class="mt-4 flex flex-wrap gap-4 text-xs font-semibold text-amber-200">
-                  <span>✓ 10+ Units: Special Society Pricing</span>
-                  <span>✓ 50+ Units: Volume Discounts</span>
-                  <span>✓ 100+ Units: Custom Label Branding</span>
+                  <span>✓ 10+ Boxes: Special Discounted Rate</span>
+                  <span>✓ 50+ Boxes: Extra Bulk Savings</span>
+                  <span>✓ 100+ Boxes: Society Name Sticker on Box</span>
                 </div>
               </div>
 
@@ -618,7 +618,7 @@ interface HamperProduct {
                   (click)="openDirectWhatsapp('Bulk Society Order for Ganpati')"
                   class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 px-8 py-4 text-sm font-bold text-slate-900 shadow-xl transition-all hover:scale-105 active:scale-95"
                 >
-                  <span>💬 Inquire for Bulk Society Rates</span>
+                  <span>💬 Ask for Society Discount on WhatsApp</span>
                 </button>
               </div>
 
@@ -636,34 +636,37 @@ interface HamperProduct {
               <h2 class="mt-3 text-2xl sm:text-3xl font-extrabold text-[#432c2c]">
                 Frequently Asked Questions
               </h2>
+              <p class="mt-2 text-xs sm:text-sm text-slate-500">
+                Everything you need to know about our Ganpati pooja boxes
+              </p>
             </div>
 
             <div class="mt-10 space-y-4">
               
               <div class="rounded-2xl border border-slate-200 bg-slate-50/50 p-5">
                 <h4 class="font-bold text-sm sm:text-base text-[#432c2c]">
-                  Q: Will the pooja kits arrive before Ganesh Chaturthi?
+                  Q: Will the boxes reach before Ganesh Chaturthi?
                 </h4>
                 <p class="mt-2 text-xs sm:text-sm text-[#6d4d4d] leading-relaxed">
-                  Yes! We start dispatches well in advance. For local city deliveries, same-day or next-day express delivery is available. We recommend ordering at least 3-4 days before sthapana day to avoid festive rush.
+                  Yes! We pack and dispatch quickly so it reaches your home in time. Please order 2 to 3 days in advance so there is no last-minute festival rush.
                 </p>
               </div>
 
               <div class="rounded-2xl border border-slate-200 bg-slate-50/50 p-5">
                 <h4 class="font-bold text-sm sm:text-base text-[#432c2c]">
-                  Q: What dry fruits are included in the ₹149 Deluxe Hamper?
+                  Q: What dry fruits are inside the ₹149 Deluxe Box?
                 </h4>
                 <p class="mt-2 text-xs sm:text-sm text-[#6d4d4d] leading-relaxed">
-                  The ₹149 hamper contains an airtight crystal acrylic box filled with premium selected Cashews (Kaju), Almonds (Badam), and Raisins (Kishmish) — perfect as a holy Naivedya/Prasad offering.
+                  It comes with a clean, clear plastic box with good quality Kaju (Cashews), Badam (Almonds), and Manuka (Raisins) — ready to offer as Prasad to Bappa.
                 </p>
               </div>
 
               <div class="rounded-2xl border border-slate-200 bg-slate-50/50 p-5">
                 <h4 class="font-bold text-sm sm:text-base text-[#432c2c]">
-                  Q: Can powders (Halad and Kumkum) spill inside the box?
+                  Q: Will Halad and Kumkum spill inside the box?
                 </h4>
                 <p class="mt-2 text-xs sm:text-sm text-[#6d4d4d] leading-relaxed">
-                  No! Each item (including Halad and Kumkum) is individually sealed in airtight pouches and secured into form-fitted partition compartments (as demonstrated in our video). Your kit will arrive completely clean and spill-free.
+                  No! Each item is packed in separate sealed plastic pouches and placed in separate box pockets (just like shown in our video). Nothing spills or mixes together.
                 </p>
               </div>
 
@@ -672,7 +675,7 @@ interface HamperProduct {
                   Q: How do I order and pay?
                 </h4>
                 <p class="mt-2 text-xs sm:text-sm text-[#6d4d4d] leading-relaxed">
-                  Simply tap any "Order on WhatsApp" button. Our team confirms your delivery address, calculates total with applicable discounts, and shares UPI payment details. Fast, easy, and personal!
+                  Click any "Order on WhatsApp" button, tell us how many boxes you need, share your delivery address, and pay easily via Google Pay, PhonePe, or UPI.
                 </p>
               </div>
 
@@ -723,7 +726,7 @@ interface HamperProduct {
                   </p>
 
                   <div class="mt-4">
-                    <h5 class="text-xs font-bold uppercase text-slate-500">Includes:</h5>
+                    <h5 class="text-xs font-bold uppercase text-slate-500">Items inside the box:</h5>
                     <ul class="mt-2 space-y-1.5">
                       <li *ngFor="let it of activeLightboxProduct.items" class="text-xs text-slate-700 flex items-center gap-2">
                         <span>{{ it.icon }}</span>
@@ -741,7 +744,7 @@ interface HamperProduct {
                     (click)="trackOrder(activeLightboxProduct.name, 'Ganpati Lightbox', activeLightboxProduct.price)" 
                     class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-emerald-600 active:scale-95"
                   >
-                    <span>💬 Order This Hamper on WhatsApp</span>
+                    <span>💬 Order This Box on WhatsApp</span>
                   </a>
                 </div>
               </div>
@@ -774,44 +777,46 @@ export class GanpatiHampersPageComponent implements OnInit, OnDestroy {
   products: HamperProduct[] = [
     {
       id: 'pooja-kit-99',
-      name: 'Ganpati Essential Pooja Kit',
+      name: 'Ganpati Essential Pooja Kit (₹99)',
       marathiName: 'गणपती पूजा साहित्य किट',
       price: 99,
       badge: 'Essential Pooja Kit',
       badgeClass: 'bg-amber-100 text-amber-800',
       image: 'assets/ganpati-pooja-kit-hamper-2026/99_hamper.png',
-      shortDesc: 'Auspicious complete sacred puja samagri kit neatly arranged in partitioned eco-friendly kraft box.',
-      highlight: '7 Sacred Essentials in 1 Box',
+      shortDesc: 'All 6 essential pooja items neatly arranged in a strong, clean box. Ready to use for home aarti and return gifts.',
+      highlight: 'Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad & Kumkum',
       items: [
-        { icon: '🌸', name: 'Agarbatti', detail: 'Premium fragrant incense sticks' },
-        { icon: '🕯️', name: 'Kapur Tablets', detail: 'Pure white camphor tablets for aarti' },
-        { icon: '🔴', name: 'Kumkum / Roli', detail: 'Pure vibrant red tilak powder' },
-        { icon: '🟡', name: 'Haldi', detail: 'Pure turmeric powder for abhishek' },
-        { icon: '🌰', name: 'Pooja Supari', detail: 'Selected sacred betel nuts' },
-        { icon: '⚪', name: 'Akshata', detail: 'Sacred consecrated beads' },
-        { icon: '🪔', name: 'Cotton Wicks', detail: 'Clean round and long wicks' }
+        { icon: '🌿', name: 'Dhup (धूप)', detail: 'Good quality dhoop for pooja' },
+        { icon: '🕯️', name: 'Kapoor (कापूर)', detail: 'Pure kapoor tablets for daily aarti' },
+        { icon: '🪔', name: 'Kapus Vaat (कापूस वात)', detail: 'Clean cotton wicks for diya' },
+        { icon: '🌸', name: 'Dhup Batti (धूप बत्ती)', detail: 'Aromatic incense sticks' },
+        { icon: '🟡', name: 'Halad (हळद)', detail: 'Pure puja haldi powder' },
+        { icon: '🔴', name: 'Kumkum (कुंकू)', detail: 'Pure puja kumkum / roli' }
       ],
-      idealFor: ['Home Ganpati Aarti', 'Society Darshan Guests', 'Temple Offerings', 'Affordable Return Gifting'],
-      orderMessage: 'Hello RMS Gift Hampers! I want to order the Ganpati Essential Pooja Kit (₹99).'
+      idealFor: ['Daily Home Aarti', 'Return Gift for Guests', 'Society Distribution', 'Temple Offerings'],
+      orderMessage: 'Hello RMS Gift Hampers! I want to order the Ganpati Essential Pooja Kit (₹99) containing Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad & Kumkum.'
     },
     {
       id: 'deluxe-hamper-149',
-      name: 'Ganpati Deluxe Pooja Kit & Dry Fruits',
-      marathiName: 'गणपती स्पेशल ड्रायफ्रूट व पूजा हॅम्पर',
+      name: 'Ganpati Pooja Kit + Dry Fruits (₹149)',
+      marathiName: 'गणपती पूजा किट + ड्रायफ्रूट्स',
       price: 149,
       badge: 'Deluxe Hamper + Dry Fruits',
       badgeClass: 'bg-rose-100 text-rose-800',
       image: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
-      shortDesc: 'Complete sacred puja essentials PLUS crystal acrylic container with premium dry fruits for holy Prasad.',
-      highlight: 'Pooja Kit + Kaju, Badam & Kishmish Box',
+      shortDesc: 'All 6 essential pooja items PLUS a separate clear box of Kaju, Badam & Manuka for Prasad.',
+      highlight: '6 Pooja Items + Kaju, Badam & Manuka Box',
       items: [
-        { icon: '✨', name: 'All 7 Sacred Pooja Essentials', detail: 'Agarbatti, Kapur, Kumkum, Haldi, Supari, Akshata, Wicks' },
-        { icon: '🥜', name: 'Premium Dry Fruits Box', detail: 'Cashews (Kaju), Almonds (Badam) & Raisins (Kishmish)' },
-        { icon: '💎', name: 'Crystal Acrylic Box', detail: 'Airtight dry fruit container suitable for Naivedya' },
-        { icon: '🎀', name: 'Festive Presentation', detail: 'Compartmentalized kraft box with decorative golden finish' }
+        { icon: '🌿', name: 'Dhup (धूप)', detail: 'Good quality dhoop for pooja' },
+        { icon: '🕯️', name: 'Kapoor (कापूर)', detail: 'Pure kapoor tablets for daily aarti' },
+        { icon: '🪔', name: 'Kapus Vaat (कापूस वात)', detail: 'Clean cotton wicks for diya' },
+        { icon: '🌸', name: 'Dhup Batti (धूप बत्ती)', detail: 'Aromatic incense sticks' },
+        { icon: '🟡', name: 'Halad (हळद)', detail: 'Pure puja haldi powder' },
+        { icon: '🔴', name: 'Kumkum (कुंकू)', detail: 'Pure puja kumkum / roli' },
+        { icon: '🥜', name: 'Dry Fruits Box', detail: 'Clean sealed box of Kaju (Cashews), Badam (Almonds) & Manuka (Raisins)' }
       ],
-      idealFor: ['VIP & Family Darshan Gifts', 'Ganesh Mandal Dignitaries', 'Corporate Festive Gifting', 'Prasad Offering'],
-      orderMessage: 'Hello RMS Gift Hampers! I want to order the Ganpati Deluxe Pooja Kit & Dry Fruits Hamper (₹149).'
+      idealFor: ['Prasad & Naivedya', 'Special Family & Relative Gifts', 'Society & Mandal Dignitaries', 'Office Festive Gifts'],
+      orderMessage: 'Hello RMS Gift Hampers! I want to order the Ganpati Deluxe Pooja Kit & Dry Fruits Hamper (₹149) containing Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad, Kumkum & Dry Fruits.'
     }
   ];
 

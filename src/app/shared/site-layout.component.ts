@@ -16,8 +16,8 @@ import { OrderTrackingService } from './order-tracking.service';
       <aside aria-label="Announcement" class="relative z-50 bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 px-4 py-2 text-center text-xs font-semibold text-white shadow-sm sm:text-sm">
         <div class="flex items-center justify-center gap-2 flex-wrap">
           <span>🌺</span>
-          <span><strong>Ganesh Utsav Special:</strong> Pure Ganpati Pooja Kits & Festive Hampers starting at ₹99!</span>
-          <a routerLink="/ganpati-hampers" class="rounded-full bg-white/20 px-2 py-0.5 font-bold text-white hover:bg-white/30 transition">Order for Bappa &rarr;</a>
+          <span><strong>Ganesh Utsav Special:</strong> Ganpati Pooja Kits starting at just ₹99!</span>
+          <a routerLink="/ganpati-hampers" class="rounded-full bg-white/20 px-2.5 py-0.5 font-bold text-white hover:bg-white/30 transition">See Boxes & Order &rarr;</a>
           <span>🪔</span>
         </div>
       </aside>
@@ -185,7 +185,7 @@ import { OrderTrackingService } from './order-tracking.service';
                 <span class="text-xl font-bold text-slate-900">RMS Gift Hampers</span>
               </a>
               <p class="max-w-md text-sm leading-relaxed text-slate-500">
-                Custom gift hampers meticulously designed for birthdays, anniversaries, festivals, and every special celebration in your life. Crafted with love, delivered with care.
+                Beautiful, customized gift hampers for birthdays, festivals, anniversaries, and family celebrations. Made with love and delivered with care.
               </p>
               
               <!-- Social Links -->

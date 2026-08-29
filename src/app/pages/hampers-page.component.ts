@@ -137,8 +137,8 @@ export class HampersPageComponent implements OnInit {
       slug: 'ganpati-hampers',
       directRoute: '/ganpati-hampers',
       title: 'Ganpati Hampers & Pooja Kits',
-      tag: '🌺 Ganesh Utsav 2026',
-      description: 'Sacred pooja kits and dry fruit hampers in leakproof partitioned boxes. Starting at ₹99 & ₹149.',
+      tag: '🌺 Ganesh Utsav Special',
+      description: 'Ready pooja kits with Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad & Kumkum in strong boxes. Starting at ₹99.',
       image: 'assets/ganpati-pooja-kit-hamper-2026/149_hamper.png',
       orderLink: 'https://wa.me/919284905118?text=Hello!%20I%20want%20to%20order%20Ganpati%20Hampers.'
     },
