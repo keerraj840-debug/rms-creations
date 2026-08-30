@@ -22,86 +22,87 @@ interface TopOffer {
     <app-site-layout>
       <div class="page-shell">
       <!-- HERO HEADER SECTION -->
-      <section class="relative overflow-hidden bg-gradient-to-b from-[#fdf8fa] via-[#fff5f8] to-white py-16 md:py-24">
+      <section class="relative overflow-hidden bg-gradient-to-b from-[#F7F6F3] via-[#FAF7F5] to-[#FFFDFC] py-12 md:py-18">
         <!-- Ambient Decorative Lighting -->
-        <div class="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-pink-200/40 blur-3xl"></div>
-        <div class="pointer-events-none absolute top-1/2 -right-24 h-96 w-96 rounded-full bg-rose-200/30 blur-3xl"></div>
+        <div class="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-[#EB9D8E]/25 blur-3xl"></div>
+        <div class="pointer-events-none absolute top-1/2 -right-24 h-96 w-96 rounded-full bg-[#DD8776]/20 blur-3xl"></div>
 
         <div class="container relative mx-auto px-4 text-center sm:px-6 lg:px-8">
-          <div class="inline-flex items-center gap-2 rounded-full border border-pink-200/60 bg-white/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-rose-600 shadow-sm backdrop-blur-md">
-            <span class="inline-block h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>
-            Seasonal offers
+          <div class="inline-flex items-center gap-2 rounded-full border border-[#D9C3B9]/80 bg-[#FFFDFC]/90 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#9C4738] shadow-sm backdrop-blur-md">
+            <span class="inline-block h-2 w-2 rounded-full bg-[#C56D5B] animate-pulse"></span>
+            Seasonal Curation & Specials
           </div>
 
-          <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-[#433535] sm:text-4xl lg:text-5xl">
-            Popular <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-rose-500">offers</span>
+          <h1 class="mt-5 font-serif text-3xl font-bold tracking-tight text-[#57251C] sm:text-5xl lg:text-6xl leading-[1.15]">
+            Featured <span class="font-serif italic font-normal text-[#C56D5B] underline decoration-[#EB9D8E] decoration-wavy decoration-1 underline-offset-8">Offers & Festive Deals</span>
           </h1>
 
-          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#6d4d4d] sm:text-lg">
-            See our best seasonal hampers and gift ideas for easy ordering.
+          <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#57251C]/80 sm:text-lg">
+            Discover limited-edition festive specials, bestselling seasonal combos, and customized gift suites.
           </p>
         </div>
       </section>
 
       <!-- CARDS GRID SECTION -->
-      <section class="bg-gradient-to-b from-white via-[#fdf8fa] to-[#f9f0f3] py-8 md:py-10">
+      <section class="bg-[#F7F6F3] py-12 md:py-16 border-t border-[#D9C3B9]/40">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             <div 
               *ngFor="let offer of offers" 
-              class="group relative flex flex-col overflow-hidden rounded-[2.5rem] border border-rose-100/80 bg-white/90 shadow-md backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-pink-300 hover:shadow-2xl"
+              class="group relative flex flex-col overflow-hidden rounded-[2.5rem] border border-[#D9C3B9]/50 bg-[#FFFDFC] shadow-md transition-all duration-500 hover:-translate-y-2 hover:border-[#C56D5B] hover:shadow-2xl"
             >
               <!-- Primary Image Box -->
-              <div class="relative overflow-hidden cursor-pointer" (click)="openLightbox(offer.image, offer.title, offer.description, offer.orderLink)">
+              <div class="relative overflow-hidden cursor-pointer bg-[#FAF7F5]" (click)="openLightbox(offer.image, offer.title, offer.description, offer.orderLink)">
                 <img 
                   [src]="offer.image" 
                   [alt]="offer.title" 
                   class="h-72 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-end p-6">
-                  <span class="rounded-full bg-white/90 px-3.5 py-1.5 text-xs font-semibold text-[#433535] backdrop-blur-md shadow-sm">
-                    🔍 Inspect Image
+                  <span class="rounded-full bg-[#FFFDFC]/95 px-3.5 py-1.5 text-xs font-bold text-[#57251C] backdrop-blur-md shadow-sm">
+                    🔍 View High-Res Photo
                   </span>
                 </div>
               </div>
 
               <!-- Card Content -->
-              <div class="flex flex-1 flex-col justify-between p-8">
+              <div class="flex flex-1 flex-col justify-between p-6">
                 <div>
-                  <h2 class="text-2xl font-bold tracking-tight text-[#433535] group-hover:text-rose-600 transition-colors duration-300">
+                  <h2 class="font-serif text-xl font-bold tracking-tight text-[#57251C] group-hover:text-[#9C4738] transition-colors duration-300">
                     {{ offer.title }}
                   </h2>
-                  <p class="mt-3 text-sm leading-relaxed text-[#6d4d4d]">
+                  <p class="mt-2 text-xs leading-relaxed text-[#57251C]/75">
                     {{ offer.description }}
                   </p>
 
                   <!-- Image Thumbnails Strip -->
-                  <div *ngIf="offer.images && offer.images.length > 1" class="mt-5 grid grid-cols-3 gap-2">
+                  <div *ngIf="offer.images && offer.images.length > 1" class="mt-4 grid grid-cols-3 gap-2">
                     <img 
                       *ngFor="let subImg of offer.images.slice(0, 3)" 
                       [src]="subImg" 
                       [alt]="offer.title" 
                       (click)="openLightbox(subImg, offer.title, offer.description, offer.orderLink); $event.stopPropagation()"
-                      class="h-20 w-full rounded-xl border border-rose-100 object-cover cursor-pointer transition hover:opacity-80 hover:scale-105" 
+                      class="h-16 w-full rounded-xl border border-[#D9C3B9]/50 object-cover cursor-pointer transition hover:opacity-85 hover:scale-105" 
                     />
                   </div>
                 </div>
 
                 <!-- Action Links -->
-                <div class="mt-8 flex flex-col gap-3 pt-4 border-t border-rose-100/80">
+                <div class="mt-6 flex flex-col gap-2.5 pt-4 border-t border-[#D9C3B9]/30">
                   <a 
                     [routerLink]="offer.route" 
-                    class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-rose-300/80 bg-white/80 px-6 py-3 text-xs font-bold uppercase tracking-wider text-rose-700 backdrop-blur-sm transition-all duration-300 hover:border-rose-400 hover:bg-rose-50 active:scale-95 shadow-sm"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#57251C]/35 bg-[#FFFDFC] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-[#57251C] shadow-sm transition-all duration-300 hover:bg-[#F7F6F3] active:scale-95"
                   >
                     View Details →
                   </a>
 
                   <a 
+                    *ngIf="offer.orderLink"
                     [href]="offer.orderLink" 
                     target="_blank"
                     rel="noopener noreferrer"
                     (click)="trackOrder(offer.title, 'Top Offers', offer.orderLink)" 
-                    class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-rose-500 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition-all duration-300 hover:bg-rose-600 hover:shadow-lg active:scale-95"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#57251C] px-6 py-3 text-xs font-bold uppercase tracking-wider text-[#FFFDFC] shadow-md transition-all duration-300 hover:bg-[#9C4738] hover:shadow-lg active:scale-95"
                   >
                     <span>💬 Order on WhatsApp</span>
                   </a>
@@ -118,25 +119,25 @@ interface TopOffer {
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md transition-opacity duration-300"
         (click)="closeLightbox()"
       >
-        <div class="relative max-w-4xl w-full overflow-hidden rounded-3xl bg-white p-2 shadow-2xl" (click)="$event.stopPropagation()">
+        <div class="relative max-w-4xl w-full overflow-hidden rounded-3xl bg-[#FFFDFC] p-2 shadow-2xl border border-[#D9C3B9]/60" (click)="$event.stopPropagation()">
           <button 
             type="button" 
             (click)="closeLightbox()" 
-            class="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-lg font-bold text-white transition hover:bg-black"
+            class="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[#57251C] text-lg font-bold text-white transition hover:bg-[#9C4738]"
             aria-label="Close Preview"
           >
             ✕
           </button>
           
           <div class="grid gap-0 lg:grid-cols-12">
-            <div class="lg:col-span-7 bg-black flex items-center justify-center overflow-hidden rounded-2xl">
+            <div class="lg:col-span-7 bg-[#FAF7F5] flex items-center justify-center overflow-hidden rounded-2xl">
               <img [src]="activeLightbox.image" [alt]="activeLightbox.title" class="max-h-[80vh] w-full object-contain" />
             </div>
             <div class="flex flex-col justify-between p-8 lg:col-span-5">
               <div>
-                <span class="rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-600 border border-rose-200">Offer Detail View</span>
-                <h3 class="mt-4 text-2xl font-bold text-[#433535]">{{ activeLightbox.title }}</h3>
-                <p class="mt-3 text-sm leading-relaxed text-[#6d4d4d]">{{ activeLightbox.description }}</p>
+                <span class="rounded-full bg-[#C56D5B]/15 px-3 py-1 text-xs font-bold text-[#9C4738] border border-[#C56D5B]/25">Offer Detail View</span>
+                <h3 class="mt-4 font-serif text-2xl font-bold text-[#57251C]">{{ activeLightbox.title }}</h3>
+                <p class="mt-3 text-xs sm:text-sm leading-relaxed text-[#57251C]/80">{{ activeLightbox.description }}</p>
               </div>
 
               <div class="mt-8">
@@ -146,16 +147,16 @@ interface TopOffer {
                   target="_blank"
                   rel="noopener noreferrer"
                   (click)="trackOrder(activeLightbox.title, 'Top Offers', activeLightbox.orderLink)" 
-                  class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-rose-500 px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-rose-600 active:scale-95"
+                  class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#57251C] px-6 py-3.5 text-xs font-bold uppercase tracking-wider text-[#FFFDFC] shadow-md transition hover:bg-[#9C4738] active:scale-95"
                 >
-                  <span>💬 Order on WhatsApp</span>
+                  <span>💬 Confirm on WhatsApp</span>
                 </a>
               </div>
             </div>
           </div>
         </div>
       </div>
-</div>
+      </div>
     </app-site-layout>
   `
 })

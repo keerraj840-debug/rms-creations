@@ -12,76 +12,75 @@ import { SeoService } from '../shared/seo.service';
     <app-site-layout>
       <div class="hamper-page-shell">
       <!-- HERO HEADER SECTION -->
-      <section class="relative overflow-hidden bg-gradient-to-b from-[#fdf8fa] via-[#fff5f8] to-white py-8 md:py-12">
+      <section class="relative overflow-hidden bg-gradient-to-b from-[#F7F6F3] via-[#FAF7F5] to-[#FFFDFC] py-12 md:py-18">
         <!-- Ambient Decorative Lighting -->
-        <div class="pointer-events-none absolute -top-20 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-pink-200/40 blur-3xl"></div>
-        <div class="pointer-events-none absolute top-1/3 -right-20 h-72 w-72 rounded-full bg-rose-200/30 blur-3xl"></div>
+        <div class="pointer-events-none absolute -top-20 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-[#EB9D8E]/25 blur-3xl"></div>
+        <div class="pointer-events-none absolute top-1/3 -right-20 h-72 w-72 rounded-full bg-[#DD8776]/20 blur-3xl"></div>
 
         <div class="container relative mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div class="inline-flex items-center gap-2 rounded-full border border-pink-200/60 bg-white/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-rose-600 shadow-sm backdrop-blur-md">
-            <span class="inline-block h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>
-            Beautiful Gift Hampers
+          <div class="inline-flex items-center gap-2 rounded-full border border-[#D9C3B9]/80 bg-[#FFFDFC]/90 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#9C4738] shadow-sm backdrop-blur-md">
+            <span class="inline-block h-2 w-2 rounded-full bg-[#C56D5B] animate-pulse"></span>
+            Curated Gift Collections
           </div>
 
-          <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-[#433535] sm:text-4xl lg:text-5xl">
-            Hampers for <br class="hidden sm:inline" />
-            <span class="font-serif italic font-normal text-rose-500 underline decoration-pink-300 decoration-wavy decoration-1 underline-offset-8">Every Occasion</span>
+          <h1 class="mt-5 font-serif text-3xl font-bold tracking-tight text-[#57251C] sm:text-5xl lg:text-6xl leading-[1.15]">
+            Bespoke Hampers for <br class="hidden sm:inline" />
+            <span class="font-serif italic font-normal text-[#C56D5B] underline decoration-[#EB9D8E] decoration-wavy decoration-1 underline-offset-8">Every Special Occasion</span>
           </h1>
 
-          <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[#6d4d4d] sm:text-base">
-            Browse thoughtfully chosen gift hampers for birthdays, festivals, and special moments. They are easy to order and beautifully packed.
+          <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[#57251C]/80 sm:text-base">
+            Explore our artisanal gift hampers designed for festive celebrations, birthdays, anniversaries, and joyful moments.
           </p>
         </div>
       </section>
 
       <!-- COLLECTION GRID SECTION -->
-      <section class="bg-gradient-to-b from-white via-[#fdf8fa] to-[#f9f0f3] py-8 md:py-12">
+      <section class="bg-[#F7F6F3] py-12 md:py-16 border-t border-[#D9C3B9]/40">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <div 
               *ngFor="let category of categories" 
-              class="group relative flex flex-col overflow-hidden rounded-[2.5rem] border border-rose-100/80 bg-white/80 shadow-md backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-pink-300 hover:shadow-2xl"
+              class="group relative flex flex-col overflow-hidden rounded-[2.5rem] border border-[#D9C3B9]/50 bg-[#FFFDFC] shadow-md transition-all duration-500 hover:-translate-y-2 hover:border-[#C56D5B] hover:shadow-2xl"
             >
               <!-- Card Image & Overlay Banner -->
               <div class="relative overflow-hidden">
                 <img 
                   [src]="category.image" 
                   [alt]="category.title" 
-                  class="h-56 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
+                  class="h-60 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-40"></div>
-                <span class="absolute top-4 left-4 rounded-full border border-white/20 bg-white/80 px-3.5 py-1 text-xs font-semibold tracking-wide text-[#433535] shadow-sm backdrop-blur-md">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-40"></div>
+                <span class="absolute top-4 left-4 rounded-full border border-[#D9C3B9]/40 bg-[#FFFDFC]/95 px-3.5 py-1 text-xs font-bold tracking-wide text-[#57251C] shadow-sm backdrop-blur-md">
                   {{ category.tag }}
                 </span>
               </div>
 
               <!-- Card Content -->
-              <div class="flex flex-1 flex-col justify-between p-5">
+              <div class="flex flex-1 flex-col justify-between p-6">
                 <div>
-                  <h2 class="text-xl font-bold tracking-tight text-[#433535] group-hover:text-rose-600 transition-colors duration-300">
+                  <h2 class="font-serif text-xl font-bold tracking-tight text-[#57251C] group-hover:text-[#9C4738] transition-colors duration-300">
                     {{ category.title }}
                   </h2>
-                  <p class="mt-2 text-sm leading-relaxed text-[#6d4d4d]">
+                  <p class="mt-2 text-xs leading-relaxed text-[#57251C]/75">
                     {{ category.description }}
                   </p>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="mt-5 flex flex-wrap items-center gap-2.5">
+                <div class="mt-6 flex flex-wrap items-center gap-2.5">
                   <a 
                     [routerLink]="category.directRoute ? category.directRoute : ['/hampers', category.slug]" 
-                    class="inline-flex flex-1 items-center justify-center rounded-full bg-rose-500 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-white shadow-md transition-all duration-300 hover:bg-rose-600 hover:shadow-lg active:scale-95"
+                    class="inline-flex flex-1 items-center justify-center rounded-full bg-[#57251C] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[#FFFDFC] shadow-sm transition-all duration-300 hover:bg-[#9C4738] hover:shadow-md active:scale-95"
                   >
-                    See More
+                    Explore Range
                   </a>
                   <a 
                     [href]="category.orderLink" 
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center justify-center gap-1.5 rounded-full border border-rose-200 bg-white px-4 py-2.5 text-xs font-semibold text-rose-700 transition-all duration-300 hover:border-rose-300 hover:bg-rose-50 active:scale-95"
+                    class="inline-flex items-center justify-center gap-1.5 rounded-full border border-[#57251C]/35 bg-[#FFFDFC] px-4 py-2.5 text-xs font-bold text-[#57251C] transition-all duration-300 hover:bg-[#F7F6F3] active:scale-95"
                   >
-                    <span>💬</span>
-                    <span>Order Now</span>
+                    <span>💬 Order</span>
                   </a>
                 </div>
               </div>
@@ -89,17 +88,17 @@ import { SeoService } from '../shared/seo.service';
           </div>
 
           <!-- Custom Consultation Banner -->
-          <div class="mt-8 rounded-[2rem] border border-rose-200/60 bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 p-6 text-white shadow-xl lg:p-8">
+          <div class="mt-12 rounded-[2.5rem] border border-[#D9C3B9]/30 bg-gradient-to-r from-[#57251C] via-[#9C4738] to-[#C56D5B] p-8 text-[#FFFDFC] shadow-xl lg:p-12">
             <div class="grid items-center gap-8 lg:grid-cols-12">
               <div class="lg:col-span-8">
-                <span class="inline-block rounded-full bg-white/20 px-3.5 py-1 text-xs font-semibold tracking-wider text-white border border-white/20 backdrop-blur-md">
-                  Need Something Special?
+                <span class="inline-block rounded-full bg-white/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#EB9D8E] border border-white/20 backdrop-blur-md">
+                  Custom Hamper Studio
                 </span>
-                <h3 class="mt-3 text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">
-                  Looking for a special theme or budget?
+                <h3 class="mt-3 font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#FFFDFC]">
+                  Looking for a custom theme, item combination, or budget?
                 </h3>
-                <p class="mt-2 max-w-2xl text-sm leading-relaxed text-pink-100 sm:text-base">
-                  Our team can create a custom hamper with your favorite style, colors, and gifts for any special occasion.
+                <p class="mt-2 max-w-2xl text-sm leading-relaxed text-[#D9C3B9] sm:text-base">
+                  Our gifting specialists assemble bespoke hampers tailored exactly to your colors, favorite items, and price points.
                 </p>
               </div>
               <div class="lg:col-span-4 lg:flex lg:justify-end">
@@ -107,9 +106,9 @@ import { SeoService } from '../shared/seo.service';
                   href="https://wa.me/919284905118?text=Hello!%20I%20want%20to%20inquire%20about%20a%20fully%20customized%20gift%20hamper." 
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-rose-600 shadow-lg transition-all duration-300 hover:bg-rose-50 hover:shadow-xl sm:w-auto active:scale-95"
+                  class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#FFFDFC] px-8 py-3.5 text-xs font-bold uppercase tracking-wider text-[#57251C] shadow-lg transition-all duration-300 hover:bg-[#F7F6F3] hover:scale-105 sm:w-auto active:scale-95"
                 >
-                  <span>💬 Chat with Us</span>
+                  <span>💬 Chat with Stylist</span>
                 </a>
               </div>
             </div>
