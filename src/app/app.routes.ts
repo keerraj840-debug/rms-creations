@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './services/auth.guard';
 import { unauthGuard } from './services/unauth.guard';
-import { LoginPageComponent } from './pages/login-page.component';
+import { LoginPageComponent } from './pages/auth/login-page.component';
+import { RegisterPageComponent } from './pages/auth/register-page.component';
+import { ForgotPasswordPageComponent } from './pages/auth/forgot-password-page.component';
 import { AdminLayoutComponent } from './shared/admin-layout.component';
 import { AdminDashboardPageComponent } from './pages/admin-dashboard-page.component';
 import { AdminUsersPageComponent } from './pages/admin-users-page.component';
@@ -26,6 +28,8 @@ import { GanpatiHampersPageComponent } from './pages/ganpati-hampers-page.compon
 export const routes: Routes = [
   // Authentication Routes
   { path: 'login', component: LoginPageComponent, canActivate: [unauthGuard] },
+  { path: 'register', component: RegisterPageComponent, canActivate: [unauthGuard] },
+  { path: 'forgot-password', component: ForgotPasswordPageComponent, canActivate: [unauthGuard] },
 
   // Public/Customer Routes
   { path: '', component: HomePageComponent },

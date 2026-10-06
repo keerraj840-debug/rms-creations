@@ -316,54 +316,6 @@ import { SeoService } from '../shared/seo.service';
         </div>
       </section>
 
-      <!-- SEASONAL HIGHLIGHTS SLIDER -->
-      <section class="py-12 md:py-16 bg-[#FAF7F5] border-t border-[#D9C3B9]/40">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="mx-auto max-w-3xl text-center">
-            <span class="inline-block rounded-full bg-[#C56D5B]/15 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[#9C4738] border border-[#C56D5B]/25">Top Offers & Favorites</span>
-            <h2 class="mt-3 font-serif text-2xl sm:text-3xl font-bold text-[#57251C]">Trending Hampers This Season</h2>
-            <p class="mt-2 text-xs sm:text-sm text-[#57251C]/75">Click any offer below to view details and order directly on WhatsApp.</p>
-          </div>
-
-          <div class="relative mt-8">
-            <div class="overflow-hidden rounded-[2.5rem] bg-[#FFFDFC] border border-[#D9C3B9]/50 shadow-xl">
-              <div 
-                *ngFor="let slide of topOfferSlides; let idx = index"
-                [class.hidden]="idx !== activeSlideIndex"
-                class="grid md:grid-cols-12 items-center"
-              >
-                <div class="md:col-span-6 p-6 sm:p-10 lg:p-12">
-                  <span class="inline-block rounded-full bg-[#C56D5B]/15 border border-[#C56D5B]/25 px-3 py-1 text-xs font-bold text-[#9C4738] mb-4">
-                    Season Special
-                  </span>
-                  <h3 class="font-serif text-2xl sm:text-3xl font-bold text-[#57251C] leading-tight">
-                    {{ slide.title }}
-                  </h3>
-                  <p class="mt-4 text-sm leading-relaxed text-[#57251C]/80">
-                    {{ slide.description }}
-                  </p>
-                  <div class="mt-8 flex items-center gap-4">
-                    <a 
-                      [routerLink]="slide.route"
-                      class="inline-flex items-center gap-2 rounded-full bg-[#57251C] px-7 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#FFFDFC] shadow-md hover:bg-[#9C4738] transition"
-                    >
-                      <span>View Collection</span>
-                      <span>&rarr;</span>
-                    </a>
-                  </div>
-                </div>
-                <div class="md:col-span-6 h-64 md:h-96">
-                  <img 
-                    [src]="slide.image" 
-                    [alt]="slide.title"
-                    class="h-full w-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       </div>
     </app-site-layout>

@@ -4,6 +4,21 @@
 
 @import 'tailwindcss';
 
+/* Enable .dark class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   DARK MODE CSS VARIABLE OVERRIDES
+   ========================================================================== */
+.dark {
+  --color-background: #1C1917;
+  --color-surface-white: #2E2825;
+  --color-surface-warm: #251F1C;
+  --color-dark-chocolate: #F4F1ED;
+  --color-warm-brown: #C5A393;
+  --border-light: rgba(255,255,255,0.08);
+}
+
 /* ==========================================================================
    CSS VARIABLES & PALETTE
    ========================================================================== */

@@ -53,6 +53,25 @@ export class SupabaseService {
         return { error };
     }
 
+    async resetPasswordForEmail(email: string) {
+        const { data, error } = await this.supabase.auth.resetPasswordForEmail(email);
+        return { data, error };
+    }
+
+    async verifyOtp(email: string, token: string, type: any = 'recovery') {
+        const { data, error } = await this.supabase.auth.verifyOtp({
+            email,
+            token,
+            type
+        });
+        return { data, error };
+    }
+
+    async updateUserPassword(password: string) {
+        const { data, error } = await this.supabase.auth.updateUser({ password });
+        return { data, error };
+    }
+
     getUser() {
         return this.supabase.auth.getUser();
     }
