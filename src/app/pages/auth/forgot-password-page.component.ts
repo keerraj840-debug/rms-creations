@@ -97,7 +97,7 @@ type Step = 'email' | 'otp' | 'password';
             </div>
             
             <div class="text-center mt-4">
-              <button type="button" (click)="step.set('email')" class="text-xs text-neutral-500 hover:text-neutral-900 underline underline-offset-2">
+              <button type="button" (click)="step.set('email')" class="text-xs text-[#8B6E57] dark:text-[#C5A393] hover:text-[#57251C] dark:hover:text-[#F4F1ED] underline underline-offset-2 transition-colors">
                 Use a different email address
               </button>
             </div>
@@ -120,7 +120,7 @@ type Step = 'email' | 'otp' | 'password';
               <button
                 type="button"
                 (click)="togglePasswordVisibility()"
-                class="absolute right-3 top-[38px] text-neutral-400 hover:text-neutral-600 transition-colors p-1"
+                class="absolute right-3 top-[38px] text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors p-1"
                 aria-label="Toggle password visibility"
               >
                 @if (showPassword()) {
@@ -133,7 +133,7 @@ type Step = 'email' | 'otp' | 'password';
 
             <app-input
               label="Confirm New Password"
-              type="password"
+              [type]="showPassword() ? 'text' : 'password'"
               formControlName="confirmPassword"
               [required]="true"
               placeholder="••••••••••••"
@@ -155,9 +155,9 @@ type Step = 'email' | 'otp' | 'password';
         }
 
         <!-- Footer -->
-        <p class="mt-8 text-center text-xs text-neutral-500">
+        <p class="mt-8 text-center text-xs text-[#7A6C5E] dark:text-[#C5A393]">
           Remember your password?
-          <a routerLink="/login" class="text-neutral-900 font-medium hover:underline ml-1 underline-offset-4">
+          <a routerLink="/login" class="text-[#57251C] dark:text-[#DD8776] font-bold hover:underline ml-1 underline-offset-4">
             Sign in
           </a>
         </p>

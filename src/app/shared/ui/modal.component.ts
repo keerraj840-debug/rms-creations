@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 
       <!-- Modal Panel -->
       <div 
-        class="relative bg-white rounded-[2rem] shadow-2xl w-full max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-300 border border-[#EADFD2]"
+        class="relative bg-white dark:bg-[#2E2825] rounded-[2rem] shadow-2xl w-full max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-300 border border-[#EADFD2] dark:border-white/10"
         [ngClass]="{
           'max-w-md': size === 'sm',
           'max-w-lg': size === 'md',
@@ -26,9 +26,9 @@ import { CommonModule } from '@angular/common';
         }"
       >
         <!-- Header -->
-        <div class="px-6 md:px-8 py-5 border-b border-[#EADFD2] flex justify-between items-center bg-[#FDFBF7] rounded-t-[2rem] shrink-0 z-10">
-          <h2 class="text-xl font-serif font-bold text-[#3B2F2F] tracking-wide">{{ title }}</h2>
-          <button (click)="closeModal()" class="text-[#7A6C5E] hover:text-[#4A3C31] hover:bg-[#EADFD2]/30 rounded-full p-2 transition-all duration-300">
+        <div class="px-6 md:px-8 py-5 border-b border-[#EADFD2] dark:border-white/10 flex justify-between items-center bg-[#FDFBF7] dark:bg-[#251F1C] rounded-t-[2rem] shrink-0 z-10">
+          <h2 class="text-xl font-serif font-bold text-[#3B2F2F] dark:text-[#F4F1ED] tracking-wide">{{ title }}</h2>
+          <button (click)="closeModal()" class="text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#4A3C31] dark:hover:text-[#F4F1ED] hover:bg-[#EADFD2]/30 dark:hover:bg-white/10 rounded-full p-2 transition-all duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -36,12 +36,12 @@ import { CommonModule } from '@angular/common';
         </div>
         
         <!-- Body -->
-        <div class="p-6 md:p-8 overflow-y-auto custom-scrollbar z-10 bg-white">
+        <div class="p-6 md:p-8 overflow-y-auto custom-scrollbar z-10 bg-white dark:bg-[#2E2825] text-[#4A3C31] dark:text-[#F4F1ED]">
           <ng-content></ng-content>
         </div>
 
         <!-- Footer -->
-        <div *ngIf="hasFooter" class="px-6 md:px-8 py-5 border-t border-[#EADFD2] bg-[#FDFBF7] flex justify-end gap-3 rounded-b-[2rem] shrink-0 z-10">
+        <div *ngIf="hasFooter" class="px-6 md:px-8 py-5 border-t border-[#EADFD2] dark:border-white/10 bg-[#FDFBF7] dark:bg-[#251F1C] flex justify-end gap-3 rounded-b-[2rem] shrink-0 z-10">
           <ng-content select="[modal-footer]"></ng-content>
         </div>
 

@@ -10,14 +10,14 @@ export const authGuard: CanActivateFn = (route, state) => {
   const role = localStorageService.getItem<string>('user_role'); // 'admin' | 'customer'
 
   if (!token) {
-    // Not logged in, redirect to login page (we will create this later)
-    return router.parseUrl('/login');
+    const returnUrl = state?.url && state.url !== '/' ? `?returnUrl=${encodeURIComponent(state.url)}` : '';
+    return router.parseUrl(`/login${returnUrl}`);
   }
 
   // Check if route requires specific roles
   const expectedRoles: string[] = route.data?.['roles'] || [];
-  if (expectedRoles.length > 0 && role) {
-    if (!expectedRoles.includes(role)) {
+  if (expectedRoles.length > 0) {
+    if (!role || !expectedRoles.includes(role)) {
       // User does not have the required role
       return router.parseUrl('/'); // Redirect to home or unauthorized page
     }

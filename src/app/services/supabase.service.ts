@@ -35,8 +35,12 @@ export class SupabaseService {
     /* ------------------------------------------------------------------ */
     /* Authentication                                                     */
     /* ------------------------------------------------------------------ */
-    async signUp(email: string, password: string) {
-        const { data, error } = await this.supabase.auth.signUp({ email, password });
+    async signUp(email: string, password: string, options?: { data?: any }) {
+        const { data, error } = await this.supabase.auth.signUp({
+            email,
+            password,
+            options: options?.data ? { data: options.data } : undefined
+        });
         return { data, error };
     }
 
@@ -51,6 +55,20 @@ export class SupabaseService {
     async signOut() {
         const { error } = await this.supabase.auth.signOut();
         return { error };
+    }
+
+    async signInWithOAuth(provider: 'google' | 'github', redirectTo?: string) {
+        const { data, error } = await this.supabase.auth.signInWithOAuth({
+            provider,
+            options: {
+                redirectTo: redirectTo || (typeof window !== 'undefined' ? `${window.location.origin}/login` : undefined)
+            }
+        });
+        return { data, error };
+    }
+
+    async getSession() {
+        return this.supabase.auth.getSession();
     }
 
     async resetPasswordForEmail(email: string) {
@@ -80,13 +98,43 @@ export class SupabaseService {
     /* Storage                                                            */
     /* ------------------------------------------------------------------ */
     async uploadFile(bucket: string, path: string, file: File) {
-        const { data, error } = await this.supabase.storage.from(bucket).upload(path, file, {
+        // 1. Enforce 1 MB upload limit on the storage layer
+        const MAX_SIZE = 1 * 1024 * 1024;
+        if (!file || file.size > MAX_SIZE) {
+            return {
+                data: null,
+                error: new Error(`File upload rejected: Size (${((file?.size || 0) / (1024 * 1024)).toFixed(2)} MB) exceeds maximum allowed limit of 1 MB.`)
+            };
+        }
+
+        // 2. Enforce JPG, JPEG, and PNG only
+        const mime = (file.type || '').toLowerCase();
+        if (mime !== 'image/jpeg' && mime !== 'image/png' && mime !== 'image/jpg') {
+            return {
+                data: null,
+                error: new Error(`File upload rejected: Format "${file.type}" is not allowed. Only JPG and PNG are accepted.`)
+            };
+        }
+
+        // 3. Generate safe server-side filename (ignore client-supplied directory traversal paths)
+        const isPng = mime === 'image/png';
+        const safeExt = isPng ? 'png' : 'jpg';
+        const randomId = typeof crypto !== 'undefined' && crypto.randomUUID
+            ? crypto.randomUUID().slice(0, 8)
+            : Math.random().toString(36).slice(2, 10);
+        const prefix = bucket.replace(/[^a-zA-Z0-9]/g, '');
+        const safePath = `${prefix}_${Date.now()}_${randomId}.${safeExt}`;
+
+        const contentType = isPng ? 'image/png' : 'image/jpeg';
+
+        const { data, error } = await this.supabase.storage.from(bucket).upload(safePath, file, {
+            contentType,
             cacheControl: '3600',
-            upsert: false
+            upsert: true
         });
-        
+
         if (error) return { data: null, error };
-        
+
         const { data: publicUrlData } = this.supabase.storage.from(bucket).getPublicUrl(data.path);
         return { data: publicUrlData.publicUrl, error: null };
     }

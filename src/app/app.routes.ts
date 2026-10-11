@@ -1,67 +1,194 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './services/auth.guard';
 import { unauthGuard } from './services/unauth.guard';
-import { LoginPageComponent } from './pages/auth/login-page.component';
-import { RegisterPageComponent } from './pages/auth/register-page.component';
-import { ForgotPasswordPageComponent } from './pages/auth/forgot-password-page.component';
-import { AdminLayoutComponent } from './shared/admin-layout.component';
-import { AdminDashboardPageComponent } from './pages/admin-dashboard-page.component';
-import { AdminUsersPageComponent } from './pages/admin-users-page.component';
-import { AdminProductsPageComponent } from './pages/admin-products-page.component';
-import { AdminProductFormPageComponent } from './pages/admin-product-form-page.component';
-import { AdminCategoriesPageComponent } from './pages/admin-categories-page.component';
-import { AdminCategoryFormPageComponent } from './pages/admin-category-form-page.component';
-import { AdminProductDetailsPageComponent } from './pages/admin-product-details-page.component';
-import { AdminOrdersPageComponent } from './pages/admin-orders-page.component';
-import { AdminSettingsPageComponent } from './pages/admin-settings-page.component';
 import { HomePageComponent } from './pages/home-page.component';
-import { GalleryPageComponent } from './pages/gallery-page.component';
-import { ContactPageComponent } from './pages/contact-page.component';
-import { TopOffersPageComponent } from './pages/top-offers-page.component';
-import { TopOfferDetailPageComponent } from './pages/top-offer-detail-page.component';
-import { HampersPageComponent } from './pages/hampers-page.component';
-import { ReturnGiftPageComponent } from './pages/return-gift-page.component';
-import { ReturnGiftDetailPageComponent } from './pages/return-gift-detail-page.component';
-import { FolderGalleryPageComponent } from './pages/folder-gallery-page.component';
-import { GanpatiHampersPageComponent } from './pages/ganpati-hampers-page.component';
 
 export const routes: Routes = [
   // Authentication Routes
-  { path: 'login', component: LoginPageComponent, canActivate: [unauthGuard] },
-  { path: 'register', component: RegisterPageComponent, canActivate: [unauthGuard] },
-  { path: 'forgot-password', component: ForgotPasswordPageComponent, canActivate: [unauthGuard] },
+  { 
+    path: 'login', 
+    loadComponent: () => import('./pages/auth/login-page.component').then(m => m.LoginPageComponent), 
+    canActivate: [unauthGuard] 
+  },
+  { 
+    path: 'register', 
+    loadComponent: () => import('./pages/auth/register-page.component').then(m => m.RegisterPageComponent), 
+    canActivate: [unauthGuard] 
+  },
+  { 
+    path: 'forgot-password', 
+    loadComponent: () => import('./pages/auth/forgot-password-page.component').then(m => m.ForgotPasswordPageComponent), 
+    canActivate: [unauthGuard] 
+  },
 
   // Public/Customer Routes
   { path: '', component: HomePageComponent },
-  { path: 'ganpati-hampers', component: GanpatiHampersPageComponent },
+  { 
+    path: 'ganpati-hampers', 
+    loadComponent: () => import('./pages/ganpati-hampers-page.component').then(m => m.GanpatiHampersPageComponent) 
+  },
   { path: 'ganpati', redirectTo: 'ganpati-hampers' },
-  { path: 'hampers', component: HampersPageComponent },
-  { path: 'hampers/:slug', component: FolderGalleryPageComponent },
-  { path: 'return-gifts', component: ReturnGiftPageComponent },
-  { path: 'return-gifts/:slug', component: ReturnGiftDetailPageComponent },
-  { path: 'gallery', component: GalleryPageComponent },
-  { path: 'top-offers', component: TopOffersPageComponent },
-  { path: 'top-offers/:category', component: TopOfferDetailPageComponent },
-  { path: 'contact', component: ContactPageComponent },
+  { 
+    path: 'hampers', 
+    loadComponent: () => import('./pages/hampers-page.component').then(m => m.HampersPageComponent) 
+  },
+  { 
+    path: 'hampers/:slug', 
+    loadComponent: () => import('./pages/folder-gallery-page.component').then(m => m.FolderGalleryPageComponent) 
+  },
+  { 
+    path: 'return-gifts', 
+    loadComponent: () => import('./pages/return-gift-page.component').then(m => m.ReturnGiftPageComponent) 
+  },
+  { 
+    path: 'return-gifts/:slug', 
+    loadComponent: () => import('./pages/return-gift-detail-page.component').then(m => m.ReturnGiftDetailPageComponent) 
+  },
+  { 
+    path: 'gallery', 
+    loadComponent: () => import('./pages/gallery-page.component').then(m => m.GalleryPageComponent) 
+  },
+  { 
+    path: 'top-offers', 
+    loadComponent: () => import('./pages/top-offers-page.component').then(m => m.TopOffersPageComponent) 
+  },
+  { 
+    path: 'top-offers/:category', 
+    loadComponent: () => import('./pages/top-offer-detail-page.component').then(m => m.TopOfferDetailPageComponent) 
+  },
+  { 
+    path: 'contact', 
+    loadComponent: () => import('./pages/contact-page.component').then(m => m.ContactPageComponent) 
+  },
+  { 
+    path: 'shop', 
+    loadComponent: () => import('./pages/shop-page.component').then(m => m.ShopPageComponent) 
+  },
+  { 
+    path: 'product/:id', 
+    loadComponent: () => import('./pages/product-detail-page.component').then(m => m.ProductDetailPageComponent) 
+  },
+  { 
+    path: 'shop/:id', 
+    loadComponent: () => import('./pages/product-detail-page.component').then(m => m.ProductDetailPageComponent) 
+  },
+  { 
+    path: 'cart', 
+    loadComponent: () => import('./pages/cart-page.component').then(m => m.CartPageComponent) 
+  },
+  { 
+    path: 'checkout', 
+    loadComponent: () => import('./pages/checkout-page.component').then(m => m.CheckoutPageComponent) 
+  },
+  { 
+    path: 'order-confirmation/:orderNo', 
+    loadComponent: () => import('./pages/order-confirmation-page.component').then(m => m.OrderConfirmationPageComponent) 
+  },
+  { 
+    path: 'my-orders', 
+    loadComponent: () => import('./pages/my-orders-page.component').then(m => m.MyOrdersPageComponent) 
+  },
+  { 
+    path: 'my-account', 
+    loadComponent: () => import('./pages/my-account-page.component').then(m => m.MyAccountPageComponent) 
+  },
+  { 
+    path: 'build-hamper', 
+    loadComponent: () => import('./pages/build-hamper-page.component').then(m => m.BuildHamperPageComponent) 
+  },
+  { path: 'build-your-own-hamper', redirectTo: 'build-hamper' },
+  { 
+    path: 'my-custom-hampers', 
+    loadComponent: () => import('./pages/my-custom-hampers-page.component').then(m => m.MyCustomHampersPageComponent) 
+  },
 
   // Admin Routes (Protected by Auth Guard)
   { 
     path: 'admin', 
-    component: AdminLayoutComponent,
+    loadComponent: () => import('./shared/admin-layout.component').then(m => m.AdminLayoutComponent),
     canActivate: [authGuard],
     data: { roles: ['admin'] },
     children: [
-      { path: '', component: AdminDashboardPageComponent },
-      { path: 'users', component: AdminUsersPageComponent },
-      { path: 'products', component: AdminProductsPageComponent },
-      { path: 'products/new', component: AdminProductFormPageComponent },
-      { path: 'products/edit/:id', component: AdminProductFormPageComponent },
-      { path: 'items', component: AdminProductDetailsPageComponent },
-      { path: 'categories', component: AdminCategoriesPageComponent },
-      { path: 'categories/new', component: AdminCategoryFormPageComponent },
-      { path: 'categories/edit/:id', component: AdminCategoryFormPageComponent },
-      { path: 'orders', component: AdminOrdersPageComponent },
-      { path: 'settings', component: AdminSettingsPageComponent },
+      { 
+        path: '', 
+        loadComponent: () => import('./pages/admin-dashboard-page.component').then(m => m.AdminDashboardPageComponent) 
+      },
+      { 
+        path: 'users', 
+        loadComponent: () => import('./pages/admin-users-page.component').then(m => m.AdminUsersPageComponent) 
+      },
+      { 
+        path: 'products', 
+        loadComponent: () => import('./pages/admin-products-page.component').then(m => m.AdminProductsPageComponent) 
+      },
+      { 
+        path: 'products/new', 
+        loadComponent: () => import('./pages/admin-product-form-page.component').then(m => m.AdminProductFormPageComponent) 
+      },
+      { 
+        path: 'products/edit/:id', 
+        loadComponent: () => import('./pages/admin-product-form-page.component').then(m => m.AdminProductFormPageComponent) 
+      },
+      { 
+        path: 'items', 
+        loadComponent: () => import('./pages/admin-product-details-page.component').then(m => m.AdminProductDetailsPageComponent) 
+      },
+      { 
+        path: 'items/new', 
+        loadComponent: () => import('./pages/admin-item-form-page.component').then(m => m.AdminItemFormPageComponent) 
+      },
+      { 
+        path: 'items/edit/:id', 
+        loadComponent: () => import('./pages/admin-item-form-page.component').then(m => m.AdminItemFormPageComponent) 
+      },
+      { 
+        path: 'categories', 
+        loadComponent: () => import('./pages/admin-categories-page.component').then(m => m.AdminCategoriesPageComponent) 
+      },
+      { 
+        path: 'categories/new', 
+        loadComponent: () => import('./pages/admin-category-form-page.component').then(m => m.AdminCategoryFormPageComponent) 
+      },
+      { 
+        path: 'categories/edit/:id', 
+        loadComponent: () => import('./pages/admin-category-form-page.component').then(m => m.AdminCategoryFormPageComponent) 
+      },
+      { 
+        path: 'orders', 
+        loadComponent: () => import('./pages/admin-orders-page.component').then(m => m.AdminOrdersPageComponent) 
+      },
+      { 
+        path: 'custom-hampers', 
+        loadComponent: () => import('./pages/admin-custom-hampers-page.component').then(m => m.AdminCustomHampersPageComponent) 
+      },
+      { 
+        path: 'banners', 
+        loadComponent: () => import('./pages/admin-banners-page.component').then(m => m.AdminBannersPageComponent) 
+      },
+      { 
+        path: 'banners/new', 
+        loadComponent: () => import('./pages/admin-banner-form-page.component').then(m => m.AdminBannerFormPageComponent) 
+      },
+      { 
+        path: 'banners/edit/:id', 
+        loadComponent: () => import('./pages/admin-banner-form-page.component').then(m => m.AdminBannerFormPageComponent) 
+      },
+      { 
+        path: 'pincodes', 
+        loadComponent: () => import('./pages/admin-pincodes-page.component').then(m => m.AdminPincodesPageComponent) 
+      },
+      { 
+        path: 'pincodes/new', 
+        loadComponent: () => import('./pages/admin-pincode-form-page.component').then(m => m.AdminPincodeFormPageComponent) 
+      },
+      { 
+        path: 'pincodes/edit/:id', 
+        loadComponent: () => import('./pages/admin-pincode-form-page.component').then(m => m.AdminPincodeFormPageComponent) 
+      },
+      { 
+        path: 'settings', 
+        loadComponent: () => import('./pages/admin-settings-page.component').then(m => m.AdminSettingsPageComponent) 
+      },
     ]
   },
 

@@ -1,33 +1,36 @@
 import { Component, Input, HostListener, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderTrackingService } from './order-tracking.service';
+import { ThemeService } from '../services/theme.service';
+import { CheckoutService } from '../services/checkout.service';
+import { CartService } from '../services/cart.service';
+import { CheckoutModalComponent } from './ui/checkout-modal.component';
 
 @Component({
   selector: 'app-site-layout',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, NgClass, NgIf, NgFor, FormsModule],
+  imports: [RouterLink, RouterLinkActive, AsyncPipe, NgClass, NgIf, NgFor, FormsModule, CheckoutModalComponent],
   template: `
     <!-- Main Shell -->
-    <div class="flex min-h-screen flex-col bg-[#F7F6F3] font-sans text-[#57251C] selection:bg-[#EB9D8E] selection:text-[#57251C]">
+    <div class="flex min-h-screen flex-col bg-[#F7F6F3] dark:bg-[#14100E] font-sans text-[#57251C] dark:text-[#F4F1ED] selection:bg-[#EB9D8E] selection:text-[#57251C] transition-colors duration-200">
       
       <!-- Top Announcement Bar (Festive Brand Banner) -->
       <aside aria-label="Announcement" class="relative z-50 bg-gradient-to-r from-[#57251C] via-[#9C4738] to-[#C56D5B] px-4 py-2 text-center text-xs font-semibold text-[#FFFDFC] shadow-sm sm:text-sm">
         <div class="flex items-center justify-center gap-2 flex-wrap">
-          <span>🌺</span>
+          <i class="fa-solid fa-om text-[#EB9D8E]"></i>
           <span><strong>Ganesh Utsav Special:</strong> Handcrafted Ganpati Pooja Kits starting at just ₹99!</span>
           <a routerLink="/ganpati-hampers" class="rounded-full bg-white/20 px-3 py-0.5 font-bold text-[#FFFDFC] hover:bg-white/30 transition">View Boxes & Order &rarr;</a>
-          <span>🪔</span>
         </div>
       </aside>
 
       <!-- Sticky Luxury Glassmorphism Header -->
       <header 
-        class="sticky top-0 z-40 w-full border-b border-[#D9C3B9]/45 bg-[#FFFDFC]/92 backdrop-blur-md transition-all duration-300"
+        class="sticky top-0 z-40 w-full border-b border-[#D9C3B9]/45 dark:border-[#3D302A] bg-[#FFFDFC]/92 dark:bg-[#1C1816]/95 backdrop-blur-md transition-all duration-300"
         [ngClass]="{
-          'shadow-md shadow-[#57251C]/5 py-1 bg-[#FFFDFC]/96': isScrolled, 
-          'py-2 bg-[#FFFDFC]/88': !isScrolled
+          'shadow-md shadow-[#57251C]/5 py-1 bg-[#FFFDFC]/96 dark:bg-[#1C1816]/98': isScrolled, 
+          'py-2 bg-[#FFFDFC]/88 dark:bg-[#1C1816]/90': !isScrolled
         }"
       >
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -39,13 +42,13 @@ import { OrderTrackingService } from './order-tracking.service';
                 <img 
                   src="assets/logo.png" 
                   alt="RMS Logo" 
-                  class="h-10 w-10 rounded-full object-cover shadow-sm ring-2 ring-[#D9C3B9]/60 transition-all group-hover:ring-[#C56D5B] sm:h-12 sm:w-12" 
+                  class="h-10 w-10 rounded-full object-cover shadow-sm ring-2 ring-[#D9C3B9]/60 dark:ring-[#57251C] transition-all group-hover:ring-[#C56D5B] sm:h-12 sm:w-12" 
                 />
-                <span class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-[#1B4D3E] ring-2 ring-[#FFFDFC]" title="Online & Ready to assist"></span>
+                <span class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-[#1B4D3E] ring-2 ring-[#FFFDFC] dark:ring-[#1C1816]" title="Online & Ready to assist"></span>
               </div>
               <div class="flex flex-col justify-center">
-                <span class="text-[10px] font-bold uppercase tracking-[0.35em] text-[#9D7B6C] sm:text-xs leading-none mb-1">RMS</span>
-                <span class="font-serif text-base font-bold tracking-tight text-[#57251C] sm:text-lg leading-none group-hover:text-[#9C4738] transition-colors">Gift Hampers</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.35em] text-[#9D7B6C] dark:text-[#C5A393] sm:text-xs leading-none mb-1">RMS</span>
+                <span class="font-serif text-base font-bold tracking-tight text-[#57251C] dark:text-[#F4F1ED] sm:text-lg leading-none group-hover:text-[#9C4738] dark:group-hover:text-[#EB9D8E] transition-colors">Gift Hampers</span>
               </div>
             </a>
 
@@ -53,70 +56,122 @@ import { OrderTrackingService } from './order-tracking.service';
             <nav class="hidden md:flex md:items-center md:gap-5 lg:gap-7">
               <a 
                 routerLink="/" 
-                routerLinkActive="text-[#9C4738] font-bold after:w-full" 
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
                 [routerLinkActiveOptions]="{ exact: true }" 
-                class="relative text-sm font-medium text-[#57251C]/80 transition-colors hover:text-[#9C4738] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
                 Home
               </a>
               <a 
-                routerLink="/ganpati-hampers" 
-                routerLinkActive="text-[#9C4738] font-bold after:w-full" 
-                class="relative inline-flex items-center gap-1.5 text-sm font-bold text-[#9C4738] transition-colors hover:text-[#57251C] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+                routerLink="/shop" 
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
+                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
-                <span>🌺 Ganpati Hampers</span>
-                <span class="rounded-full bg-[#C56D5B]/15 px-1.5 py-0.2 text-[10px] font-extrabold text-[#9C4738] border border-[#C56D5B]/30 animate-pulse">Special</span>
+                Shop
+              </a>
+              <a 
+                routerLink="/ganpati-hampers" 
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
+                class="relative inline-flex items-center gap-1.5 text-sm font-bold text-[#9C4738] dark:text-[#EB9D8E] transition-colors hover:text-[#57251C] dark:hover:text-[#F4F1ED] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+              >
+                <i class="fa-solid fa-om text-xs"></i>
+                <span>Ganpati Hampers</span>
+                <span class="rounded-full bg-[#C56D5B]/15 dark:bg-[#C56D5B]/25 px-1.5 py-0.2 text-[10px] font-extrabold text-[#9C4738] dark:text-[#EB9D8E] border border-[#C56D5B]/30 animate-pulse">Special</span>
+              </a>
+              <a 
+                routerLink="/build-hamper" 
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
+                class="relative inline-flex items-center gap-1.5 text-sm font-bold text-[#9C4738] dark:text-[#EB9D8E] transition-colors hover:text-[#57251C] dark:hover:text-[#F4F1ED] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+              >
+                <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                <span>Build a Hamper</span>
               </a>
               <a 
                 routerLink="/hampers" 
-                routerLinkActive="text-[#9C4738] font-bold after:w-full" 
-                class="relative text-sm font-medium text-[#57251C]/80 transition-colors hover:text-[#9C4738] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
+                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
                 Hampers
               </a>
               <a 
                 routerLink="/return-gifts" 
-                routerLinkActive="text-[#9C4738] font-bold after:w-full" 
-                class="relative text-sm font-medium text-[#57251C]/80 transition-colors hover:text-[#9C4738] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
+                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
                 Return Gifts
               </a>
               <a 
                 routerLink="/gallery" 
-                routerLinkActive="text-[#9C4738] font-bold after:w-full" 
-                class="relative text-sm font-medium text-[#57251C]/80 transition-colors hover:text-[#9C4738] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
+                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
                 Gallery
               </a>
               <a 
                 routerLink="/top-offers" 
-                routerLinkActive="text-[#9C4738] font-bold after:w-full" 
-                class="relative text-sm font-medium text-[#57251C]/80 transition-colors hover:text-[#9C4738] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
+                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
                 Top Offers
               </a>
               <a 
+                routerLink="/my-orders" 
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
+                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+              >
+                My Orders
+              </a>
+              <a 
                 routerLink="/contact" 
-                routerLinkActive="text-[#9C4738] font-bold after:w-full" 
-                class="relative text-sm font-medium text-[#57251C]/80 transition-colors hover:text-[#9C4738] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
+                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
+                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
                 Contact
               </a>
             </nav>
 
             <!-- Header Action Controls -->
-            <div class="flex items-center gap-3 sm:gap-4">
-              <!-- WhatsApp Quick Action Button (Refined Luxury CTA) -->
+            <div class="flex items-center gap-2.5 sm:gap-4">
+              <!-- Dark / Light Theme Switcher Button -->
               <button
                 type="button"
-                (click)="openWhatsapp('Header')"
-                class="hidden items-center justify-center gap-2 rounded-full bg-[#57251C] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#FFFDFC] shadow-sm shadow-[#57251C]/20 transition-all hover:-translate-y-0.5 hover:bg-[#9C4738] hover:shadow-md active:scale-95 sm:inline-flex"
+                (click)="themeService.toggleTheme()"
+                class="flex h-9 w-9 items-center justify-center rounded-full border border-[#D9C3B9]/50 bg-[#FFFDFC]/90 text-[#57251C] shadow-sm transition hover:border-[#C56D5B] hover:text-[#9C4738] dark:border-[#3D302A] dark:bg-[#251F1C] dark:text-[#F4F1ED]"
+                [title]="themeService.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+                aria-label="Toggle Theme"
               >
-                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.124.551 4.195 1.597 6.02L.055 24l6.105-1.602c1.745.952 3.712 1.455 5.871 1.455 6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm3.896 17.266c-.183.513-1.045.962-1.464 1.002-.42.04-1.001.077-2.923-.717-2.316-.957-3.805-3.32-3.921-3.475-.116-.155-.936-1.246-.936-2.378 0-1.132.585-1.688.794-1.921.209-.233.456-.291.608-.291.152 0 .304 0 .436.007.14.008.33.025.517.47.195.467.666 1.632.724 1.748.058.116.097.252.019.408-.078.155-.116.252-.233.388-.116.136-.245.298-.348.396-.115.109-.239.229-.107.457.132.228.588.973 1.259 1.573.864.773 1.603 1.012 1.832 1.127.228.116.363.097.498-.058.136-.155.585-.68.74-.913.155-.233.228-.155.443.058.558.214.724.348 1.267.504 1.344.155.077.33.078.503-.131z"/>
+                <svg *ngIf="!themeService.isDarkMode" class="h-4 w-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span>WhatsApp</span>
+                <svg *ngIf="themeService.isDarkMode" class="h-4 w-4 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
               </button>
+
+              <!-- Cart Button with Live Counter Badge -->
+              <a
+                routerLink="/cart"
+                class="relative flex h-9 w-9 items-center justify-center rounded-full border border-[#D9C3B9]/50 bg-[#FFFDFC]/90 text-[#57251C] shadow-sm transition hover:border-[#C56D5B] hover:text-[#9C4738] dark:border-[#3D302A] dark:bg-[#251F1C] dark:text-[#F4F1ED]"
+                title="View Cart"
+                aria-label="View Shopping Cart"
+              >
+                <i class="fa-solid fa-cart-shopping text-xs"></i>
+                <span 
+                  *ngIf="cartService.totalItemsCount > 0" 
+                  class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#C56D5B] text-[9px] font-extrabold text-white ring-2 ring-[#FFFDFC] dark:ring-[#1C1816]"
+                >
+                  {{ cartService.totalItemsCount }}
+                </span>
+              </a>
+
+              <!-- Shop Now CTA Button -->
+              <a
+                routerLink="/shop"
+                class="items-center justify-center gap-1.5 rounded-full bg-[#57251C] dark:bg-[#C56D5B] px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-bold uppercase tracking-wider text-[#FFFDFC] shadow-sm shadow-[#57251C]/20 transition-all hover:-translate-y-0.5 hover:bg-[#9C4738] dark:hover:bg-[#DD8776] hover:shadow-md active:scale-95 inline-flex"
+              >
+                <i class="fa-solid fa-gift text-xs"></i>
+                <span>Shop Gifts</span>
+              </a>
 
               <!-- Mobile Hamburger Button -->
               <button 
@@ -124,7 +179,7 @@ import { OrderTrackingService } from './order-tracking.service';
                 (click)="toggleMenu()"
                 [attr.aria-expanded]="isMobileMenuOpen"
                 aria-label="Toggle mobile menu"
-                class="inline-flex items-center justify-center rounded-xl p-2.5 text-[#57251C] transition-colors hover:bg-[#F7F6F3] hover:text-[#9C4738] focus:outline-none focus:ring-2 focus:ring-[#C56D5B] md:hidden"
+                class="inline-flex items-center justify-center rounded-xl p-2.5 text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738] focus:outline-none focus:ring-2 focus:ring-[#C56D5B] md:hidden"
               >
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                   <path [class.hidden]="isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -137,26 +192,35 @@ import { OrderTrackingService } from './order-tracking.service';
 
         <!-- Mobile Navigation Menu Dropdown -->
         <div 
-          class="border-t border-[#D9C3B9]/30 bg-[#FFFDFC]/98 backdrop-blur-xl md:hidden overflow-hidden transition-all duration-300 ease-in-out"
+          class="border-t border-[#D9C3B9]/30 dark:border-[#3D302A] bg-[#FFFDFC]/98 dark:bg-[#1C1816]/98 backdrop-blur-xl md:hidden overflow-hidden transition-all duration-300 ease-in-out"
           [ngClass]="isMobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'"
         >
           <nav class="flex flex-col space-y-1 px-4 pb-6 pt-3 sm:px-6">
-            <a routerLink="/" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] text-[#9C4738] font-bold border-l-2 border-[#C56D5B]" [routerLinkActiveOptions]="{ exact: true }" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] transition-colors hover:bg-[#F7F6F3] hover:text-[#9C4738]">Home</a>
-            <a routerLink="/ganpati-hampers" (click)="closeMenu()" routerLinkActive="bg-[#C56D5B]/15 text-[#9C4738] font-bold border-l-2 border-[#9C4738]" class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-bold text-[#9C4738] bg-[#F7F6F3] border border-[#D9C3B9]/50 shadow-sm">
-              <span>🌺 Ganpati Hampers & Pooja Kits</span>
+            <a routerLink="/" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" [routerLinkActiveOptions]="{ exact: true }" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">Home</a>
+            <a routerLink="/shop" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-semibold text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-gift text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> Shop All Gifts</span>
+              <span class="rounded-full bg-[#C56D5B]/20 text-[#9C4738] dark:text-[#EB9D8E] px-2 py-0.5 text-[10px] font-bold">New</span>
+            </a>
+            <a routerLink="/cart" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-semibold text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> Shopping Cart</span>
+              <span *ngIf="cartService.totalItemsCount > 0" class="rounded-full bg-[#9C4738] text-white px-2 py-0.5 text-[10px] font-bold">{{ cartService.totalItemsCount }} items</span>
+            </a>
+            <a routerLink="/ganpati-hampers" (click)="closeMenu()" routerLinkActive="bg-[#C56D5B]/15 text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#9C4738]" class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-bold text-[#9C4738] dark:text-[#EB9D8E] bg-[#F7F6F3] dark:bg-[#251F1C] border border-[#D9C3B9]/50 dark:border-[#3D302A] shadow-sm">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-om text-xs"></i> Ganpati Hampers & Pooja Kits</span>
               <span class="rounded-full bg-[#9C4738] text-white px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold">Special</span>
             </a>
-            <a routerLink="/hampers" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] text-[#9C4738] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] transition-colors hover:bg-[#F7F6F3] hover:text-[#9C4738]">All Hampers</a>
-            <a routerLink="/return-gifts" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] text-[#9C4738] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] transition-colors hover:bg-[#F7F6F3] hover:text-[#9C4738]">Return Gifts</a>
-            <a routerLink="/gallery" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] text-[#9C4738] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] transition-colors hover:bg-[#F7F6F3] hover:text-[#9C4738]">Gallery</a>
-            <a routerLink="/top-offers" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] text-[#9C4738] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] transition-colors hover:bg-[#F7F6F3] hover:text-[#9C4738]">Top Offers</a>
-            <a routerLink="/contact" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] text-[#9C4738] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] transition-colors hover:bg-[#F7F6F3] hover:text-[#9C4738]">Contact Us</a>
+            <a routerLink="/hampers" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">All Hampers</a>
+            <a routerLink="/return-gifts" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">Return Gifts</a>
+            <a routerLink="/top-offers" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">Top Offers</a>
+            <a routerLink="/my-orders" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">My Orders & Tracking</a>
+            <a routerLink="/my-account" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">My Account & Address</a>
+            <a routerLink="/contact" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">Contact Us</a>
             
             <div class="pt-3">
               <button
                 type="button"
                 (click)="openWhatsapp('Mobile menu')"
-                class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#57251C] px-4 py-3.5 text-base font-semibold text-[#FFFDFC] shadow-md transition-all hover:bg-[#9C4738] active:scale-95"
+                class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#57251C] dark:bg-[#C56D5B] px-4 py-3.5 text-base font-semibold text-[#FFFDFC] shadow-md transition-all hover:bg-[#9C4738] active:scale-95"
               >
                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.124.551 4.195 1.597 6.02L.055 24l6.105-1.602c1.745.952 3.712 1.455 5.871 1.455 6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm3.896 17.266c-.183.513-1.045.962-1.464 1.002-.42.04-1.001.077-2.923-.717-2.316-.957-3.805-3.32-3.921-3.475-.116-.155-.936-1.246-.936-2.378 0-1.132.585-1.688.794-1.921.209-.233.456-.291.608-.291.152 0 .304 0 .436.007.14.008.33.025.517.47.195.467.666 1.632.724 1.748.058.116.097.252.019.408-.078.155-.116.252-.233.388-.116.136-.245.298-.348.396-.115.109-.239.229-.107.457.132.228.588.973 1.259 1.573.864.773 1.603 1.012 1.832 1.127.228.116.363.097.498-.058.136-.155.585-.68.74-.913.155-.233.228-.155.443.058.558.214.724.348 1.267.504 1.344.155.077.33.078.503-.131z"/>
@@ -207,11 +271,14 @@ import { OrderTrackingService } from './order-tracking.service';
               <h3 class="text-xs font-bold uppercase tracking-wider text-[#EB9D8E]">Discover</h3>
               <ul class="mt-4 space-y-3 text-sm font-medium text-[#D9C3B9]">
                 <li><a routerLink="/" class="transition-colors hover:text-[#FFFDFC]">Home</a></li>
-                <li><a routerLink="/ganpati-hampers" class="text-[#DD8776] font-bold hover:text-white">🌺 Ganpati Hampers (From ₹99)</a></li>
-                <li><a routerLink="/hampers" class="transition-colors hover:text-[#FFFDFC]">All Hampers</a></li>
-                <li><a routerLink="/return-gifts" class="transition-colors hover:text-[#FFFDFC]">Return Gifts</a></li>
+                <li><a routerLink="/build-hamper" class="text-white font-bold hover:text-[#DD8776] flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-xs"></i> Build Your Own Hamper</a></li>
+                <li><a routerLink="/my-custom-hampers" class="transition-colors hover:text-[#FFFDFC]">Custom Hamper Consultations</a></li>
+                <li><a routerLink="/shop" class="text-white font-bold hover:text-[#DD8776] flex items-center gap-1.5"><i class="fa-solid fa-gift text-xs"></i> Shop All Gifts</a></li>
+                <li><a routerLink="/cart" class="transition-colors hover:text-[#FFFDFC]">Shopping Cart ({{ cartService.totalItemsCount }})</a></li>
+                <li><a routerLink="/my-orders" class="transition-colors hover:text-[#FFFDFC]">Track My Orders</a></li>
+                <li><a routerLink="/my-account" class="transition-colors hover:text-[#FFFDFC]">My Account & Profile</a></li>
+                <li><a routerLink="/ganpati-hampers" class="text-[#DD8776] font-bold hover:text-white flex items-center gap-1.5"><i class="fa-solid fa-om text-xs"></i> Ganpati Hampers (From ₹99)</a></li>
                 <li><a routerLink="/top-offers" class="transition-colors hover:text-[#FFFDFC]">Top Offers</a></li>
-                <li><a routerLink="/gallery" class="transition-colors hover:text-[#FFFDFC]">Our Gallery</a></li>
               </ul>
             </div>
             
@@ -221,7 +288,7 @@ import { OrderTrackingService } from './order-tracking.service';
               <ul class="mt-4 space-y-3 text-sm text-[#D9C3B9]">
                 <li class="flex items-center gap-3">
                   <svg class="h-5 w-5 text-[#DD8776] shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.864-1.048l-3.413-.541c-.49-.078-.984.12-1.22.569l-1.218 2.321c-3.218-1.55-5.83-4.162-7.38-7.38l2.321-1.218c.45-.236.647-.73.569-1.22l-.541-3.413C10.231 2.601 9.78 2.25 9.264 2.25H7.875A2.25 2.25 0 005.625 4.5c0 1.25.13 2.474.382 3.65z" /></svg>
-                  <a href="tel:+919284905118" class="font-semibold text-[#FFFDFC] hover:text-[#DD8776] transition-colors">+91 9284905118</a>
+                  <a href="tel:+919284905118" class="font-semibold text-[#FFFDFC] hover:text-[#DD8776] transition-colors">+91 92849 05118</a>
                 </li>
                 <li class="flex items-center gap-3">
                   <svg class="h-5 w-5 text-[#DD8776] shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
@@ -275,41 +342,41 @@ import { OrderTrackingService } from './order-tracking.service';
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
         (click)="closeAdminLoginModal()"
       >
-        <div class="w-full max-w-md rounded-3xl bg-[#FFFDFC] p-6 shadow-2xl border border-[#D9C3B9]/50" (click)="$event.stopPropagation()">
-          <div class="flex items-center justify-between border-b border-[#D9C3B9]/30 pb-4">
+        <div class="w-full max-w-md rounded-3xl bg-[#FFFDFC] dark:bg-[#1E1916] p-6 shadow-2xl border border-[#D9C3B9]/50 dark:border-[#3D302A] text-[#57251C] dark:text-[#F4F1ED]" (click)="$event.stopPropagation()">
+          <div class="flex items-center justify-between border-b border-[#D9C3B9]/30 dark:border-[#3D302A] pb-4">
             <div>
-              <h3 class="text-lg font-bold text-[#57251C]">Admin Login</h3>
-              <p class="text-xs text-[#9D7B6C]">Only the admin can view enquiries or export the sheet.</p>
+              <h3 class="text-lg font-bold text-[#57251C] dark:text-[#F4F1ED]">Admin Login</h3>
+              <p class="text-xs text-[#9D7B6C] dark:text-[#C5A393]">Only the admin can view enquiries or export the sheet.</p>
             </div>
-            <button (click)="closeAdminLoginModal()" class="rounded-full bg-[#F7F6F3] p-2 text-[#9D7B6C] hover:text-[#57251C]">✕</button>
+            <button (click)="closeAdminLoginModal()" class="rounded-full bg-[#F7F6F3] dark:bg-[#251F1C] p-2 text-[#9D7B6C] dark:text-[#D9C3B9] hover:text-[#57251C] dark:hover:text-[#FFFDFC]"><i class="fa-solid fa-xmark"></i></button>
           </div>
 
           <div class="mt-4 space-y-3">
             <input
               [(ngModel)]="adminUsername"
               type="email"
-              class="w-full rounded-xl border border-[#D9C3B9]/60 px-3 py-2.5 text-sm outline-none focus:border-[#C56D5B]"
+              class="w-full rounded-xl border border-[#D9C3B9]/60 dark:border-[#3D302A] bg-white dark:bg-[#251F1C] px-3 py-2.5 text-sm outline-none focus:border-[#C56D5B] text-[#57251C] dark:text-[#F4F1ED]"
               placeholder="Email"
             />
             <input
               [(ngModel)]="adminPassword"
               type="password"
-              class="w-full rounded-xl border border-[#D9C3B9]/60 px-3 py-2.5 text-sm outline-none focus:border-[#C56D5B]"
+              class="w-full rounded-xl border border-[#D9C3B9]/60 dark:border-[#3D302A] bg-white dark:bg-[#251F1C] px-3 py-2.5 text-sm outline-none focus:border-[#C56D5B] text-[#57251C] dark:text-[#F4F1ED]"
               placeholder="Password"
             />
-            <p *ngIf="adminLoginError" class="text-sm text-red-600">{{ adminLoginError }}</p>
+            <p *ngIf="adminLoginError" class="text-sm text-red-600 dark:text-red-400">{{ adminLoginError }}</p>
           </div>
 
           <div class="mt-6 flex gap-3">
             <button 
               (click)="submitAdminLogin()"
-              class="w-full rounded-xl bg-[#57251C] py-3 text-sm font-bold text-[#FFFDFC] shadow hover:bg-[#9C4738] transition"
+              class="w-full rounded-xl bg-[#57251C] dark:bg-[#C56D5B] py-3 text-sm font-bold text-[#FFFDFC] shadow hover:bg-[#9C4738] dark:hover:bg-[#DD8776] transition"
             >
               Login
             </button>
             <button 
               (click)="closeAdminLoginModal()"
-              class="rounded-xl border border-[#D9C3B9] px-4 py-3 text-sm font-semibold text-[#57251C] hover:bg-[#F7F6F3]"
+              class="rounded-xl border border-[#D9C3B9] dark:border-[#3D302A] px-4 py-3 text-sm font-semibold text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C]"
             >
               Cancel
             </button>
@@ -323,29 +390,29 @@ import { OrderTrackingService } from './order-tracking.service';
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
         (click)="toggleTrackerModal()"
       >
-        <div class="max-w-lg w-full rounded-3xl bg-[#FFFDFC] p-6 shadow-2xl border border-[#D9C3B9]/50" (click)="$event.stopPropagation()">
-          <div class="flex items-center justify-between border-b border-[#D9C3B9]/30 pb-4">
+        <div class="max-w-lg w-full rounded-3xl bg-[#FFFDFC] dark:bg-[#1E1916] p-6 shadow-2xl border border-[#D9C3B9]/50 dark:border-[#3D302A] text-[#57251C] dark:text-[#F4F1ED]" (click)="$event.stopPropagation()">
+          <div class="flex items-center justify-between border-b border-[#D9C3B9]/30 dark:border-[#3D302A] pb-4">
             <div>
-              <h3 class="text-lg font-bold text-[#57251C]">Tracked Customer Orders</h3>
-              <p class="text-xs text-[#9D7B6C]">Recorded sessions during this visit</p>
+              <h3 class="text-lg font-bold text-[#57251C] dark:text-[#F4F1ED]">Tracked Customer Orders</h3>
+              <p class="text-xs text-[#9D7B6C] dark:text-[#C5A393]">Recorded sessions during this visit</p>
             </div>
-            <button (click)="toggleTrackerModal()" class="rounded-full bg-[#F7F6F3] p-2 text-[#9D7B6C] hover:text-[#57251C]">✕</button>
+            <button (click)="toggleTrackerModal()" class="rounded-full bg-[#F7F6F3] dark:bg-[#251F1C] p-2 text-[#9D7B6C] dark:text-[#D9C3B9] hover:text-[#57251C] dark:hover:text-[#FFFDFC]"><i class="fa-solid fa-xmark"></i></button>
           </div>
 
           <div class="mt-4 max-h-60 overflow-y-auto space-y-2">
-            <div *ngFor="let item of trackerOrders" class="rounded-xl bg-[#F7F6F3] p-3 text-xs flex justify-between items-center border border-[#D9C3B9]/30">
+            <div *ngFor="let item of trackerOrders" class="rounded-xl bg-[#F7F6F3] dark:bg-[#251F1C] p-3 text-xs flex justify-between items-center border border-[#D9C3B9]/30 dark:border-[#3D302A]">
               <div>
-                <p class="font-bold text-[#57251C]">{{ item.title }}</p>
-                <p class="text-[#9D7B6C]">{{ item.page }} • {{ item.category }}</p>
+                <p class="font-bold text-[#57251C] dark:text-[#F4F1ED]">{{ item.title }}</p>
+                <p class="text-[#9D7B6C] dark:text-[#C5A393]">{{ item.page }} • {{ item.category }}</p>
               </div>
-              <span class="text-[10px] text-[#9D7B6C] font-mono">{{ item.timestamp  }}</span>
+              <span class="text-[10px] text-[#9D7B6C] dark:text-[#C5A393] font-mono">{{ item.timestamp  }}</span>
             </div>
           </div>
 
           <div class="mt-6 flex gap-3">
             <button 
               (click)="downloadOrderSheet()" 
-              class="w-full rounded-xl bg-[#57251C] py-3 text-xs font-bold text-[#FFFDFC] shadow hover:bg-[#9C4738] transition"
+              class="w-full rounded-xl bg-[#57251C] dark:bg-[#C56D5B] py-3 text-xs font-bold text-[#FFFDFC] shadow hover:bg-[#9C4738] dark:hover:bg-[#DD8776] transition"
             >
               Export Order Sheet (.CSV)
             </button>
@@ -353,12 +420,31 @@ import { OrderTrackingService } from './order-tracking.service';
         </div>
       </div>
 
+      <!-- FLOATING TOAST NOTIFICATION FOR CART -->
+      <aside 
+        *ngIf="cartService.toastMessage$ | async as toastMsg" 
+        aria-live="polite"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-full bg-[#57251C] dark:bg-[#1E1916] text-[#FFFDFC] px-5 py-3 shadow-2xl border border-[#EB9D8E]/40 ring-2 ring-black/10 backdrop-blur-md"
+      >
+        <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+        <span class="text-xs sm:text-sm font-medium">{{ toastMsg }}</span>
+        <a routerLink="/cart" class="rounded-full bg-[#C56D5B] px-3 py-1 text-xs font-bold text-white hover:bg-[#9C4738] transition ml-1">
+          Cart &rarr;
+        </a>
+      </aside>
+
+      <!-- Global Customer Checkout & Free UPI / COD Modal -->
+      <app-checkout-modal></app-checkout-modal>
+
     </div>
   `
 })
 export class SiteLayoutComponent {
   @Input() title = '';
 
+  public readonly themeService = inject(ThemeService);
+  public readonly checkoutService = inject(CheckoutService);
+  public readonly cartService = inject(CartService);
   private readonly orderTracker = inject(OrderTrackingService);
   private readonly router = inject(Router);
   
@@ -390,7 +476,9 @@ export class SiteLayoutComponent {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isScrolled = window.scrollY > 10;
+    if (typeof window !== 'undefined') {
+      this.isScrolled = window.scrollY > 10;
+    }
   }
 
   toggleMenu() {
@@ -401,10 +489,20 @@ export class SiteLayoutComponent {
     this.isMobileMenuOpen = false;
   }
 
+  openQuickOrder() {
+    this.checkoutService.open({
+      title: 'RMS Festive Gift Hamper',
+      price: 999,
+      category: 'Festive Hampers'
+    });
+  }
+
   openWhatsapp(sourcePage: string = 'General') {
-    const url = 'https://wa.me/919284905118?text=Hello%20RMS%20Gift%20Hampers,%20I%20would%20like%20to%20know%20more!';
+    const url = 'https://wa.me/919284905118?text=Hello%20RMS%20Creations,%20I%20would%20like%20to%20know%20more!';
     this.trackOrder('General enquiry', 'Website', sourcePage, url);
-    window.open(url, '_blank');
+    if (typeof window !== 'undefined') {
+      window.open(url, '_blank');
+    }
   }
 
   trackOrder(title: string, category: string, page: string, link: string) {
