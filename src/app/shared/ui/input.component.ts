@@ -44,6 +44,8 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/f
           [type]="type"
           [placeholder]="placeholder"
           [disabled]="disabled"
+          [attr.inputmode]="inputmode"
+          [attr.autocomplete]="autocomplete"
           [(ngModel)]="value"
           (ngModelChange)="onChange($event)"
           (blur)="onTouched()"
@@ -73,6 +75,8 @@ export class InputComponent implements ControlValueAccessor {
   @Input() required = false;
   @Input() disabled = false;
   @Input() rows = 3;
+  @Input() inputmode?: string;
+  @Input() autocomplete?: string;
 
   value: any = '';
   onChange: any = () => {};

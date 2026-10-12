@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { Routes, Router } from '@angular/router';
+import { inject } from '@angular/core';
 import { authGuard } from './services/auth.guard';
 import { unauthGuard } from './services/unauth.guard';
 import { HomePageComponent } from './pages/home-page.component';
@@ -25,24 +26,39 @@ export const routes: Routes = [
   { path: '', component: HomePageComponent },
   { 
     path: 'ganpati-hampers', 
-    loadComponent: () => import('./pages/ganpati-hampers-page.component').then(m => m.GanpatiHampersPageComponent) 
+    redirectTo: () => {
+      const router = inject(Router);
+      return router.createUrlTree(['/shop'], { queryParams: { category: 'Ganpati Hampers & Pooja Kits' } });
+    }
   },
-  { path: 'ganpati', redirectTo: 'ganpati-hampers' },
+  { 
+    path: 'ganpati', 
+    redirectTo: () => {
+      const router = inject(Router);
+      return router.createUrlTree(['/shop'], { queryParams: { category: 'Ganpati Hampers & Pooja Kits' } });
+    }
+  },
   { 
     path: 'hampers', 
-    loadComponent: () => import('./pages/hampers-page.component').then(m => m.HampersPageComponent) 
+    redirectTo: '/shop'
   },
   { 
     path: 'hampers/:slug', 
-    loadComponent: () => import('./pages/folder-gallery-page.component').then(m => m.FolderGalleryPageComponent) 
+    redirectTo: '/shop'
   },
   { 
     path: 'return-gifts', 
-    loadComponent: () => import('./pages/return-gift-page.component').then(m => m.ReturnGiftPageComponent) 
+    redirectTo: () => {
+      const router = inject(Router);
+      return router.createUrlTree(['/shop'], { queryParams: { category: 'Event Favours & Return Gifts' } });
+    }
   },
   { 
     path: 'return-gifts/:slug', 
-    loadComponent: () => import('./pages/return-gift-detail-page.component').then(m => m.ReturnGiftDetailPageComponent) 
+    redirectTo: () => {
+      const router = inject(Router);
+      return router.createUrlTree(['/shop'], { queryParams: { category: 'Event Favours & Return Gifts' } });
+    }
   },
   { 
     path: 'gallery', 
@@ -50,11 +66,17 @@ export const routes: Routes = [
   },
   { 
     path: 'top-offers', 
-    loadComponent: () => import('./pages/top-offers-page.component').then(m => m.TopOffersPageComponent) 
+    redirectTo: () => {
+      const router = inject(Router);
+      return router.createUrlTree(['/shop'], { queryParams: { category: 'Friendship Day Collections' } });
+    }
   },
   { 
     path: 'top-offers/:category', 
-    loadComponent: () => import('./pages/top-offer-detail-page.component').then(m => m.TopOfferDetailPageComponent) 
+    redirectTo: () => {
+      const router = inject(Router);
+      return router.createUrlTree(['/shop']);
+    }
   },
   { 
     path: 'contact', 

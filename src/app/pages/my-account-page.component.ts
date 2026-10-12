@@ -117,7 +117,7 @@ import { CustomerAddressService, CustomerAddress } from '../services/customer-ad
 
               <div>
                 <label class="block font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">Mobile Number</label>
-                <input type="tel" maxlength="10" [(ngModel)]="profilePhone" placeholder="10-digit mobile number" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs font-mono outline-none" />
+                <input type="tel" maxlength="10" inputmode="numeric" autocomplete="tel" [(ngModel)]="profilePhone" placeholder="10-digit mobile number" class="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs font-mono outline-none" />
               </div>
 
               <div>
@@ -138,7 +138,7 @@ import { CustomerAddressService, CustomerAddress } from '../services/customer-ad
             </div>
 
             <div class="pt-2 flex justify-end">
-              <button type="button" (click)="saveProfile()" [disabled]="savingProfile || !profileName.trim()" class="px-6 py-2.5 rounded-xl bg-[#9C4738] hover:bg-[#883B2D] text-white text-xs font-bold transition shadow-xs disabled:opacity-50 cursor-pointer">
+              <button type="button" (click)="saveProfile()" [disabled]="savingProfile || !profileName.trim()" class="min-h-[44px] px-6 py-2.5 rounded-xl bg-[#9C4738] hover:bg-[#883B2D] text-white text-xs font-bold transition shadow-xs disabled:opacity-50 cursor-pointer">
                 {{ savingProfile ? 'Saving...' : 'Update Profile' }}
               </button>
             </div>
@@ -151,7 +151,7 @@ import { CustomerAddressService, CustomerAddress } from '../services/customer-ad
                 <h2 class="font-serif font-bold text-lg text-[#2E2825] dark:text-[#F4F1ED]">Saved Address Book</h2>
                 <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">Save frequent delivery destinations for seamless checkout.</p>
               </div>
-              <button *ngIf="!showAddressModal" type="button" (click)="openAddAddress()" class="px-3.5 py-2 rounded-xl bg-[#9C4738] text-white text-xs font-bold hover:bg-[#883B2D] transition shadow-2xs flex items-center gap-1.5 cursor-pointer">
+              <button *ngIf="!showAddressModal" type="button" (click)="openAddAddress()" class="min-h-[40px] px-3.5 py-2 rounded-xl bg-[#9C4738] text-white text-xs font-bold hover:bg-[#883B2D] transition shadow-2xs flex items-center gap-1.5 cursor-pointer">
                 <i class="fa-solid fa-plus text-[10px]"></i>
                 <span>Add Address</span>
               </button>
@@ -179,10 +179,10 @@ import { CustomerAddressService, CustomerAddress } from '../services/customer-ad
                 </div>
 
                 <div class="pt-2 border-t border-[#EADFD2]/60 dark:border-white/10 flex items-center justify-between text-xs">
-                  <button type="button" (click)="editAddress(addr)" class="font-bold text-[#9C4738] dark:text-[#EB9D8E] hover:underline cursor-pointer">
+                  <button type="button" (click)="editAddress(addr)" class="font-bold text-[#9C4738] dark:text-[#EB9D8E] hover:underline cursor-pointer py-1">
                     Edit
                   </button>
-                  <button type="button" (click)="deleteAddress(addr)" class="font-bold text-rose-600 hover:text-rose-700 cursor-pointer">
+                  <button type="button" (click)="deleteAddress(addr)" class="font-bold text-rose-600 hover:text-rose-700 cursor-pointer py-1">
                     Delete
                   </button>
                 </div>
@@ -192,7 +192,7 @@ import { CustomerAddressService, CustomerAddress } from '../services/customer-ad
             <div *ngIf="addresses.length === 0 && !showAddressModal" class="py-8 text-center text-xs text-[#7A6C5E] dark:text-[#C5A393] space-y-2">
               <i class="fa-solid fa-map-location-dot text-2xl text-stone-400"></i>
               <p>You haven't saved any delivery addresses yet.</p>
-              <button type="button" (click)="openAddAddress()" class="px-4 py-2 rounded-xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] text-xs font-bold text-[#9C4738] cursor-pointer">
+              <button type="button" (click)="openAddAddress()" class="min-h-[40px] px-4 py-2 rounded-xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] text-xs font-bold text-[#9C4738] cursor-pointer">
                 + Add Your First Address
               </button>
             </div>
@@ -220,22 +220,22 @@ import { CustomerAddressService, CustomerAddress } from '../services/customer-ad
 
                 <div>
                   <label class="block font-bold mb-1 text-[#4A3C31] dark:text-[#F4F1ED]">PIN Code (6 digits) *</label>
-                  <input type="text" maxlength="6" [(ngModel)]="currentAddress.pin_code" placeholder="400050" class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs font-mono font-bold outline-none" />
+                  <input type="text" maxlength="6" inputmode="numeric" autocomplete="postal-code" [(ngModel)]="currentAddress.pin_code" placeholder="400050" class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs font-mono font-bold outline-none" />
                 </div>
 
                 <div class="sm:col-span-2">
                   <label class="block font-bold mb-1 text-[#4A3C31] dark:text-[#F4F1ED]">Street Address / House No. *</label>
-                  <textarea [(ngModel)]="currentAddress.address" rows="2" placeholder="Building name, flat number, street..." class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs outline-none"></textarea>
+                  <textarea [(ngModel)]="currentAddress.address" autocomplete="street-address" rows="2" placeholder="Building name, flat number, street..." class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs outline-none"></textarea>
                 </div>
 
                 <div>
                   <label class="block font-bold mb-1 text-[#4A3C31] dark:text-[#F4F1ED]">City *</label>
-                  <input type="text" [(ngModel)]="currentAddress.city" placeholder="Mumbai" class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs outline-none" />
+                  <input type="text" [(ngModel)]="currentAddress.city" autocomplete="address-level2" placeholder="Mumbai" class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs outline-none" />
                 </div>
 
                 <div>
                   <label class="block font-bold mb-1 text-[#4A3C31] dark:text-[#F4F1ED]">State *</label>
-                  <input type="text" [(ngModel)]="currentAddress.state" placeholder="Maharashtra" class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs outline-none" />
+                  <input type="text" [(ngModel)]="currentAddress.state" autocomplete="address-level1" placeholder="Maharashtra" class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs outline-none" />
                 </div>
 
                 <div class="sm:col-span-2 flex items-center gap-2 pt-1">

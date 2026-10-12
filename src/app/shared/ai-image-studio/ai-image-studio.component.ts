@@ -132,27 +132,32 @@ export interface ColorPalettePreset {
 
             <!-- 4. Aspect Ratio & Format -->
             <div>
-              <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">
-                Format & Aspect Ratio
-              </label>
-              <div class="grid grid-cols-3 gap-2">
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">
+                  Standard Aspect Ratio
+                </label>
+                <span class="text-[10px] text-[#9C4738] font-semibold">
+                  {{ context.targetType === 'banner' ? '16:9 Mandatory' : '1:1 Mandatory' }}
+                </span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
                 <button type="button" (click)="selectedAspectRatio = '1:1'; regeneratePrompt()"
-                        [class]="selectedAspectRatio === '1:1' ? 'bg-[#9C4738] text-white font-bold' : 'bg-white dark:bg-[#231C18] text-[#7A6C5E] dark:text-[#C5A393] border border-[#EADFD2] dark:border-white/10'"
-                        class="py-2 px-1 rounded-xl text-xs flex flex-col items-center justify-center gap-1 cursor-pointer">
+                        [class]="selectedAspectRatio === '1:1' 
+                          ? 'bg-[#9C4738] text-white font-bold shadow-xs' 
+                          : 'bg-white dark:bg-[#231C18] text-[#7A6C5E] dark:text-[#C5A393] border border-[#EADFD2] dark:border-white/10 hover:border-[#9C4738]'"
+                        class="py-2.5 px-2 rounded-xl text-xs flex flex-col items-center justify-center gap-1 cursor-pointer transition">
                   <span class="w-4 h-4 rounded border-2 border-current"></span>
-                  <span class="text-[10px]">1:1 Square</span>
-                </button>
-                <button type="button" (click)="selectedAspectRatio = '4:3'; regeneratePrompt()"
-                        [class]="selectedAspectRatio === '4:3' ? 'bg-[#9C4738] text-white font-bold' : 'bg-white dark:bg-[#231C18] text-[#7A6C5E] dark:text-[#C5A393] border border-[#EADFD2] dark:border-white/10'"
-                        class="py-2 px-1 rounded-xl text-xs flex flex-col items-center justify-center gap-1 cursor-pointer">
-                  <span class="w-5 h-4 rounded border-2 border-current"></span>
-                  <span class="text-[10px]">4:3 Card</span>
+                  <span class="text-[10px] font-bold">1:1 Square</span>
+                  <span class="text-[8px] opacity-80">(Category / Product / Item)</span>
                 </button>
                 <button type="button" (click)="selectedAspectRatio = '16:9'; regeneratePrompt()"
-                        [class]="selectedAspectRatio === '16:9' ? 'bg-[#9C4738] text-white font-bold' : 'bg-white dark:bg-[#231C18] text-[#7A6C5E] dark:text-[#C5A393] border border-[#EADFD2] dark:border-white/10'"
-                        class="py-2 px-1 rounded-xl text-xs flex flex-col items-center justify-center gap-1 cursor-pointer">
+                        [class]="selectedAspectRatio === '16:9' 
+                          ? 'bg-[#9C4738] text-white font-bold shadow-xs' 
+                          : 'bg-white dark:bg-[#231C18] text-[#7A6C5E] dark:text-[#C5A393] border border-[#EADFD2] dark:border-white/10 hover:border-[#9C4738]'"
+                        class="py-2.5 px-2 rounded-xl text-xs flex flex-col items-center justify-center gap-1 cursor-pointer transition">
                   <span class="w-6 h-3 rounded border-2 border-current"></span>
-                  <span class="text-[10px]">16:9 Banner</span>
+                  <span class="text-[10px] font-bold">16:9 Banner</span>
+                  <span class="text-[8px] opacity-80">(Hero Carousel)</span>
                 </button>
               </div>
             </div>
@@ -160,10 +165,10 @@ export interface ColorPalettePreset {
             <!-- Brand Identity Logo Option -->
             <div class="p-3 rounded-2xl bg-white dark:bg-[#231C18] border border-[#EADFD2] dark:border-white/10 flex items-center justify-between">
               <div class="flex items-center gap-2.5">
-                <img src="assets/logo.png" alt="RMS Logo" class="w-7 h-7 rounded-full object-cover border border-[#D9C3B9]">
+                <img src="assets/images/logo.png" (error)="$any($event.target).src = 'assets/logo.png'" alt="RMS Logo" class="w-7 h-7 rounded-full object-cover border border-[#D9C3B9]">
                 <div>
-                  <p class="text-xs font-bold text-[#2E2825] dark:text-[#F4F1ED]">RMS Brand Seal</p>
-                  <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Incorporate official seal watermark</p>
+                  <p class="text-xs font-bold text-[#2E2825] dark:text-[#F4F1ED]">RMS Official Seal</p>
+                  <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Composite frosted brand seal badge</p>
                 </div>
               </div>
               <input type="checkbox" [(ngModel)]="includeBrandLogo" class="w-4 h-4 accent-[#9C4738] cursor-pointer">
@@ -179,7 +184,7 @@ export interface ColorPalettePreset {
               <div class="flex items-center justify-between">
                 <label class="text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] flex items-center gap-1.5">
                   <i class="fa-solid fa-terminal text-[#9C4738]"></i>
-                  <span>Assembled Creation Prompt</span>
+                  <span>Art-Directed Reference Prompt</span>
                 </label>
                 <button type="button" (click)="regeneratePrompt()" 
                         class="text-[11px] font-bold text-[#9C4738] hover:underline cursor-pointer flex items-center gap-1">
@@ -188,12 +193,12 @@ export interface ColorPalettePreset {
                 </button>
               </div>
 
-              <textarea [(ngModel)]="activePrompt" rows="3"
+              <textarea [(ngModel)]="activePrompt" rows="4"
                         class="w-full p-3 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1E1916] text-xs font-mono text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738] resize-none leading-relaxed"></textarea>
 
               <div class="flex items-center justify-between pt-1">
                 <span class="text-[10px] text-[#A89F91]">
-                  Fine-tune wording before rendering your image variations.
+                  Inspect or refine prompt before synthesizing variations.
                 </span>
 
                 <!-- Action Button -->
@@ -206,12 +211,12 @@ export interface ColorPalettePreset {
             </div>
 
             <!-- Provider Status Alert -->
-            <div class="px-3.5 py-2 bg-[#F3E7DC]/40 dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 rounded-xl flex items-center justify-between text-xs text-[#7A6C5E] dark:text-[#C5A393]">
+            <div class="px-3.5 py-2.5 bg-[#F3E7DC]/50 dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs text-[#7A6C5E] dark:text-[#C5A393]">
               <span class="flex items-center gap-1.5 text-[11px]">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Studio Engine: <strong>RMS Procedural Synthesis &amp; Asset Renderer</strong></span>
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                <span>Studio Engine: <strong>Reference-Matched Asset Synthesizer</strong></span>
               </span>
-              <span class="text-[10px] text-[#A89F91]">No external API keys required</span>
+              <span class="text-[10px] text-[#9C4738] font-bold">Matched to RMS Website Style &bull; &le; 1 MB JPG Output</span>
             </div>
 
             <!-- Loading State -->
@@ -385,7 +390,7 @@ export class AiImageStudioComponent implements OnChanges {
   selectedTheme = 'Festive & Auspicious';
   selectedPalette = this.palettes[0];
   selectedStyle = 'Premium Studio Product Photography';
-  selectedAspectRatio: '1:1' | '4:3' | '16:9' = '1:1';
+  selectedAspectRatio: '1:1' | '16:9' = '1:1';
   includeBrandLogo = true;
 
   activePrompt = '';
@@ -406,11 +411,9 @@ export class AiImageStudioComponent implements OnChanges {
   private initStudioFromContext() {
     if (!this.context) return;
 
-    // Smart default aspect ratio based on entity type
+    // Strict aspect ratios matching cropping specifications: 16:9 for banners, 1:1 for categories, products, items
     if (this.context.targetType === 'banner') {
       this.selectedAspectRatio = '16:9';
-    } else if (this.context.targetType === 'category') {
-      this.selectedAspectRatio = '4:3';
     } else {
       this.selectedAspectRatio = '1:1';
     }

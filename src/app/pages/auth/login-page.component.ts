@@ -58,6 +58,7 @@ import { sanitizeReturnUrl } from '../../utils/security.utils';
             label="Email"
             type="email"
             formControlName="email"
+            autocomplete="email"
             [required]="true"
             placeholder="name@company.com"
             [error]="getEmailError()"
@@ -75,6 +76,7 @@ import { sanitizeReturnUrl } from '../../utils/security.utils';
               <app-input
                 [type]="showPassword() ? 'text' : 'password'"
                 formControlName="password"
+                autocomplete="current-password"
                 [required]="true"
                 placeholder="••••••••••••"
                 [error]="getPasswordError()"

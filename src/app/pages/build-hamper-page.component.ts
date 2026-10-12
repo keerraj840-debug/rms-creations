@@ -212,10 +212,10 @@ interface PresentationTheme {
                         <span>Add</span>
                       </button>
 
-                      <div *ngIf="isItemInHamper(item.uid)" class="flex items-center gap-1.5 bg-white dark:bg-[#251F1C] border border-[#9C4738] rounded-xl px-2 py-1 shadow-2xs">
-                        <button type="button" (click)="decreaseHamperQuantity(item.uid)" class="text-xs font-bold text-stone-500 hover:text-rose-600 cursor-pointer">-</button>
-                        <span class="text-xs font-bold text-[#9C4738] px-1">{{ getHamperItemQuantity(item.uid) }}</span>
-                        <button type="button" (click)="increaseHamperQuantity(item.uid)" class="text-xs font-bold text-stone-500 hover:text-emerald-600 cursor-pointer">+</button>
+                      <div *ngIf="isItemInHamper(item.uid)" class="flex items-center gap-2 bg-white dark:bg-[#251F1C] border border-[#9C4738] rounded-xl p-1 shadow-2xs">
+                        <button type="button" (click)="decreaseHamperQuantity(item.uid)" class="w-7 h-7 rounded-lg bg-stone-100 dark:bg-stone-800 text-xs font-bold text-stone-600 dark:text-stone-300 hover:text-rose-600 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Decrease quantity">-</button>
+                        <span class="text-xs font-bold text-[#9C4738] px-1 font-mono">{{ getHamperItemQuantity(item.uid) }}</span>
+                        <button type="button" (click)="increaseHamperQuantity(item.uid)" class="w-7 h-7 rounded-lg bg-stone-100 dark:bg-stone-800 text-xs font-bold text-stone-600 dark:text-stone-300 hover:text-emerald-600 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Increase quantity">+</button>
                       </div>
                     </div>
                   </div>
@@ -398,7 +398,7 @@ interface PresentationTheme {
             </div>
 
             <!-- RIGHT 5 COLS: STICKY REAL-TIME HAMPER SIMULATION PREVIEW -->
-            <div class="lg:col-span-5 sticky top-24 space-y-4">
+            <div id="hamper-simulation-preview" class="lg:col-span-5 sticky top-24 space-y-4">
               
               <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-5 sm:p-6 shadow-md space-y-4">
                 
@@ -530,6 +530,33 @@ interface PresentationTheme {
           </div>
         </main>
 
+        <!-- FLOATING MOBILE HAMPER PREVIEW PILL (LG:HIDDEN) -->
+        <aside 
+          *ngIf="hamperItems.length > 0"
+          aria-label="Hamper Composition Preview"
+          class="fixed bottom-14 inset-x-3.5 z-30 lg:hidden shadow-2xl"
+        >
+          <div class="bg-[#57251C] text-white rounded-2xl p-3 shadow-xl border border-[#EB9D8E]/30 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-gift text-sm text-[#EB9D8E]"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs font-bold truncate">Hamper: {{ totalItemsCount }} item(s)</p>
+                <p class="text-[10px] text-[#D9C3B9]">Est: ₹{{ estimatedCatalogueSubtotal }} ({{ customItemsCount }} custom)</p>
+              </div>
+            </div>
+            <button 
+              type="button" 
+              (click)="scrollToPreview()"
+              class="min-h-[38px] px-3.5 py-1.5 rounded-xl bg-[#C56D5B] hover:bg-[#9C4738] text-white text-xs font-bold shrink-0 transition cursor-pointer active:scale-95 flex items-center gap-1.5"
+            >
+              <span>View Hamper</span>
+              <i class="fa-solid fa-arrow-down text-[10px]"></i>
+            </button>
+          </div>
+        </aside>
+
         <!-- SUCCESS CONFIRMATION MODAL -->
         <app-modal 
           [isOpen]="showSuccessModal" 
@@ -582,6 +609,15 @@ export class BuildHamperPageComponent implements OnInit {
   private readonly customHamperService = inject(CustomHamperService);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
+
+  scrollToPreview() {
+    if (typeof document !== 'undefined') {
+      const el = document.getElementById('hamper-simulation-preview');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
 
   // Occasions & Themes
   readonly occasions = [

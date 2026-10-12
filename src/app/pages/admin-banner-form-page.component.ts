@@ -154,7 +154,7 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
               <input 
                 type="text" 
                 [(ngModel)]="banner.navigate_to_url_on_click" 
-                placeholder="e.g. /shop or /ganpati-hampers" 
+                placeholder="e.g. /shop or /shop?category=Ganpati Hampers & Pooja Kits" 
                 class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-4 py-3 text-xs sm:text-sm font-mono text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738] outline-none transition"
               />
 
@@ -170,31 +170,31 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
                 </button>
                 <button 
                   type="button" 
-                  (click)="banner.navigate_to_url_on_click = '/ganpati-hampers'"
+                  (click)="banner.navigate_to_url_on_click = '/shop?category=Ganpati Hampers & Pooja Kits'"
                   class="text-xs px-2.5 py-1 rounded-lg bg-[#FAF7F2] dark:bg-white/10 text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] border border-[#EADFD2] dark:border-white/10 transition cursor-pointer"
                 >
-                  /ganpati-hampers
+                  Ganpati Kits
                 </button>
                 <button 
                   type="button" 
-                  (click)="banner.navigate_to_url_on_click = '/hampers'"
+                  (click)="banner.navigate_to_url_on_click = '/shop?category=Chocolate Hampers'"
                   class="text-xs px-2.5 py-1 rounded-lg bg-[#FAF7F2] dark:bg-white/10 text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] border border-[#EADFD2] dark:border-white/10 transition cursor-pointer"
                 >
-                  /hampers
+                  Chocolates
                 </button>
                 <button 
                   type="button" 
-                  (click)="banner.navigate_to_url_on_click = '/return-gifts'"
+                  (click)="banner.navigate_to_url_on_click = '/shop?category=Event Favours & Return Gifts'"
                   class="text-xs px-2.5 py-1 rounded-lg bg-[#FAF7F2] dark:bg-white/10 text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] border border-[#EADFD2] dark:border-white/10 transition cursor-pointer"
                 >
-                  /return-gifts
+                  Return Gifts
                 </button>
                 <button 
                   type="button" 
-                  (click)="banner.navigate_to_url_on_click = '/top-offers'"
+                  (click)="banner.navigate_to_url_on_click = '/build-hamper'"
                   class="text-xs px-2.5 py-1 rounded-lg bg-[#FAF7F2] dark:bg-white/10 text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] border border-[#EADFD2] dark:border-white/10 transition cursor-pointer"
                 >
-                  /top-offers
+                  Build Hamper
                 </button>
               </div>
             </div>

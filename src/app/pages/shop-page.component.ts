@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { SiteLayoutComponent } from '../shared/site-layout.component';
 import { SeoService } from '../shared/seo.service';
 import { SupabaseService } from '../services/supabase.service';
@@ -30,7 +31,7 @@ export interface ShopProduct {
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-20">
         
         <!-- PROMOTIONAL HERO BANNER -->
-        <section class="relative overflow-hidden bg-gradient-to-r from-[#57251C] via-[#9C4738] to-[#BA5E4E] text-white py-12 md:py-16 shadow-md">
+        <section class="relative overflow-hidden bg-gradient-to-r from-[#57251C] via-[#9C4738] to-[#BA5E4E] text-white py-10 md:py-16 shadow-md">
           <div class="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
           <div class="pointer-events-none absolute bottom-0 right-0 h-64 w-64 rounded-full bg-black/15 blur-2xl"></div>
 
@@ -39,13 +40,13 @@ export interface ShopProduct {
               <i class="fa-solid fa-sparkles text-amber-300"></i>
               Boutique Gifting Catalog
             </span>
-            <h1 class="mt-4 font-serif text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+            <h1 class="mt-3 font-serif text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight">
               Curated Gift Hampers &amp; Festive Treats
             </h1>
-            <p class="mt-3 text-sm sm:text-base text-[#F3E7DC] max-w-2xl mx-auto leading-relaxed">
+            <p class="mt-2.5 text-xs sm:text-base text-[#F3E7DC] max-w-2xl mx-auto leading-relaxed">
               Explore artisanal Ganpati pooja hampers, festive gift bundles, birthday favors, and luxury suites. Order online with Cash on Delivery or Free 0% UPI.
             </p>
-            <div class="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-white/90">
+            <div class="mt-5 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 text-xs font-semibold text-white/90">
               <span class="inline-flex items-center gap-1.5"><i class="fa-solid fa-truck-fast text-amber-300"></i> Free Delivery on ₹499+</span>
               <span class="hidden sm:inline">•</span>
               <span class="inline-flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-emerald-300"></i> 100% Handcrafted</span>
@@ -56,10 +57,10 @@ export interface ShopProduct {
         </section>
 
         <!-- MAIN SHOP CONTENT -->
-        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <main class="container mx-auto px-3.5 sm:px-6 lg:px-8 pt-6 sm:pt-8">
           
           <!-- SEARCH & FILTER TOOLBAR -->
-          <div class="bg-white dark:bg-[#1E1916] rounded-2xl p-4 sm:p-5 border border-[#EADFD2] dark:border-white/10 shadow-sm space-y-4">
+          <div class="bg-white dark:bg-[#1E1916] rounded-2xl p-3.5 sm:p-5 border border-[#EADFD2] dark:border-white/10 shadow-xs space-y-3.5">
             
             <!-- Top Controls Row -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -70,9 +71,9 @@ export interface ShopProduct {
                   type="text" 
                   [(ngModel)]="searchQuery" 
                   placeholder="Search hampers, Ganpati boxes, return gifts..." 
-                  class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738] transition"
+                  class="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738] transition"
                 />
-                <button *ngIf="searchQuery" (click)="searchQuery = ''" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#7A6C5E] hover:text-[#2E2825]">
+                <button *ngIf="searchQuery" (click)="searchQuery = ''" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#7A6C5E] hover:text-[#2E2825] p-1">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
               </div>
@@ -87,7 +88,7 @@ export interface ShopProduct {
                   <label class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] hidden sm:inline">Sort By:</label>
                   <select 
                     [(ngModel)]="sortBy"
-                    class="px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs font-semibold text-[#2E2825] dark:text-[#F4F1ED] outline-none cursor-pointer"
+                    class="px-2.5 sm:px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs font-semibold text-[#2E2825] dark:text-[#F4F1ED] outline-none cursor-pointer"
                   >
                     <option value="featured">Featured First</option>
                     <option value="price-asc">Price: Low to High</option>
@@ -100,8 +101,8 @@ export interface ShopProduct {
 
             <!-- Category & Price Filter Pills -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-[#EADFD2]/60 dark:border-white/10">
-              <!-- Categories -->
-              <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+              <!-- Categories Horizontal Scroll -->
+              <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none -mx-1 px-1">
                 <button 
                   type="button"
                   *ngFor="let cat of availableCategories"
@@ -109,14 +110,14 @@ export interface ShopProduct {
                   [class]="selectedCategory === cat 
                     ? 'bg-[#9C4738] text-white font-bold shadow-xs' 
                     : 'bg-[#FAF7F2] dark:bg-[#251F1C] text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#2E2825] dark:hover:text-[#F4F1ED] border border-[#EADFD2] dark:border-white/10 font-medium'"
-                  class="px-3.5 py-1.5 rounded-full text-xs shrink-0 transition-all cursor-pointer"
+                  class="min-h-[36px] px-3.5 py-1.5 rounded-full text-xs shrink-0 transition-all cursor-pointer whitespace-nowrap active:scale-95"
                 >
                   {{ cat }}
                 </button>
               </div>
 
               <!-- Budget filters -->
-              <div class="flex items-center gap-1.5 shrink-0">
+              <div class="flex items-center gap-1.5 shrink-0 overflow-x-auto pb-1 sm:pb-0">
                 <span class="text-[11px] font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider hidden lg:inline">Budget:</span>
                 <button 
                   type="button"
@@ -125,7 +126,7 @@ export interface ShopProduct {
                   [class]="selectedBudget === b.value 
                     ? 'bg-[#57251C] dark:bg-white text-white dark:text-[#2E2825] font-bold' 
                     : 'bg-white dark:bg-[#251F1C] text-[#7A6C5E] dark:text-[#C5A393] border border-[#EADFD2] dark:border-white/10'"
-                  class="px-2.5 py-1 rounded-lg text-[11px] transition-all cursor-pointer"
+                  class="min-h-[32px] px-2.5 py-1 rounded-lg text-[11px] transition-all cursor-pointer whitespace-nowrap active:scale-95"
                 >
                   {{ b.label }}
                 </button>
@@ -141,7 +142,7 @@ export interface ShopProduct {
           </div>
 
           <!-- EMPTY STATE -->
-          <div *ngIf="!loading && filteredProducts.length === 0" class="py-20 text-center bg-white dark:bg-[#1E1916] rounded-3xl border border-dashed border-[#EADFD2] dark:border-white/10 p-8 max-w-md mx-auto my-8 shadow-xs">
+          <div *ngIf="!loading && filteredProducts.length === 0" class="py-16 sm:py-20 text-center bg-white dark:bg-[#1E1916] rounded-3xl border border-dashed border-[#EADFD2] dark:border-white/10 p-6 sm:p-8 max-w-md mx-auto my-8 shadow-xs">
             <div class="w-14 h-14 rounded-2xl bg-[#FAF7F2] dark:bg-white/5 text-[#9C4738] dark:text-[#EB9D8E] flex items-center justify-center text-2xl mx-auto">
               <i class="fa-solid fa-bag-shopping"></i>
             </div>
@@ -150,14 +151,14 @@ export interface ShopProduct {
             <button 
               type="button" 
               (click)="resetFilters()" 
-              class="mt-5 px-5 py-2.5 rounded-full bg-[#9C4738] text-white text-xs font-bold hover:bg-[#883B2D] transition cursor-pointer"
+              class="mt-5 px-5 py-2.5 rounded-full bg-[#9C4738] text-white text-xs font-bold hover:bg-[#883B2D] transition cursor-pointer active:scale-95"
             >
               Reset All Filters
             </button>
           </div>
 
-          <!-- PRODUCT GRID -->
-          <div *ngIf="!loading && filteredProducts.length > 0" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <!-- RESPONSIVE 2-COLUMN MOBILE PRODUCT GRID -->
+          <div *ngIf="!loading && filteredProducts.length > 0" class="mt-6 sm:mt-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
             <div 
               *ngFor="let product of filteredProducts" 
               class="group bg-white dark:bg-[#1E1916] rounded-2xl border border-[#EADFD2] dark:border-white/10 overflow-hidden shadow-2xs hover:shadow-lg hover:border-[#9C4738]/50 transition-all duration-300 flex flex-col justify-between"
@@ -172,41 +173,42 @@ export interface ShopProduct {
                 />
                 
                 <!-- Category badge -->
-                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/90 dark:bg-[#1E1916]/90 text-[#9C4738] dark:text-[#EB9D8E] backdrop-blur-md shadow-2xs border border-[#EADFD2]/60 dark:border-white/10">
+                <span class="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-bold bg-white/90 dark:bg-[#1E1916]/90 text-[#9C4738] dark:text-[#EB9D8E] backdrop-blur-md shadow-2xs border border-[#EADFD2]/60 dark:border-white/10 truncate max-w-[120px]">
                   {{ product.category }}
                 </span>
 
                 <!-- Discount badge if applicable -->
-                <span *ngIf="product.originalPrice && product.originalPrice > product.price" class="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white shadow-xs">
+                <span *ngIf="product.originalPrice && product.originalPrice > product.price" class="absolute top-2 right-2 sm:top-3 sm:right-3 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-600 text-white shadow-xs">
                   Save ₹{{ product.originalPrice - product.price }}
                 </span>
               </div>
 
               <!-- Card Content -->
-              <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+              <div class="p-3 sm:p-4 flex-1 flex flex-col justify-between space-y-2.5 sm:space-y-3">
                 <div>
                   <h3 
                     [routerLink]="['/product', product.id]"
-                    class="font-serif font-bold text-sm text-[#2E2825] dark:text-[#F4F1ED] group-hover:text-[#9C4738] dark:group-hover:text-[#EB9D8E] transition-colors cursor-pointer line-clamp-2"
+                    class="font-serif font-bold text-xs sm:text-sm text-[#2E2825] dark:text-[#F4F1ED] group-hover:text-[#9C4738] dark:group-hover:text-[#EB9D8E] transition-colors cursor-pointer line-clamp-2 min-h-[2rem]"
+                    [title]="product.name"
                   >
                     {{ product.name }}
                   </h3>
-                  <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393] line-clamp-2 mt-1 leading-relaxed">
+                  <p class="hidden sm:block text-xs text-[#7A6C5E] dark:text-[#C5A393] line-clamp-2 mt-1 leading-relaxed">
                     {{ product.description || 'Artisanal gift hamper curated with bespoke keepsakes.' }}
                   </p>
                 </div>
 
                 <!-- Price and Add to Cart Section -->
-                <div class="pt-3 border-t border-[#EADFD2]/60 dark:border-white/10 flex items-center justify-between gap-2">
+                <div class="pt-2 sm:pt-3 border-t border-[#EADFD2]/60 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
-                    <div class="flex items-baseline gap-1.5">
-                      <span class="font-serif font-bold text-lg text-[#9C4738] dark:text-[#EB9D8E]">₹{{ product.price }}</span>
-                      <span *ngIf="product.originalPrice && product.originalPrice > product.price" class="text-xs text-[#7A6C5E] line-through">
+                    <div class="flex items-baseline gap-1 sm:gap-1.5 flex-wrap">
+                      <span class="font-serif font-bold text-base sm:text-lg text-[#9C4738] dark:text-[#EB9D8E]">₹{{ product.price }}</span>
+                      <span *ngIf="product.originalPrice && product.originalPrice > product.price" class="text-[10px] sm:text-xs text-[#7A6C5E] line-through">
                         ₹{{ product.originalPrice }}
                       </span>
                     </div>
-                    <span class="text-[10px] font-bold text-emerald-600 flex items-center gap-1">
-                      <i class="fa-solid fa-check text-[9px]"></i> In Stock
+                    <span class="text-[9px] sm:text-[10px] font-bold text-emerald-600 flex items-center gap-1">
+                      <i class="fa-solid fa-check text-[8px]"></i> In Stock
                     </span>
                   </div>
 
@@ -214,11 +216,11 @@ export interface ShopProduct {
                   <button 
                     type="button"
                     (click)="addToCart(product)"
-                    class="px-3.5 py-2 rounded-xl bg-[#57251C] dark:bg-[#C56D5B] hover:bg-[#9C4738] dark:hover:bg-[#DD8776] text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs hover:shadow active:scale-95 cursor-pointer shrink-0"
+                    class="w-full sm:w-auto min-h-[38px] px-3 py-2 rounded-xl bg-[#57251C] dark:bg-[#C56D5B] hover:bg-[#9C4738] dark:hover:bg-[#DD8776] text-white text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs hover:shadow active:scale-95 cursor-pointer shrink-0"
                     title="Add to Cart"
                   >
-                    <i class="fa-solid fa-bag-shopping text-xs"></i>
-                    <span>{{ getCartQty(product.id) > 0 ? ('In Cart (' + getCartQty(product.id) + ')') : 'Add to Cart' }}</span>
+                    <i class="fa-solid fa-bag-shopping text-[11px]"></i>
+                    <span>{{ getCartQty(product.id) > 0 ? ('Added (' + getCartQty(product.id) + ')') : 'Add to Cart' }}</span>
                   </button>
                 </div>
               </div>
@@ -232,11 +234,14 @@ export interface ShopProduct {
     </app-site-layout>
   `
 })
-export class ShopPageComponent implements OnInit {
+export class ShopPageComponent implements OnInit, OnDestroy {
   private readonly supabase = inject(SupabaseService);
   private readonly seo = inject(SeoService);
+  private readonly route = inject(ActivatedRoute);
   public readonly cartService = inject(CartService);
   private readonly cdr = inject(ChangeDetectorRef);
+
+  private querySub?: Subscription;
 
   products: ShopProduct[] = [];
   loading = true;
@@ -262,7 +267,47 @@ export class ShopPageComponent implements OnInit {
       keywords: 'shop hampers, buy gift hampers online, ganpati pooja box, return gifts, chocolate gifts',
       slug: 'shop'
     });
-    this.loadCatalog();
+
+    this.loadCatalog().then(() => {
+      this.subscribeToQueryParams();
+    });
+  }
+
+  ngOnDestroy() {
+    this.querySub?.unsubscribe();
+  }
+
+  private subscribeToQueryParams() {
+    this.querySub = this.route.queryParams.subscribe(params => {
+      if (params['category']) {
+        this.applyCategoryFilter(params['category']);
+      }
+      if (params['search']) {
+        this.searchQuery = params['search'];
+      }
+      this.cdr.markForCheck();
+    });
+  }
+
+  private applyCategoryFilter(catParam: string) {
+    if (!catParam) return;
+    const clean = catParam.toLowerCase().trim();
+    const matched = this.availableCategories.find(c => {
+      const lower = c.toLowerCase();
+      return lower === clean || 
+             lower.includes(clean) || 
+             clean.includes(lower) ||
+             (clean.includes('ganpati') && lower.includes('ganpati')) ||
+             (clean.includes('return') && lower.includes('return')) ||
+             (clean.includes('girl') && lower.includes('girl')) ||
+             (clean.includes('boy') && lower.includes('boy')) ||
+             (clean.includes('chocolate') && lower.includes('chocolate')) ||
+             (clean.includes('friendship') && lower.includes('friendship')) ||
+             (clean.includes('raksha') && lower.includes('raksha'));
+    });
+    if (matched) {
+      this.selectedCategory = matched;
+    }
   }
 
   async loadCatalog() {

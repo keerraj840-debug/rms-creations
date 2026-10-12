@@ -6,6 +6,7 @@ import { SiteLayoutComponent } from '../shared/site-layout.component';
 import { SeoService } from '../shared/seo.service';
 import { SupabaseService } from '../services/supabase.service';
 import { CartService } from '../services/cart.service';
+import { PinCodeAvailabilityService, DeliveryCheckResult } from '../services/pin-code-availability.service';
 
 export interface ProductDetail {
   id: number;
@@ -26,10 +27,10 @@ export interface ProductDetail {
   imports: [CommonModule, RouterLink, FormsModule, SiteLayoutComponent],
   template: `
     <app-site-layout>
-      <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-24">
+      <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-28">
         
         <!-- BREADCRUMBS BAR -->
-        <nav aria-label="Breadcrumb" class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs text-[#7A6C5E] dark:text-[#C5A393] flex items-center gap-2">
+        <nav aria-label="Breadcrumb" class="container mx-auto px-4 sm:px-6 lg:px-8 py-3.5 text-xs text-[#7A6C5E] dark:text-[#C5A393] flex items-center gap-2">
           <a routerLink="/" class="hover:text-[#9C4738] transition">Home</a>
           <span>/</span>
           <a routerLink="/shop" class="hover:text-[#9C4738] transition">Shop</a>
@@ -50,7 +51,7 @@ export interface ProductDetail {
           </div>
           <h2 class="mt-4 font-serif text-2xl font-bold text-[#2E2825] dark:text-[#F4F1ED]">Product Not Found</h2>
           <p class="mt-2 text-xs text-[#7A6C5E] dark:text-[#C5A393]">This gift item may have been moved or is currently not listed.</p>
-          <a routerLink="/shop" class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#9C4738] text-white text-xs font-bold shadow-md hover:bg-[#883B2D] transition">
+          <a routerLink="/shop" class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#9C4738] text-white text-xs font-bold shadow-md hover:bg-[#883B2D] transition active:scale-95">
             Browse All Hampers
           </a>
         </div>
@@ -58,7 +59,7 @@ export interface ProductDetail {
         <!-- PRODUCT DETAILS CONTAINER -->
         <main *ngIf="!loading && product" class="container mx-auto px-4 sm:px-6 lg:px-8 pt-2">
           
-          <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-6 sm:p-8 lg:p-10 shadow-sm">
+          <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-5 sm:p-8 lg:p-10 shadow-xs">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
               
               <!-- LEFT COLUMN: PHOTO GALLERY -->
@@ -71,7 +72,7 @@ export interface ProductDetail {
                     class="w-full h-full object-contain cursor-zoom-in transition-transform duration-500 hover:scale-105"
                     (click)="openImageModal()"
                   />
-                  <span class="absolute top-4 left-4 px-3 py-1 rounded-full text-[11px] font-bold bg-white/95 dark:bg-[#1E1916]/95 text-[#9C4738] dark:text-[#EB9D8E] border border-[#EADFD2]/60 dark:border-white/10 shadow-2xs">
+                  <span class="absolute top-3 left-3 sm:top-4 sm:left-4 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold bg-white/95 dark:bg-[#1E1916]/95 text-[#9C4738] dark:text-[#EB9D8E] border border-[#EADFD2]/60 dark:border-white/10 shadow-2xs">
                     {{ product.category }}
                   </span>
                 </div>
@@ -83,7 +84,7 @@ export interface ProductDetail {
                     *ngFor="let img of product.images; let idx = index"
                     (click)="activeImage = img"
                     [class]="activeImage === img ? 'ring-2 ring-[#9C4738] border-transparent' : 'border-[#EADFD2] dark:border-white/10 hover:opacity-85'"
-                    class="w-20 h-20 rounded-xl overflow-hidden bg-[#FAF7F2] dark:bg-[#251F1C] border shrink-0 transition cursor-pointer"
+                    class="w-18 h-18 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-[#FAF7F2] dark:bg-[#251F1C] border shrink-0 transition cursor-pointer"
                   >
                     <img [src]="img" [alt]="product.name" class="w-full h-full object-cover" />
                   </button>
@@ -119,18 +120,50 @@ export interface ProductDetail {
                       Save ₹{{ product.originalPrice - product.price }}
                     </span>
                   </div>
-                  <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-1">Inclusive of all taxes. Free shipping on orders ₹499+.</p>
+                  <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-1">Inclusive of all taxes. Free doorstep shipping on orders ₹499+.</p>
 
                   <!-- Inclusions & Description -->
-                  <div class="mt-6 pt-6 border-t border-[#EADFD2]/60 dark:border-white/10 space-y-3">
+                  <div class="mt-5 pt-5 border-t border-[#EADFD2]/60 dark:border-white/10 space-y-2.5">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-[#7A6C5E] dark:text-[#C5A393]">Hamper Highlights &amp; Inclusions</h3>
-                    <p class="text-sm text-[#4A3C31] dark:text-[#D9C3B9] leading-relaxed whitespace-pre-line">
+                    <p class="text-xs sm:text-sm text-[#4A3C31] dark:text-[#D9C3B9] leading-relaxed whitespace-pre-line">
                       {{ product.description || 'Each hamper is individually handcrafted with premium finishes, luxury satin ribbon wrapping, and protective transit packing.' }}
                     </p>
                   </div>
 
+                  <!-- PIN CODE DELIVERY CHECKER -->
+                  <div class="mt-5 p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 space-y-2">
+                    <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">
+                      <i class="fa-solid fa-location-dot text-[#9C4738] mr-1"></i>
+                      Check Delivery to Your PIN Code:
+                    </label>
+                    <div class="flex gap-2">
+                      <input 
+                        type="text" 
+                        inputmode="numeric"
+                        maxlength="6"
+                        [(ngModel)]="pincodeQuery" 
+                        (keyup.enter)="checkPincode()"
+                        placeholder="e.g. 411038"
+                        class="flex-1 px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs font-mono font-bold text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
+                      />
+                      <button 
+                        type="button" 
+                        (click)="checkPincode()"
+                        [disabled]="checkingPincode || !pincodeQuery.trim()"
+                        class="min-h-[40px] px-4 py-2 rounded-xl bg-[#57251C] dark:bg-[#C56D5B] text-white text-xs font-bold hover:bg-[#9C4738] transition disabled:opacity-50 cursor-pointer shrink-0"
+                      >
+                        <i *ngIf="checkingPincode" class="fa-solid fa-spinner fa-spin mr-1"></i>
+                        <span>Check</span>
+                      </button>
+                    </div>
+                    <div *ngIf="pincodeResult" class="text-[11px] font-medium pt-1" [ngClass]="pincodeResult.isServiceable ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-600'">
+                      <i class="fa-solid mr-1" [ngClass]="pincodeResult.isServiceable ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                      <span>{{ pincodeResult.message }}</span>
+                    </div>
+                  </div>
+
                   <!-- Optional Personalization Gift Note -->
-                  <div class="mt-6 p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 space-y-2">
+                  <div class="mt-5 p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 space-y-2">
                     <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">
                       <i class="fa-solid fa-pen-nib text-[#9C4738] mr-1"></i>
                       Complimentary Greeting Message (Optional):
@@ -147,12 +180,12 @@ export interface ProductDetail {
                   <div class="mt-6 pt-6 border-t border-[#EADFD2]/60 dark:border-white/10 space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                       
-                      <!-- Quantity Stepper -->
-                      <div class="flex items-center border border-[#EADFD2] dark:border-white/10 rounded-xl bg-[#FAF7F2] dark:bg-[#251F1C] overflow-hidden shrink-0 w-36 justify-between p-1">
+                      <!-- Quantity Stepper with 44px touch targets -->
+                      <div class="flex items-center border border-[#EADFD2] dark:border-white/10 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] overflow-hidden shrink-0 w-36 justify-between p-1">
                         <button 
                           type="button" 
                           (click)="decrementQty()" 
-                          class="w-9 h-9 rounded-lg bg-white dark:bg-[#1E1916] text-[#4A3C31] dark:text-[#F4F1ED] font-bold text-sm hover:bg-[#F3E7DC] dark:hover:bg-white/10 transition cursor-pointer flex items-center justify-center"
+                          class="w-10 h-10 rounded-xl bg-white dark:bg-[#1E1916] text-[#4A3C31] dark:text-[#F4F1ED] font-bold text-sm hover:bg-[#F3E7DC] dark:hover:bg-white/10 transition cursor-pointer flex items-center justify-center active:scale-95"
                           aria-label="Decrease quantity"
                         >
                           <i class="fa-solid fa-minus text-xs"></i>
@@ -163,7 +196,7 @@ export interface ProductDetail {
                         <button 
                           type="button" 
                           (click)="incrementQty()" 
-                          class="w-9 h-9 rounded-lg bg-white dark:bg-[#1E1916] text-[#4A3C31] dark:text-[#F4F1ED] font-bold text-sm hover:bg-[#F3E7DC] dark:hover:bg-white/10 transition cursor-pointer flex items-center justify-center"
+                          class="w-10 h-10 rounded-xl bg-white dark:bg-[#1E1916] text-[#4A3C31] dark:text-[#F4F1ED] font-bold text-sm hover:bg-[#F3E7DC] dark:hover:bg-white/10 transition cursor-pointer flex items-center justify-center active:scale-95"
                           aria-label="Increase quantity"
                         >
                           <i class="fa-solid fa-plus text-xs"></i>
@@ -174,7 +207,7 @@ export interface ProductDetail {
                       <button 
                         type="button" 
                         (click)="onAddToCart()"
-                        class="flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#57251C] to-[#9C4738] hover:from-[#451B14] hover:to-[#883B2D] text-white font-bold text-sm shadow-md hover:shadow-lg active:scale-98 transition flex items-center justify-center gap-2.5 cursor-pointer"
+                        class="flex-1 min-h-[48px] py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#57251C] to-[#9C4738] hover:from-[#451B14] hover:to-[#883B2D] text-white font-bold text-sm shadow-md hover:shadow-lg active:scale-98 transition flex items-center justify-center gap-2.5 cursor-pointer"
                       >
                         <i class="fa-solid fa-bag-shopping text-base"></i>
                         <span>Add {{ quantity > 1 ? (quantity + ' Items') : 'to Cart' }} — ₹{{ product.price * quantity }}</span>
@@ -197,21 +230,21 @@ export interface ProductDetail {
                 </div>
 
                 <!-- ASSURANCE BADGES -->
-                <div class="grid grid-cols-3 gap-3 pt-6 border-t border-[#EADFD2]/60 dark:border-white/10 text-center text-xs">
-                  <div class="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-xl border border-[#EADFD2]/50 dark:border-white/10">
+                <div class="grid grid-cols-3 gap-2.5 sm:gap-3 pt-6 border-t border-[#EADFD2]/60 dark:border-white/10 text-center text-xs">
+                  <div class="p-2.5 sm:p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-xl border border-[#EADFD2]/50 dark:border-white/10">
                     <i class="fa-solid fa-shield-heart text-base text-[#9C4738] dark:text-[#EB9D8E] mb-1 block"></i>
-                    <span class="font-bold text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">100% Handcrafted</span>
-                    <span class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Pristine Finish</span>
+                    <span class="font-bold text-[10px] sm:text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">100% Handcrafted</span>
+                    <span class="text-[9px] sm:text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Pristine Finish</span>
                   </div>
-                  <div class="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-xl border border-[#EADFD2]/50 dark:border-white/10">
+                  <div class="p-2.5 sm:p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-xl border border-[#EADFD2]/50 dark:border-white/10">
                     <i class="fa-solid fa-truck-fast text-base text-[#9C4738] dark:text-[#EB9D8E] mb-1 block"></i>
-                    <span class="font-bold text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">Secure Transit</span>
-                    <span class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Damage-free Packing</span>
+                    <span class="font-bold text-[10px] sm:text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">Secure Transit</span>
+                    <span class="text-[9px] sm:text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Damage-free Packing</span>
                   </div>
-                  <div class="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-xl border border-[#EADFD2]/50 dark:border-white/10">
+                  <div class="p-2.5 sm:p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-xl border border-[#EADFD2]/50 dark:border-white/10">
                     <i class="fa-solid fa-wallet text-base text-[#9C4738] dark:text-[#EB9D8E] mb-1 block"></i>
-                    <span class="font-bold text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">COD / Free UPI</span>
-                    <span class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Direct &amp; Safe</span>
+                    <span class="font-bold text-[10px] sm:text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">COD / Free UPI</span>
+                    <span class="text-[9px] sm:text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Direct &amp; Safe</span>
                   </div>
                 </div>
 
@@ -221,6 +254,26 @@ export interface ProductDetail {
           </div>
 
         </main>
+
+        <!-- STICKY MOBILE BOTTOM BUY BAR -->
+        <aside 
+          *ngIf="product && !loading"
+          aria-label="Quick Add to Cart"
+          class="fixed bottom-14 inset-x-0 z-30 bg-[#FFFDFC]/95 dark:bg-[#1C1816]/95 backdrop-blur-md border-t border-[#D9C3B9]/50 dark:border-[#3D302A] px-4 py-2.5 md:hidden shadow-lg flex items-center justify-between gap-3"
+        >
+          <div>
+            <span class="font-serif font-bold text-lg text-[#9C4738] dark:text-[#EB9D8E]">₹{{ product.price * quantity }}</span>
+            <span class="block text-[10px] text-emerald-600 font-bold">In Stock &bull; Free UPI / COD</span>
+          </div>
+          <button 
+            type="button"
+            (click)="onAddToCart()"
+            class="flex-1 max-w-[200px] min-h-[44px] py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#57251C] to-[#9C4738] hover:from-[#451B14] hover:to-[#883B2D] text-white font-bold text-xs uppercase tracking-wider shadow-md active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <i class="fa-solid fa-bag-shopping text-xs"></i>
+            <span>Add to Cart</span>
+          </button>
+        </aside>
 
         <!-- FULL RESOLUTION PREVIEW MODAL -->
         <div *ngIf="showImageModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" (click)="showImageModal = false">
@@ -242,6 +295,7 @@ export class ProductDetailPageComponent implements OnInit {
   private readonly supabase = inject(SupabaseService);
   private readonly seo = inject(SeoService);
   public readonly cartService = inject(CartService);
+  private readonly pinService = inject(PinCodeAvailabilityService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   product: ProductDetail | null = null;
@@ -250,6 +304,10 @@ export class ProductDetailPageComponent implements OnInit {
   quantity = 1;
   personalizationNote = '';
   showImageModal = false;
+
+  pincodeQuery = '';
+  checkingPincode = false;
+  pincodeResult: DeliveryCheckResult | null = null;
 
   @HostListener('window:keydown.escape')
   handleEscape() {
@@ -314,6 +372,30 @@ export class ProductDetailPageComponent implements OnInit {
       this.product = null;
     } finally {
       this.loading = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  async checkPincode() {
+    if (!this.pincodeQuery || this.pincodeQuery.trim().length !== 6) {
+      this.pincodeResult = {
+        isServiceable: false,
+        pinCode: this.pincodeQuery || '',
+        baseCharge: 0,
+        above1kgCharge: 0,
+        calculatedDeliveryFee: 0,
+        totalWeightKg: 0.5,
+        freeDeliveryApplied: false,
+        message: 'Please enter a valid 6-digit postal PIN code.'
+      };
+      return;
+    }
+    this.checkingPincode = true;
+    try {
+      const subtotal = (this.product?.price || 0) * this.quantity;
+      this.pincodeResult = await this.pinService.checkDelivery(this.pincodeQuery.trim(), subtotal, 0.5);
+    } finally {
+      this.checkingPincode = false;
       this.cdr.markForCheck();
     }
   }

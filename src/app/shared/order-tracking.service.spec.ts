@@ -64,7 +64,7 @@ describe('OrderTrackingService', () => {
     service.recordOrder({
       title: 'Sample Gift',
       category: 'Gifts',
-      page: '/return-gifts',
+      page: '/shop',
       link: 'https://example.com/gifts'
     });
     expect(service.getOrders().length).toBe(1);

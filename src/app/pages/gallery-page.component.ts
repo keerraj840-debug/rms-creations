@@ -3,10 +3,17 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SiteLayoutComponent } from '../shared/site-layout.component';
 import { SeoService } from '../shared/seo.service';
-import { GalleryItem } from '../shared/asset-folder-config';
 import { OrderTrackingService } from '../shared/order-tracking.service';
 import { SupabaseService } from '../services/supabase.service';
 import { CheckoutService } from '../services/checkout.service';
+
+export interface GalleryItem {
+  title: string;
+  description: string;
+  image: string;
+  price?: number;
+  orderLink?: string;
+}
 
 @Component({
   selector: 'app-gallery-page',

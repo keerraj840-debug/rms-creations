@@ -248,8 +248,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       <input 
                         type="text" 
                         [(ngModel)]="customerName" 
+                        autocomplete="name"
                         placeholder="e.g. Radhika Sharma"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
+                        class="w-full min-h-[42px] px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
                       />
                     </div>
 
@@ -259,10 +260,12 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       </label>
                       <input 
                         type="tel" 
+                        inputmode="numeric"
+                        autocomplete="tel"
                         maxlength="10"
                         [(ngModel)]="customerPhone" 
                         placeholder="10-digit mobile"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] font-mono outline-none focus:border-[#9C4738]"
+                        class="w-full min-h-[42px] px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] font-mono outline-none focus:border-[#9C4738]"
                       />
                     </div>
                   </div>
@@ -274,6 +277,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                     </label>
                     <textarea 
                       [(ngModel)]="customerAddress" 
+                      autocomplete="street-address"
                       rows="2"
                       placeholder="e.g. Flat 304, Green Heights, Linking Road, Bandra West"
                       class="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
@@ -287,8 +291,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       <input 
                         type="text" 
                         [(ngModel)]="customerCity" 
+                        autocomplete="address-level2"
                         placeholder="e.g. Mumbai"
-                        class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
+                        class="w-full min-h-[42px] px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
                       />
                     </div>
 
@@ -297,8 +302,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       <input 
                         type="text" 
                         [(ngModel)]="customerState" 
+                        autocomplete="address-level1"
                         placeholder="Maharashtra"
-                        class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
+                        class="w-full min-h-[42px] px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
                       />
                     </div>
 
@@ -308,11 +314,13 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       </label>
                       <input 
                         type="text" 
+                        inputmode="numeric"
+                        autocomplete="postal-code"
                         [(ngModel)]="customerPin" 
                         (ngModelChange)="onPinChange($event)"
                         maxlength="6"
                         placeholder="e.g. 400050"
-                        class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs font-mono font-bold text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
+                        class="w-full min-h-[42px] px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs font-mono font-bold text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
                       />
                     </div>
                   </div>

@@ -16,12 +16,12 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
     <!-- Main Shell -->
     <div class="flex min-h-screen flex-col bg-[#F7F6F3] dark:bg-[#14100E] font-sans text-[#57251C] dark:text-[#F4F1ED] selection:bg-[#EB9D8E] selection:text-[#57251C] transition-colors duration-200">
       
-      <!-- Top Announcement Bar (Festive Brand Banner) -->
+      <!-- Top Announcement Bar (Brand Banner) -->
       <aside aria-label="Announcement" class="relative z-50 bg-gradient-to-r from-[#57251C] via-[#9C4738] to-[#C56D5B] px-4 py-2 text-center text-xs font-semibold text-[#FFFDFC] shadow-sm sm:text-sm">
         <div class="flex items-center justify-center gap-2 flex-wrap">
-          <i class="fa-solid fa-om text-[#EB9D8E]"></i>
-          <span><strong>Ganesh Utsav Special:</strong> Handcrafted Ganpati Pooja Kits starting at just ₹99!</span>
-          <a routerLink="/ganpati-hampers" class="rounded-full bg-white/20 px-3 py-0.5 font-bold text-[#FFFDFC] hover:bg-white/30 transition">View Boxes & Order &rarr;</a>
+          <i class="fa-solid fa-gift text-[#EB9D8E]"></i>
+          <span><strong>Handcrafted Luxury Hampers:</strong> Bespoke gift curations, celebration treats &amp; pooja essentials!</span>
+          <a routerLink="/shop" class="rounded-full bg-white/20 px-3 py-0.5 font-bold text-[#FFFDFC] hover:bg-white/30 transition">Explore Catalogue &rarr;</a>
         </div>
       </aside>
 
@@ -67,16 +67,7 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
                 routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
                 class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
-                Shop
-              </a>
-              <a 
-                routerLink="/ganpati-hampers" 
-                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
-                class="relative inline-flex items-center gap-1.5 text-sm font-bold text-[#9C4738] dark:text-[#EB9D8E] transition-colors hover:text-[#57251C] dark:hover:text-[#F4F1ED] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
-              >
-                <i class="fa-solid fa-om text-xs"></i>
-                <span>Ganpati Hampers</span>
-                <span class="rounded-full bg-[#C56D5B]/15 dark:bg-[#C56D5B]/25 px-1.5 py-0.2 text-[10px] font-extrabold text-[#9C4738] dark:text-[#EB9D8E] border border-[#C56D5B]/30 animate-pulse">Special</span>
+                Shop All
               </a>
               <a 
                 routerLink="/build-hamper" 
@@ -87,32 +78,11 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
                 <span>Build a Hamper</span>
               </a>
               <a 
-                routerLink="/hampers" 
-                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
-                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
-              >
-                Hampers
-              </a>
-              <a 
-                routerLink="/return-gifts" 
-                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
-                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
-              >
-                Return Gifts
-              </a>
-              <a 
                 routerLink="/gallery" 
                 routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
                 class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
-                Gallery
-              </a>
-              <a 
-                routerLink="/top-offers" 
-                routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full" 
-                class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
-              >
-                Top Offers
+                Lookbook
               </a>
               <a 
                 routerLink="/my-orders" 
@@ -193,27 +163,24 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
         <!-- Mobile Navigation Menu Dropdown -->
         <div 
           class="border-t border-[#D9C3B9]/30 dark:border-[#3D302A] bg-[#FFFDFC]/98 dark:bg-[#1C1816]/98 backdrop-blur-xl md:hidden overflow-hidden transition-all duration-300 ease-in-out"
-          [ngClass]="isMobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'"
+          [ngClass]="isMobileMenuOpen ? 'max-h-[550px] opacity-100' : 'max-h-0 opacity-0'"
         >
           <nav class="flex flex-col space-y-1 px-4 pb-6 pt-3 sm:px-6">
             <a routerLink="/" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" [routerLinkActiveOptions]="{ exact: true }" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">Home</a>
             <a routerLink="/shop" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-semibold text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">
               <span class="flex items-center gap-2"><i class="fa-solid fa-gift text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> Shop All Gifts</span>
-              <span class="rounded-full bg-[#C56D5B]/20 text-[#9C4738] dark:text-[#EB9D8E] px-2 py-0.5 text-[10px] font-bold">New</span>
+              <span class="rounded-full bg-[#C56D5B]/20 text-[#9C4738] dark:text-[#EB9D8E] px-2 py-0.5 text-[10px] font-bold">Catalogue</span>
             </a>
+            <a routerLink="/build-hamper" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-xs text-[#9C4738]"></i> Build Your Own Hamper</span>
+            </a>
+            <a routerLink="/gallery" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">Lookbook &amp; Gallery</a>
             <a routerLink="/cart" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-semibold text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">
               <span class="flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> Shopping Cart</span>
               <span *ngIf="cartService.totalItemsCount > 0" class="rounded-full bg-[#9C4738] text-white px-2 py-0.5 text-[10px] font-bold">{{ cartService.totalItemsCount }} items</span>
             </a>
-            <a routerLink="/ganpati-hampers" (click)="closeMenu()" routerLinkActive="bg-[#C56D5B]/15 text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#9C4738]" class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-bold text-[#9C4738] dark:text-[#EB9D8E] bg-[#F7F6F3] dark:bg-[#251F1C] border border-[#D9C3B9]/50 dark:border-[#3D302A] shadow-sm">
-              <span class="flex items-center gap-2"><i class="fa-solid fa-om text-xs"></i> Ganpati Hampers & Pooja Kits</span>
-              <span class="rounded-full bg-[#9C4738] text-white px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold">Special</span>
-            </a>
-            <a routerLink="/hampers" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">All Hampers</a>
-            <a routerLink="/return-gifts" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">Return Gifts</a>
-            <a routerLink="/top-offers" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">Top Offers</a>
-            <a routerLink="/my-orders" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">My Orders & Tracking</a>
-            <a routerLink="/my-account" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">My Account & Address</a>
+            <a routerLink="/my-orders" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">My Orders &amp; Tracking</a>
+            <a routerLink="/my-account" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">My Account &amp; Address</a>
             <a routerLink="/contact" (click)="closeMenu()" routerLinkActive="bg-[#F7F6F3] dark:bg-[#251F1C] text-[#9C4738] dark:text-[#EB9D8E] font-bold border-l-2 border-[#C56D5B]" class="block rounded-xl px-4 py-3 text-base font-medium text-[#57251C] dark:text-[#F4F1ED] transition-colors hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] hover:text-[#9C4738]">Contact Us</a>
             
             <div class="pt-3">
@@ -233,12 +200,12 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
       </header>
 
       <!-- Main Outlet Container -->
-      <main class="w-full flex-grow">
+      <main class="w-full flex-grow pb-16 md:pb-0">
         <ng-content></ng-content>
       </main>
 
       <!-- Editorial Luxury Footer -->
-      <footer class="mt-auto border-t border-[#57251C] bg-[#57251C] text-[#FFFDFC]">
+      <footer class="mt-auto border-t border-[#57251C] bg-[#57251C] text-[#FFFDFC] pb-16 md:pb-0">
         <div class="mx-auto max-w-7xl px-4 pb-8 pt-16 sm:px-6 lg:px-8">
           <div class="grid grid-cols-1 gap-12 md:grid-cols-4 md:gap-8">
             
@@ -271,14 +238,14 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
               <h3 class="text-xs font-bold uppercase tracking-wider text-[#EB9D8E]">Discover</h3>
               <ul class="mt-4 space-y-3 text-sm font-medium text-[#D9C3B9]">
                 <li><a routerLink="/" class="transition-colors hover:text-[#FFFDFC]">Home</a></li>
+                <li><a routerLink="/shop" class="text-white font-bold hover:text-[#DD8776] flex items-center gap-1.5"><i class="fa-solid fa-gift text-xs"></i> Shop All Gifts</a></li>
                 <li><a routerLink="/build-hamper" class="text-white font-bold hover:text-[#DD8776] flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-xs"></i> Build Your Own Hamper</a></li>
                 <li><a routerLink="/my-custom-hampers" class="transition-colors hover:text-[#FFFDFC]">Custom Hamper Consultations</a></li>
-                <li><a routerLink="/shop" class="text-white font-bold hover:text-[#DD8776] flex items-center gap-1.5"><i class="fa-solid fa-gift text-xs"></i> Shop All Gifts</a></li>
+                <li><a routerLink="/gallery" class="transition-colors hover:text-[#FFFDFC]">Lookbook &amp; Gallery</a></li>
                 <li><a routerLink="/cart" class="transition-colors hover:text-[#FFFDFC]">Shopping Cart ({{ cartService.totalItemsCount }})</a></li>
                 <li><a routerLink="/my-orders" class="transition-colors hover:text-[#FFFDFC]">Track My Orders</a></li>
                 <li><a routerLink="/my-account" class="transition-colors hover:text-[#FFFDFC]">My Account & Profile</a></li>
-                <li><a routerLink="/ganpati-hampers" class="text-[#DD8776] font-bold hover:text-white flex items-center gap-1.5"><i class="fa-solid fa-om text-xs"></i> Ganpati Hampers (From ₹99)</a></li>
-                <li><a routerLink="/top-offers" class="transition-colors hover:text-[#FFFDFC]">Top Offers</a></li>
+                <li><a routerLink="/contact" class="transition-colors hover:text-[#FFFDFC]">Contact Studio</a></li>
               </ul>
             </div>
             
@@ -311,24 +278,32 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
           </div>
           
           <!-- Copyright & Bottom Info -->
-          <div class="mt-16 flex flex-col items-center justify-between border-t border-[#D9C3B9]/20 pt-8 sm:flex-row">
+          <div class="mt-16 flex flex-col items-center justify-between border-t border-[#D9C3B9]/20 pt-8 sm:flex-row gap-4">
             <p class="text-sm text-[#D9C3B9]/70">
               © 2026 RMS Gift Hampers. All Rights Reserved.
             </p>
-            <div class="mt-4 flex gap-6 text-sm text-[#D9C3B9]/70 sm:mt-0">
+            <div class="flex items-center gap-6 text-sm text-[#D9C3B9]/70 sm:mt-0">
               <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+              <button 
+                type="button" 
+                (click)="toggleTrackerModal()" 
+                class="hover:text-[#EB9D8E] text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5 font-semibold"
+              >
+                <i class="fa-solid fa-lock text-[10px]"></i>
+                <span>Admin</span>
+              </button>
             </div>
           </div>
         </div>
       </footer>
 
-      <!-- OPTIONAL FLOATING ORDER TRACKER BADGE FOR OPERATORS -->
-      <div class="fixed bottom-5 right-5 z-40">
+      <!-- OPTIONAL FLOATING ORDER TRACKER BADGE FOR OPERATORS (DESKTOP ONLY) -->
+      <div class="fixed bottom-5 right-5 z-40 hidden lg:block">
         <button 
           type="button"
           (click)="toggleTrackerModal()"
-          class="flex items-center gap-2 rounded-full bg-[#57251C] px-4 py-2.5 text-xs font-semibold text-[#FFFDFC] shadow-xl ring-2 ring-[#D9C3B9]/40 transition hover:bg-[#9C4738] hover:scale-105 active:scale-95"
+          class="flex items-center gap-2 rounded-full bg-[#57251C] px-4 py-2.5 text-xs font-semibold text-[#FFFDFC] shadow-xl ring-2 ring-[#D9C3B9]/40 transition hover:bg-[#9C4738] hover:scale-105 active:scale-95 cursor-pointer"
         >
           <span class="flex h-2 w-2 rounded-full bg-[#EB9D8E] animate-pulse"></span>
           <span>{{ isAdminAuthenticated ? 'Captured Enquiries' : 'Admin Access' }}</span>
@@ -432,6 +407,73 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
           Cart &rarr;
         </a>
       </aside>
+
+      <!-- APP-LIKE STICKY MOBILE BOTTOM NAVIGATION BAR -->
+      <nav 
+        aria-label="Mobile Bottom Navigation" 
+        class="fixed bottom-0 inset-x-0 z-40 bg-[#FFFDFC]/95 dark:bg-[#1C1816]/95 backdrop-blur-xl border-t border-[#D9C3B9]/45 dark:border-[#3D302A] px-2 py-1.5 md:hidden flex items-center justify-around shadow-lg"
+      >
+        <!-- Home -->
+        <a 
+          routerLink="/" 
+          routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold" 
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-[10px] text-[#57251C]/75 dark:text-[#D9C3B9] transition active:scale-95"
+        >
+          <i class="fa-solid fa-house text-base mb-0.5"></i>
+          <span>Home</span>
+        </a>
+
+        <!-- Shop -->
+        <a 
+          routerLink="/shop" 
+          routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold" 
+          class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-[10px] text-[#57251C]/75 dark:text-[#D9C3B9] transition active:scale-95"
+        >
+          <i class="fa-solid fa-gift text-base mb-0.5"></i>
+          <span>Shop</span>
+        </a>
+
+        <!-- Custom Hamper Studio (Center Prominent) -->
+        <a 
+          routerLink="/build-hamper" 
+          routerLinkActive="scale-105" 
+          class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-[10px] text-[#9C4738] dark:text-[#EB9D8E] font-bold transition active:scale-95 -mt-3.5"
+        >
+          <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#9C4738] to-[#BA5E4E] text-white flex items-center justify-center shadow-md ring-3 ring-[#FFFDFC] dark:ring-[#1C1816]">
+            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+          </div>
+          <span class="mt-0.5">Build</span>
+        </a>
+
+        <!-- Cart -->
+        <a 
+          routerLink="/cart" 
+          routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold" 
+          class="relative flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-[10px] text-[#57251C]/75 dark:text-[#D9C3B9] transition active:scale-95"
+        >
+          <div class="relative">
+            <i class="fa-solid fa-bag-shopping text-base mb-0.5"></i>
+            <span 
+              *ngIf="cartService.totalItemsCount > 0" 
+              class="absolute -top-1.5 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#C56D5B] text-[9px] font-extrabold text-white ring-1 ring-white"
+            >
+              {{ cartService.totalItemsCount }}
+            </span>
+          </div>
+          <span>Cart</span>
+        </a>
+
+        <!-- My Orders -->
+        <a 
+          routerLink="/my-orders" 
+          routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold" 
+          class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] text-[10px] text-[#57251C]/75 dark:text-[#D9C3B9] transition active:scale-95"
+        >
+          <i class="fa-solid fa-truck-fast text-base mb-0.5"></i>
+          <span>Orders</span>
+        </a>
+      </nav>
 
       <!-- Global Customer Checkout & Free UPI / COD Modal -->
       <app-checkout-modal></app-checkout-modal>

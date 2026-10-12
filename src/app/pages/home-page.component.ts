@@ -331,7 +331,8 @@ import { CartService } from '../services/cart.service';
             <a 
               *ngFor="let cat of displayCategories" 
               [routerLink]="cat.route" 
-              class="group relative overflow-hidden rounded-3xl border border-[#D9C3B9]/20 bg-white/5 p-6 backdrop-blur-lg transition duration-500 hover:-translate-y-2 hover:border-[#DD8776]/50 hover:bg-white/10"
+              [queryParams]="cat.queryParams"
+              class="group relative overflow-hidden rounded-3xl border border-[#D9C3B9]/20 bg-white/5 p-6 backdrop-blur-lg transition duration-500 hover:-translate-y-2 hover:border-[#DD8776]/50 hover:bg-white/10 cursor-pointer"
             >
               <div class="overflow-hidden rounded-2xl">
                 <img [src]="cat.image" [alt]="cat.name" class="h-60 w-full object-cover transition duration-500 group-hover:scale-110" />
@@ -430,7 +431,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
       title: 'RMS Luxury Hampers',
       description: 'Handcrafted luxury hampers for every celebration.',
       image: 'assets/banners/banner.png',
-      route: '/hampers'
+      route: '/shop'
     };
   }
 
@@ -485,14 +486,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
       if (data && data.length > 0) {
         this.displayCategories = data.map((c: any) => {
           const lower = c.name.toLowerCase();
-          const route = lower.includes('ganpati') ? '/ganpati-hampers' :
-                        lower.includes('return gift') ? '/return-gifts' :
-                        lower.includes('girl') ? '/hampers/girls-hampers' :
-                        lower.includes('boy') ? '/hampers/boys-hampers' :
-                        lower.includes('chocolate') ? '/hampers/chocolate-hamper' :
-                        lower.includes('friendship') ? '/top-offers/friendship-day' :
-                        lower.includes('raksha') ? '/top-offers/rakshabandhan' :
-                        '/shop';
           const badge = lower.includes('ganpati') ? 'Festive' :
                         lower.includes('friendship') || lower.includes('raksha') ? 'Seasonal' :
                         lower.includes('girl') || lower.includes('boy') ? 'Bestseller' : '';
@@ -501,7 +494,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
             name: c.name,
             image: c.image || 'assets/banners/banner.png',
             description: c.description || 'Artisanal gift hamper curation.',
-            route: route,
+            route: '/shop',
+            queryParams: { category: c.name },
             badge: badge
           };
         });
@@ -535,7 +529,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
               'Ready pooja kits starting from ₹99. Contains Dhup, Kapoor, Kapus Vaat, Dhup Batti, Halad, Kumkum & Dry Fruits in a strong partitioned box.' : 
               'Thoughtfully styled hampers for special celebrations and treasured moments.',
             image: b.image || 'assets/banners/banner.png',
-            route: b.navigate_to_url_on_click || '/hampers'
+            route: b.navigate_to_url_on_click || '/shop'
           }));
           this.activeSlideIndex = 0;
 
@@ -571,7 +565,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
             title: 'RMS Luxury Hampers',
             description: 'Handcrafted luxury hampers for every celebration.',
             image: 'assets/banners/banner.png',
-            route: '/hampers'
+            route: '/shop'
           }];
         }
       }

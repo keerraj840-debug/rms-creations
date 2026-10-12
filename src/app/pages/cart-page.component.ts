@@ -48,8 +48,9 @@ import { PinCodeAvailabilityService, DeliveryCheckResult } from '../services/pin
                 Browse Shop Catalog →
               </a>
               <a 
-                routerLink="/ganpati-hampers" 
-                class="px-6 py-3 rounded-full border border-[#9C4738] text-[#9C4738] dark:text-[#EB9D8E] hover:bg-[#FAF7F2] dark:hover:bg-white/5 text-xs font-bold uppercase tracking-wider transition"
+                [routerLink]="['/shop']" 
+                [queryParams]="{ category: 'Ganpati Hampers & Pooja Kits' }"
+                class="px-6 py-3 rounded-full border border-[#9C4738] text-[#9C4738] dark:text-[#EB9D8E] hover:bg-[#FAF7F2] dark:hover:bg-white/5 text-xs font-bold uppercase tracking-wider transition active:scale-95"
               >
                 Ganpati Specials
               </a>
@@ -110,26 +111,26 @@ import { PinCodeAvailabilityService, DeliveryCheckResult } from '../services/pin
 
                     <!-- Quantity Controls & Line Total -->
                     <div class="flex items-center justify-between sm:justify-end gap-5 shrink-0 pt-2 sm:pt-0">
-                      <!-- Stepper -->
-                      <div class="flex items-center border border-[#EADFD2] dark:border-white/10 rounded-xl bg-[#FAF7F2] dark:bg-[#251F1C] overflow-hidden p-0.5">
+                      <!-- Stepper with comfortable touch targets -->
+                      <div class="flex items-center border border-[#EADFD2] dark:border-white/10 rounded-xl bg-[#FAF7F2] dark:bg-[#251F1C] overflow-hidden p-1">
                         <button 
                           type="button" 
                           (click)="cartService.updateQuantity(item.id, item.quantity - 1)"
-                          class="w-7 h-7 rounded-lg bg-white dark:bg-[#1E1916] text-[#4A3C31] dark:text-[#F4F1ED] text-xs font-bold hover:bg-[#F3E7DC] dark:hover:bg-white/10 flex items-center justify-center cursor-pointer"
-                          aria-label="Decrease"
+                          class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white dark:bg-[#1E1916] text-[#4A3C31] dark:text-[#F4F1ED] text-xs font-bold hover:bg-[#F3E7DC] dark:hover:bg-white/10 flex items-center justify-center cursor-pointer active:scale-95"
+                          aria-label="Decrease quantity"
                         >
-                          <i class="fa-solid fa-minus text-[10px]"></i>
+                          <i class="fa-solid fa-minus text-[11px]"></i>
                         </button>
-                        <span class="w-8 text-center font-bold text-xs font-mono text-[#2E2825] dark:text-[#F4F1ED]">
+                        <span class="w-9 text-center font-bold text-xs font-mono text-[#2E2825] dark:text-[#F4F1ED]">
                           {{ item.quantity }}
                         </span>
                         <button 
                           type="button" 
                           (click)="cartService.updateQuantity(item.id, item.quantity + 1)"
-                          class="w-7 h-7 rounded-lg bg-white dark:bg-[#1E1916] text-[#4A3C31] dark:text-[#F4F1ED] text-xs font-bold hover:bg-[#F3E7DC] dark:hover:bg-white/10 flex items-center justify-center cursor-pointer"
-                          aria-label="Increase"
+                          class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white dark:bg-[#1E1916] text-[#4A3C31] dark:text-[#F4F1ED] text-xs font-bold hover:bg-[#F3E7DC] dark:hover:bg-white/10 flex items-center justify-center cursor-pointer active:scale-95"
+                          aria-label="Increase quantity"
                         >
-                          <i class="fa-solid fa-plus text-[10px]"></i>
+                          <i class="fa-solid fa-plus text-[11px]"></i>
                         </button>
                       </div>
 
@@ -199,11 +200,12 @@ import { PinCodeAvailabilityService, DeliveryCheckResult } from '../services/pin
                   <div class="flex gap-2">
                     <input 
                       type="text" 
+                      inputmode="numeric"
                       maxlength="6"
                       [(ngModel)]="checkPinCode" 
                       (keyup.enter)="checkDeliveryAvailability()"
                       placeholder="e.g. 411038"
-                      class="flex-1 px-3 py-1.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1C1917] text-xs font-mono font-bold text-[#2E2825] dark:text-[#F4F1ED] outline-none"
+                      class="flex-1 px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1C1917] text-xs font-mono font-bold text-[#2E2825] dark:text-[#F4F1ED] outline-none"
                     />
                     <button 
                       type="button" 
@@ -285,6 +287,25 @@ import { PinCodeAvailabilityService, DeliveryCheckResult } from '../services/pin
           </div>
 
         </main>
+
+        <!-- STICKY MOBILE BOTTOM CHECKOUT BAR -->
+        <aside 
+          *ngIf="cartService.items.length > 0"
+          aria-label="Checkout Summary"
+          class="fixed bottom-14 inset-x-0 z-30 bg-[#FFFDFC]/95 dark:bg-[#1C1816]/95 backdrop-blur-md border-t border-[#D9C3B9]/50 dark:border-[#3D302A] px-4 py-2.5 md:hidden shadow-lg flex items-center justify-between gap-3"
+        >
+          <div>
+            <span class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] block">Total Payable:</span>
+            <span class="font-serif font-bold text-lg text-[#9C4738] dark:text-[#EB9D8E]">₹{{ cartService.finalTotal }}</span>
+          </div>
+          <a 
+            routerLink="/checkout"
+            class="flex-1 max-w-[200px] min-h-[44px] py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#57251C] to-[#9C4738] hover:from-[#451B14] hover:to-[#883B2D] text-white font-bold text-xs uppercase tracking-wider shadow-md active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer text-center"
+          >
+            <span>Proceed to Checkout</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+        </aside>
 
       </div>
     </app-site-layout>
