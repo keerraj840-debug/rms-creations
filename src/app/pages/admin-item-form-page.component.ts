@@ -3,23 +3,21 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../services/supabase.service';
-import { AiImageStudioComponent } from '../shared/ai-image-studio/ai-image-studio.component';
-import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.service';
 import { FileUploadComponent } from '../shared/ui/file-upload.component';
 
 @Component({
   selector: 'app-admin-item-form-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, AiImageStudioComponent, FileUploadComponent],
+  imports: [CommonModule, FormsModule, RouterLink, FileUploadComponent],
   template: `
     <div class="max-w-7xl mx-auto pb-12 space-y-4 transition-colors duration-300">
-      
+
       <!-- Top Sticky Action Bar (Exact match to Product & Category Studio) -->
       <div class="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#FAF7F2]/95 dark:bg-[#1E1916]/95 backdrop-blur-md border-b border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-between gap-4">
-        
+
         <!-- Left: Back, Title & Live Status -->
         <div class="flex items-center gap-3 min-w-0">
-          <a routerLink="/admin/items" 
+          <a routerLink="/admin/items"
              class="p-2 text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#4A3C31] dark:hover:text-[#F4F1ED] bg-white dark:bg-[#251F1C] rounded-xl border border-[#EADFD2] dark:border-white/10 transition-colors shadow-2xs shrink-0 cursor-pointer"
              title="Back to Items Catalog">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -48,7 +46,7 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
                 <span>{{ readinessScore.isReady ? 'Ready' : (readinessScore.completed + ' of ' + readinessScore.total + ' fields filled') }}</span>
               </div>
             </div>
-            
+
             <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] truncate">
               {{ isEdit ? 'Update item details, price, and stock levels' : 'Add pooja items, sweets, diyas, dry fruits, candles, or packaging items' }}
             </p>
@@ -57,7 +55,7 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
 
         <!-- Right: Actions -->
         <div class="flex items-center gap-2.5 shrink-0">
-          <button type="button" routerLink="/admin/items" 
+          <button type="button" routerLink="/admin/items"
                   class="px-3.5 py-2 text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#4A3C31] dark:hover:text-[#F4F1ED] rounded-xl transition-colors cursor-pointer">
             Cancel
           </button>
@@ -69,7 +67,7 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
             <span class="hidden sm:inline">Save & Add Another</span>
             <span class="sm:hidden">+ Another</span>
           </button>
-          
+
           <!-- Primary Save / Publish Button -->
           <button type="button" (click)="saveItem(false)" [disabled]="saving"
                   class="px-5 py-2 rounded-xl bg-gradient-to-r from-[#9C4738] to-[#BA5E4E] hover:from-[#883B2D] text-white text-xs font-bold shadow-sm hover:shadow transition-all disabled:opacity-50 flex items-center gap-2 cursor-pointer"
@@ -102,10 +100,10 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
       <!-- UNIFIED 2-COLUMN WORKSPACE -->
       <div class="bg-white dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 rounded-2xl p-6 shadow-2xs">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           <!-- LEFT COLUMN: Component Details, Unit Cost, Stock & Description (7 Cols) -->
           <div class="lg:col-span-7 space-y-4.5">
-            
+
             <div class="border-b border-[#EADFD2]/60 dark:border-white/10 pb-2 flex items-center justify-between">
               <h2 class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider flex items-center gap-2">
                 <i class="fa-solid fa-box text-[#9C4738]"></i>
@@ -123,11 +121,11 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
                   {{ (item.name?.length || 0) }} / 80
                 </span>
               </div>
-              
+
               <input type="text" [(ngModel)]="item.name" placeholder="e.g. Brass Pooja Diya (2.5 inch), Premium Almonds 100g, Satin Ribbon..."
                      class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border rounded-xl px-4 py-2.5 text-sm font-medium text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] transition-all"
                      [ngClass]="submitted && errors['name'] ? 'border-rose-500 ring-2 ring-rose-500/20 bg-rose-50/20' : 'border-[#EADFD2] focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738]'">
-              
+
               <p *ngIf="submitted && errors['name']" class="text-xs text-rose-500 font-semibold mt-1 flex items-center gap-1">
                 <i class="fa-solid fa-circle-exclamation"></i> <span>{{ errors['name'] }}</span>
               </p>
@@ -143,7 +141,7 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
                   {{ (item.description?.length || 0) }} / 300
                 </span>
               </div>
-              
+
               <textarea [(ngModel)]="item.description" rows="3" placeholder="Packaging notes, batch size, shelf-life, or supplier details..."
                         class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-4 py-2.5 text-xs text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] focus:outline-none focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738] leading-relaxed resize-y"></textarea>
             </div>
@@ -159,7 +157,7 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                
+
                 <!-- Unit Cost (₹) -->
                 <div>
                   <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">
@@ -212,22 +210,83 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
               </div>
             </div>
 
+            <!-- MULTI-MARKETPLACE LEAST-PRICE SOURCING RESEARCH CARD -->
+            <div class="p-4 bg-gradient-to-br from-[#FAF7F2] to-[#FFFDFC] dark:from-white/5 dark:to-white/10 border border-[#EADFD2] dark:border-white/10 rounded-2xl space-y-3 shadow-2xs">
+              <div class="flex items-center justify-between border-b border-[#EADFD2]/60 dark:border-white/10 pb-2">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-[#57251C] text-white flex items-center justify-center text-xs shadow-xs">
+                    <i class="fa-solid fa-magnifying-glass-dollar text-[#EB9D8E]"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">Find Lowest Supplier Prices</h3>
+                    <p class="text-[10px] text-[#A89F91]">Compare prices on Meesho, Amazon, Flipkart &amp; IndiaMART</p>
+                  </div>
+                </div>
+
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Supplier Search
+                </span>
+              </div>
+
+              <!-- Marketplace Direct Search Buttons -->
+              <div class="space-y-2">
+                <p class="text-[11px] font-bold text-[#57251C] dark:text-[#F4F1ED]">
+                  Search <strong class="text-[#9C4738] dark:text-[#DD8776]">"{{ item.name || 'this item' }}"</strong> on market links:
+                </p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <!-- Meesho -->
+                  <a [href]="getMeeshoUrl(item.name)" target="_blank" rel="noopener noreferrer"
+                     class="px-3 py-2 rounded-xl bg-pink-50 dark:bg-pink-950/30 border border-pink-200 dark:border-pink-800/40 text-pink-700 dark:text-pink-300 hover:bg-pink-100 transition text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs">
+                    <span>🛍️ Meesho</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                  </a>
+
+                  <!-- Amazon (Sorted Low to High) -->
+                  <a [href]="getAmazonUrl(item.name)" target="_blank" rel="noopener noreferrer"
+                     class="px-3 py-2 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-amber-800 dark:text-amber-300 hover:bg-amber-100 transition text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs">
+                    <span>📦 Amazon (Low&rarr;High)</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                  </a>
+
+                  <!-- Flipkart (Sorted Low to High) -->
+                  <a [href]="getFlipkartUrl(item.name)" target="_blank" rel="noopener noreferrer"
+                     class="px-3 py-2 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 transition text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs">
+                    <span>🛒 Flipkart</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                  </a>
+
+                  <!-- IndiaMART B2B -->
+                  <a [href]="getIndiamartUrl(item.name)" target="_blank" rel="noopener noreferrer"
+                     class="px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 transition text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs">
+                    <span>🏬 IndiaMART</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Sourcing Guidance Box -->
+              <div class="p-2.5 bg-white dark:bg-[#1C1917] rounded-xl border border-[#EADFD2] dark:border-white/10 text-[11px] text-[#7A6C5E] dark:text-[#C5A393] space-y-1">
+                <p><strong>Tip:</strong> Use Meesho &amp; IndiaMART for wholesale prices on ribbons, diyas, boxes, and jars.</p>
+              </div>
+            </div>
+
           </div>
 
           <!-- RIGHT COLUMN: Interactive Component Preview, Hamper Guide, Readiness (5 Cols) -->
           <div class="lg:col-span-5 space-y-5">
-            
+
             <div class="border-b border-[#EADFD2]/60 dark:border-white/10 pb-2 flex items-center justify-between">
               <h2 class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider flex items-center gap-2">
                 <i class="fa-solid fa-eye text-[#9C4738]"></i>
                 <span>Item Photo &amp; Showcase (1:1)</span>
               </h2>
 
-              <!-- ✨ AI Image Studio Button -->
-              <button type="button" (click)="openAiStudio()"
-                      class="px-2.5 py-1 rounded-xl bg-gradient-to-r from-purple-600 to-rose-600 hover:from-purple-700 hover:to-rose-700 text-white text-[11px] font-bold shadow-2xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer">
-                <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-                <span>AI Studio</span>
+              <!-- Copy ChatGPT / AI Prompt Button -->
+              <button type="button" (click)="copyChatGptPrompt()"
+                      class="px-2.5 py-1 rounded-xl bg-[#57251C] hover:bg-[#9C4738] text-white text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                <i class="fa-solid fa-copy text-[10px]"></i>
+                <span>{{ promptCopied ? 'Copied Prompt!' : 'Copy ChatGPT / AI Prompt' }}</span>
               </button>
             </div>
 
@@ -338,14 +397,6 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
         </div>
       </div>
 
-      <!-- AI Image Creation Studio Modal -->
-      <app-ai-image-studio
-        [isOpen]="showAiStudio"
-        [context]="aiStudioContext"
-        (close)="showAiStudio = false"
-        (applyImage)="onAiImageApplied($event)"
-      ></app-ai-image-studio>
-
     </div>
   `
 })
@@ -371,24 +422,21 @@ export class AdminItemFormPageComponent implements OnInit {
     image: ''
   };
 
-  // AI Image Studio state
-  showAiStudio = false;
-  aiStudioContext: AiImageStudioContext = { targetType: 'item', title: '' };
+  promptCopied = false;
 
-  openAiStudio() {
-    this.aiStudioContext = {
-      targetType: 'item',
-      title: this.item.name || 'Hamper Inclusion Item',
-      description: this.item.description || '',
-      price: Number(this.item.price) || undefined,
-      existingImageUrl: this.item.image || undefined
-    };
-    this.showAiStudio = true;
+  get chatGptPrompt(): string {
+    const name = this.item.name?.trim() || 'Pooja Diya / Hamper Item';
+    const desc = this.item.description?.trim() || 'Handcrafted luxury hamper inclusion item';
+    return `Commercial 8K studio product photograph of "${name}". ${desc}. Contact RMS Gift Hampers: Phone/WhatsApp 9284905118, Email rmsgifthampers@gmail.com, Website https://rmscreations.netlify.app/. Clean studio hero presentation isolated on a warm neutral cream stone pedestal with soft directional key lighting, gentle realistic cast shadows, photorealistic, high detail, no text.`;
   }
 
-  onAiImageApplied(imageUrl: string) {
-    this.item.image = imageUrl;
-    this.successMessage = '✨ AI Item photograph created and attached!';
+  copyChatGptPrompt() {
+    navigator.clipboard.writeText(this.chatGptPrompt);
+    this.promptCopied = true;
+    setTimeout(() => {
+      this.promptCopied = false;
+      this.cdr.markForCheck();
+    }, 3000);
     this.cdr.markForCheck();
   }
 
@@ -452,6 +500,26 @@ export class AdminItemFormPageComponent implements OnInit {
     const current = Number(this.item.stock_quantity) || 0;
     this.item.stock_quantity = current + amount;
     this.cdr.markForCheck();
+  }
+
+  getMeeshoUrl(name: string): string {
+    const q = encodeURIComponent((name || 'hamper item').trim() + ' wholesale');
+    return `https://www.meesho.com/search?q=${q}`;
+  }
+
+  getAmazonUrl(name: string): string {
+    const q = encodeURIComponent((name || 'hamper item').trim());
+    return `https://www.amazon.in/s?k=${q}&s=price-asc-rank`;
+  }
+
+  getFlipkartUrl(name: string): string {
+    const q = encodeURIComponent((name || 'hamper item').trim());
+    return `https://www.flipkart.com/search?q=${q}&sort=price_asc`;
+  }
+
+  getIndiamartUrl(name: string): string {
+    const q = encodeURIComponent((name || 'hamper item').trim() + ' wholesale');
+    return `https://dir.indiamart.com/search.mp?ss=${q}`;
   }
 
   ngOnInit() {

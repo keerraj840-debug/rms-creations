@@ -53,9 +53,14 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
+  /**
+   * Returns true only if a verified user profile is held in memory.
+   * The profile is populated from the Supabase Auth session — it cannot be
+   * spoofed by modifying localStorage. Do NOT gate security-sensitive
+   * operations solely on this getter; rely on database RLS policies.
+   */
   get isAuthenticated(): boolean {
-    const token = this.localStorage.getItem<string>('auth_token');
-    return Boolean(token || this.currentUser);
+    return this.currentUserSubject.value !== null;
   }
 
   async syncUserProfile(authUser: any): Promise<UserProfile | null> {
@@ -202,10 +207,30 @@ export class AuthService {
   }
 
   async signOut() {
-    await this.supabase.signOut();
-    this.currentUserSubject.next(null);
-    this.localStorage.removeItem(this.USER_STORAGE_KEY);
-    this.localStorage.removeItem('auth_token');
-    this.localStorage.removeItem('user_role');
+    try {
+      await this.supabase.signOut();
+    } catch (err) {
+      console.warn('Supabase sign-out encountered warning, proceeding with local clean-up:', err);
+    } finally {
+      this.currentUserSubject.next(null);
+      this.localStorage.removeItem(this.USER_STORAGE_KEY);
+      this.localStorage.removeItem('auth_token');
+      this.localStorage.removeItem('user_role');
+
+      if (typeof window !== 'undefined' && window.localStorage) {
+        try {
+          const keysToRemove: string[] = [];
+          for (let i = 0; i < window.localStorage.length; i++) {
+            const key = window.localStorage.key(i);
+            if (key && (key.startsWith('sb-') || key.includes('auth-token') || key === 'rms_auth_user_profile')) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach((k) => window.localStorage.removeItem(k));
+        } catch {
+          // ignore
+        }
+      }
+    }
   }
 }

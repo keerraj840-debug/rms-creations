@@ -17,10 +17,27 @@ function strongPasswordValidator() {
   };
 }
 
+function minimumAgeValidator(minAge = 18) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null;
+    const dob = new Date(control.value);
+    if (isNaN(dob.getTime())) return { invalidDate: true };
+
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+
+    return age >= minAge ? null : { underAge: { minAge, actualAge: age } };
+  };
+}
+
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
   const password = control.get('password')?.value;
   const confirmPassword = control.get('confirmPassword')?.value;
-  
+
   if (password !== confirmPassword) {
     control.get('confirmPassword')?.setErrors({ passwordMismatch: true });
     return { passwordMismatch: true };
@@ -76,7 +93,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
 
         <!-- Form Block -->
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-3.5">
-          
+
           <!-- Full Name -->
           <app-input
             label="Full Name"
@@ -141,7 +158,8 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
                 class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-3 py-2 text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738] focus:ring-1 focus:ring-[#9C4738]"
               />
               <p *ngIf="registerForm.get('date_of_birth')?.touched && registerForm.get('date_of_birth')?.invalid" class="text-[11px] text-rose-500 mt-1">
-                Date of birth is required
+                <span *ngIf="registerForm.get('date_of_birth')?.hasError('required')">Date of birth is required</span>
+                <span *ngIf="registerForm.get('date_of_birth')?.hasError('underAge')">You must be at least 18 years old to sign up</span>
               </p>
             </div>
           </div>
@@ -192,6 +210,26 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
             ></app-input>
           </div>
 
+          <!-- Mandatory Age Gate & Terms Agreement -->
+          <div class="p-3 bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl space-y-1">
+            <div class="flex items-start gap-2">
+              <input
+                type="checkbox"
+                formControlName="age_gate"
+                id="age_gate"
+                class="mt-0.5 w-4 h-4 rounded accent-[#9C4738] cursor-pointer shrink-0"
+              />
+              <label for="age_gate" class="text-xs text-[#4A3C31] dark:text-[#C5A393] leading-relaxed select-none">
+                I confirm that I am at least 18 years of age and agree to the 
+                <a routerLink="/terms" target="_blank" class="text-[#9C4738] dark:text-[#EB9D8E] font-bold underline hover:text-[#7A3326]">Terms of Service</a> and 
+                <a routerLink="/privacy" target="_blank" class="text-[#9C4738] dark:text-[#EB9D8E] font-bold underline hover:text-[#7A3326]">Privacy Policy</a>. <span class="text-rose-500">*</span>
+              </label>
+            </div>
+            <p *ngIf="registerForm.get('age_gate')?.touched && registerForm.get('age_gate')?.invalid" class="text-[11px] text-rose-500 pl-6">
+              You must confirm you are at least 18 years old to register.
+            </p>
+          </div>
+
           <div class="pt-2">
             <app-button
               type="submit"
@@ -234,7 +272,8 @@ export class RegisterPageComponent implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     phone_no: ['', [Validators.pattern(/^[0-9]{10}$/)]],
     gender: ['', [Validators.required]],
-    date_of_birth: ['', [Validators.required]],
+    date_of_birth: ['', [Validators.required, minimumAgeValidator(18)]],
+    age_gate: [false, [Validators.requiredTrue]],
     password: ['', [Validators.required, strongPasswordValidator()]],
     confirmPassword: ['', [Validators.required]]
   }, { validators: passwordMatchValidator });

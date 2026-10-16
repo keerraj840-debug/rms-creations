@@ -7,6 +7,7 @@ import { CardComponent } from '../shared/ui/card.component';
 import { ModalComponent } from '../shared/ui/modal.component';
 import { TableComponent, TableColumn } from '../shared/ui/table.component';
 import { PurchaseOrder, PurchaseOrderDetail } from '../models/purchase-order.model';
+import { NotificationOutboxService } from '../services/notification-outbox.service';
 
 export interface OrderAuditEntry {
   id: string;
@@ -22,7 +23,7 @@ export interface OrderAuditEntry {
   imports: [CommonModule, FormsModule, CardComponent, ModalComponent, TableComponent],
   template: `
     <div class="space-y-5 max-w-7xl mx-auto pb-12 transition-colors duration-300">
-      
+
       <!-- Top Action Bar -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -38,7 +39,7 @@ export interface OrderAuditEntry {
             Streamlined processing, automated delivery eligibility check, payment auditing, and status tracking.
           </p>
         </div>
-        
+
         <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
           <!-- Refresh Button -->
           <button type="button" (click)="fetchOrders()" [disabled]="loading"
@@ -125,7 +126,7 @@ export interface OrderAuditEntry {
       </div>
 
       <!-- Bulk Actions Sticky Bar (When orders are selected) -->
-      <div *ngIf="selectedOrderIds.size > 0" 
+      <div *ngIf="selectedOrderIds.size > 0"
            class="p-3 bg-stone-900 text-white rounded-2xl shadow-lg flex flex-wrap items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2">
         <div class="flex items-center gap-2.5 text-xs font-semibold">
           <span class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center font-bold text-[11px]">
@@ -160,10 +161,10 @@ export interface OrderAuditEntry {
       <!-- Main Orders Table Card -->
       <app-card [hasFooter]="false">
         <div card-header class="w-full space-y-3">
-          
+
           <!-- Top Row: Search + Status Tabs + Filters -->
           <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            
+
             <!-- Search Input -->
             <div class="relative w-full lg:w-72">
               <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-[#7A6C5E] dark:text-[#C5A393]"></i>
@@ -266,7 +267,7 @@ export interface OrderAuditEntry {
           </div>
 
           <!-- Active filters counter -->
-          <div *ngIf="searchQuery || statusFilter !== 'all' || dateRangeFilter !== 'all' || paymentFilter !== 'all' || onlyNeedsAttention" 
+          <div *ngIf="searchQuery || statusFilter !== 'all' || dateRangeFilter !== 'all' || paymentFilter !== 'all' || onlyNeedsAttention"
                class="flex items-center justify-between text-[11px] text-[#A89F91] pt-1">
             <span>Showing {{ filteredOrders.length }} of {{ orders.length }} orders</span>
             <button type="button" (click)="resetFilters()" class="text-[#9C4738] dark:text-[#DD8776] font-bold hover:underline cursor-pointer">
@@ -291,9 +292,9 @@ export interface OrderAuditEntry {
           (emptyActionClick)="searchQuery || statusFilter !== 'all' ? resetFilters() : openCreateModal()"
         >
           <!-- Table Header Checkbox Row (Handled by user) -->
-          <tr *ngFor="let order of filteredOrders" 
+          <tr *ngFor="let order of filteredOrders"
               class="hover:bg-[#FDFBF7] dark:hover:bg-white/5 transition-colors group">
-            
+
             <!-- Checkbox & Order ID -->
             <td class="px-4 py-3.5">
               <div class="flex items-center gap-2.5">
@@ -301,7 +302,7 @@ export interface OrderAuditEntry {
                        (change)="toggleOrderSelection(order.purchase_order_id, $event)"
                        class="rounded border-[#EADFD2] text-[#9C4738] focus:ring-[#9C4738] cursor-pointer">
                 <div>
-                  <button type="button" (click)="viewOrder(order)" 
+                  <button type="button" (click)="viewOrder(order)"
                           class="font-bold text-[#4A3C31] dark:text-[#F4F1ED] group-hover:text-[#9C4738] dark:group-hover:text-[#DD8776] transition-colors text-xs sm:text-sm text-left flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-receipt text-[#A89F91] text-xs"></i>
                     <span>#{{ order.purchase_order_no || order.purchase_order_id }}</span>
@@ -309,15 +310,15 @@ export interface OrderAuditEntry {
 
                   <!-- Urgent Badges -->
                   <div class="flex items-center gap-1 mt-1 flex-wrap">
-                    <span *ngIf="isNewOrder(order)" 
+                    <span *ngIf="isNewOrder(order)"
                           class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
                       NEW
                     </span>
-                    <span *ngIf="isDelayedOrder(order)" 
+                    <span *ngIf="isDelayedOrder(order)"
                           class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
                       DELAYED (&gt;48h)
                     </span>
-                    <span *ngIf="hasPaymentIssue(order)" 
+                    <span *ngIf="hasPaymentIssue(order)"
                           class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
                       VERIFY UPI
                     </span>
@@ -367,7 +368,7 @@ export interface OrderAuditEntry {
             <td class="px-4 py-3.5 text-right">
               <div class="flex items-center justify-end gap-1.5">
                 <!-- Fast Status Step Button (One-click progression) -->
-                <button *ngIf="getNextSafeStatus(order) as nextSt" 
+                <button *ngIf="getNextSafeStatus(order) as nextSt"
                         type="button" (click)="executeQuickAdvance(order, nextSt)"
                         class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-[#FAF7F2] dark:bg-white/10 hover:bg-[#F3E7DC] dark:hover:bg-white/20 text-[#9C4738] dark:text-[#DD8776] border border-[#EADFD2] dark:border-white/10 transition cursor-pointer"
                         [title]="'Advance to ' + nextSt">
@@ -381,7 +382,7 @@ export interface OrderAuditEntry {
                         title="View Full Order Details">
                   <i class="fa-solid fa-eye text-xs"></i>
                 </button>
-                
+
                 <!-- Open WhatsApp Concierge -->
                 <a [href]="getWhatsAppLink(order)" target="_blank"
                    class="p-1.5 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 rounded-lg transition-all cursor-pointer"
@@ -398,7 +399,7 @@ export interface OrderAuditEntry {
       <!-- ORDER DETAILS SLIDE-OVER / MODAL -->
       <app-modal [isOpen]="showDetailsModal" [title]="'Purchase Order #' + (selectedOrder?.purchase_order_no || selectedOrder?.purchase_order_id || '')" size="lg" (onClose)="showDetailsModal = false">
         <div *ngIf="selectedOrder" class="space-y-4 py-2 text-xs">
-          
+
           <!-- Summary Header -->
           <div class="p-4 bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
@@ -478,38 +479,38 @@ export interface OrderAuditEntry {
           <div class="p-3 bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 rounded-xl flex items-center justify-between gap-2 flex-wrap">
             <span class="text-[10px] font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider">Next Allowed Action:</span>
             <div class="flex items-center gap-2 flex-wrap">
-              <button *ngIf="selectedOrder.purchase_order_status === 'pending'" type="button" 
+              <button *ngIf="selectedOrder.purchase_order_status === 'pending'" type="button"
                       (click)="confirmOrderStatus(selectedOrder, 'confirmed')"
                       class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs cursor-pointer">
                 <i class="fa-solid fa-check mr-1"></i> Confirm Order
               </button>
 
-              <button *ngIf="selectedOrder.purchase_order_status === 'confirmed'" type="button" 
+              <button *ngIf="selectedOrder.purchase_order_status === 'confirmed'" type="button"
                       (click)="confirmOrderStatus(selectedOrder, 'accepted')"
                       class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs cursor-pointer">
                 <i class="fa-solid fa-box mr-1"></i> Start Assembly / Processing
               </button>
 
-              <button *ngIf="selectedOrder.purchase_order_status === 'accepted'" type="button" 
+              <button *ngIf="selectedOrder.purchase_order_status === 'accepted'" type="button"
                       (click)="confirmOrderStatus(selectedOrder, 'packed')"
                       class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs cursor-pointer">
                 <i class="fa-solid fa-boxes-packing mr-1"></i> Mark Packed
               </button>
 
-              <button *ngIf="selectedOrder.purchase_order_status === 'accepted' || selectedOrder.purchase_order_status === 'packed'" type="button" 
+              <button *ngIf="selectedOrder.purchase_order_status === 'accepted' || selectedOrder.purchase_order_status === 'packed'" type="button"
                       (click)="openShipModal(selectedOrder)"
                       class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs cursor-pointer">
                 <i class="fa-solid fa-truck mr-1"></i> Dispatch / Mark Shipped
               </button>
 
-              <button *ngIf="selectedOrder.purchase_order_status === 'shipped'" type="button" 
+              <button *ngIf="selectedOrder.purchase_order_status === 'shipped'" type="button"
                       (click)="openDeliverModal(selectedOrder)"
                       class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs cursor-pointer">
                 <i class="fa-solid fa-house-chimney-check mr-1"></i> Mark Delivered
               </button>
 
               <!-- Safe Cancel Button (Requires confirmation dialog) -->
-              <button *ngIf="selectedOrder.purchase_order_status !== 'cancelled' && selectedOrder.purchase_order_status !== 'delivered'" 
+              <button *ngIf="selectedOrder.purchase_order_status !== 'cancelled' && selectedOrder.purchase_order_status !== 'delivered'"
                       type="button" (click)="openCancelModal(selectedOrder)"
                       class="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 cursor-pointer">
                 <i class="fa-solid fa-ban mr-1"></i> Cancel Order
@@ -572,9 +573,9 @@ export interface OrderAuditEntry {
           <div class="p-3 bg-white dark:bg-[#1E1916] border border-[#EADFD2]/70 dark:border-white/10 rounded-xl space-y-2">
             <div class="flex items-center justify-between">
               <span class="text-[10px] font-bold text-[#A89F91] block uppercase tracking-wider">Delivery Address &amp; Serviceability</span>
-              
+
               <!-- Real-time PIN Serviceability Badge -->
-              <span *ngIf="pinCheckResult" 
+              <span *ngIf="pinCheckResult"
                     [ngClass]="pinCheckResult.isServiceable ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-rose-100 text-rose-800 border-rose-300'"
                     class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border flex items-center gap-1">
                 <i [class]="pinCheckResult.isServiceable ? 'fa-solid fa-circle-check text-emerald-600' : 'fa-solid fa-triangle-exclamation text-rose-600'"></i>
@@ -665,13 +666,13 @@ export interface OrderAuditEntry {
         </div>
 
         <div modal-footer class="w-full flex justify-between items-center gap-2">
-          <button *ngIf="selectedOrder" type="button" (click)="deleteOrder(selectedOrder)" 
+          <button *ngIf="selectedOrder" type="button" (click)="deleteOrder(selectedOrder)"
                   class="text-xs font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1 cursor-pointer">
             <i class="fa-solid fa-trash-can"></i>
             <span>Delete Order</span>
           </button>
-          
-          <button type="button" (click)="showDetailsModal = false" 
+
+          <button type="button" (click)="showDetailsModal = false"
                   class="px-4 py-2 rounded-xl bg-[#9C4738] text-white text-xs font-bold shadow-2xs cursor-pointer">
             Close
           </button>
@@ -848,6 +849,7 @@ export interface OrderAuditEntry {
 export class AdminOrdersPageComponent implements OnInit {
   private supabase = inject(SupabaseService);
   private pinCodeService = inject(PinCodeAvailabilityService);
+  private outboxService = inject(NotificationOutboxService);
   private cdr = inject(ChangeDetectorRef);
 
   orders: PurchaseOrder[] = [];
@@ -1103,13 +1105,13 @@ export class AdminOrdersPageComponent implements OnInit {
     let result = this.orders.filter(order => {
       // 1. Text Search
       const q = this.searchQuery.toLowerCase().trim();
-      const matchesSearch = !q || 
+      const matchesSearch = !q ||
         (order.purchase_order_no && order.purchase_order_no.toLowerCase().includes(q)) ||
         (order.contact_no && order.contact_no.toLowerCase().includes(q)) ||
         (order.shipping_address && order.shipping_address.toLowerCase().includes(q)) ||
         (order.shipping_pin_code && order.shipping_pin_code.toLowerCase().includes(q)) ||
         (order.shipping_remark && order.shipping_remark.toLowerCase().includes(q));
-      
+
       // 2. Status Filter
       const st = (order.purchase_order_status || 'confirmed').toLowerCase();
       const matchesStatus = this.statusFilter === 'all' || st === this.statusFilter;
@@ -1258,8 +1260,19 @@ export class AdminOrdersPageComponent implements OnInit {
     }
   }
 
+  private extractCustomerDetails(order: PurchaseOrder): { name: string; email: string } {
+    const remark = order.shipping_remark || '';
+    const nameMatch = remark.match(/Customer:\s*([^|]+)/);
+    const emailMatch = remark.match(/Email:\s*([^|]+)/);
+
+    return {
+      name: (nameMatch ? nameMatch[1].trim() : 'Valued Customer'),
+      email: (emailMatch ? emailMatch[1].trim() : 'contact@rmscreations.com')
+    };
+  }
+
   async confirmOrderStatus(order: PurchaseOrder, newStatus: string) {
-    const oldStatus = order.purchase_order_status;
+    const oldStatus = order.purchase_order_status || 'pending';
     order.purchase_order_status = newStatus;
     order.is_active = newStatus !== 'cancelled';
     this.cdr.markForCheck();
@@ -1284,6 +1297,20 @@ export class AdminOrdersPageComponent implements OnInit {
         this.cdr.markForCheck();
       } else {
         this.logAuditAction(`Order Status changed from ${oldStatus} to ${newStatus}`, order.purchase_order_id, { oldStatus, newStatus });
+
+        // Trigger Transactional Outbox Notification
+        const cust = this.extractCustomerDetails(order);
+        this.outboxService.recordStatusUpdatedNotification(
+          order.purchase_order_no,
+          order.purchase_order_id,
+          cust.name,
+          cust.email,
+          newStatus,
+          oldStatus,
+          order.payable_amount || 0,
+          order.shipping_remark || '',
+          order.utr_no || ''
+        ).then(() => this.outboxService.processPendingOutbox().catch(() => {})).catch(() => {});
       }
     } catch {
       order.purchase_order_status = oldStatus;
@@ -1302,6 +1329,7 @@ export class AdminOrdersPageComponent implements OnInit {
   async submitShipOrder() {
     if (!this.targetActionOrder || !this.shipTrackingNo.trim()) return;
     const order = this.targetActionOrder;
+    const oldStatus = order.purchase_order_status || 'confirmed';
     const remark = `${this.shipCourier} - Tracking #${this.shipTrackingNo.trim()}`;
 
     try {
@@ -1320,6 +1348,21 @@ export class AdminOrdersPageComponent implements OnInit {
         order.order_shipping_date = new Date().toISOString();
         order.shipping_remark = remark;
         this.logAuditAction(`Order Dispatched via ${remark}`, order.purchase_order_id, { courier: this.shipCourier, tracking: this.shipTrackingNo });
+
+        // Trigger Outbox Notification
+        const cust = this.extractCustomerDetails(order);
+        this.outboxService.recordStatusUpdatedNotification(
+          order.purchase_order_no,
+          order.purchase_order_id,
+          cust.name,
+          cust.email,
+          'shipped',
+          oldStatus,
+          order.payable_amount || 0,
+          remark,
+          order.utr_no || ''
+        ).then(() => this.outboxService.processPendingOutbox().catch(() => {})).catch(() => {});
+
         this.showShipModal = false;
         this.targetActionOrder = null;
         this.applyFilter();
@@ -1339,6 +1382,7 @@ export class AdminOrdersPageComponent implements OnInit {
   async submitDeliverOrder() {
     if (!this.targetActionOrder) return;
     const order = this.targetActionOrder;
+    const oldStatus = order.purchase_order_status || 'shipped';
 
     try {
       const { error } = await this.supabase
@@ -1354,6 +1398,21 @@ export class AdminOrdersPageComponent implements OnInit {
         order.purchase_order_status = 'delivered';
         order.order_delivery_date = new Date().toISOString();
         this.logAuditAction('Order Marked as Delivered to Customer', order.purchase_order_id, {});
+
+        // Trigger Outbox Notification
+        const cust = this.extractCustomerDetails(order);
+        this.outboxService.recordStatusUpdatedNotification(
+          order.purchase_order_no,
+          order.purchase_order_id,
+          cust.name,
+          cust.email,
+          'delivered',
+          oldStatus,
+          order.payable_amount || 0,
+          order.shipping_remark || '',
+          order.utr_no || ''
+        ).then(() => this.outboxService.processPendingOutbox().catch(() => {})).catch(() => {});
+
         this.showDeliverModal = false;
         this.targetActionOrder = null;
         this.applyFilter();
@@ -1374,6 +1433,7 @@ export class AdminOrdersPageComponent implements OnInit {
   async submitCancelOrder() {
     if (!this.targetActionOrder || !this.cancelReason.trim()) return;
     const order = this.targetActionOrder;
+    const oldStatus = order.purchase_order_status || 'pending';
 
     try {
       const { error } = await this.supabase
@@ -1391,6 +1451,21 @@ export class AdminOrdersPageComponent implements OnInit {
         order.is_active = false;
         order.cancellation_remark = this.cancelReason.trim();
         this.logAuditAction(`Order Cancelled: ${this.cancelReason.trim()}`, order.purchase_order_id, { reason: this.cancelReason });
+
+        // Trigger Outbox Notification
+        const cust = this.extractCustomerDetails(order);
+        this.outboxService.recordStatusUpdatedNotification(
+          order.purchase_order_no,
+          order.purchase_order_id,
+          cust.name,
+          cust.email,
+          'cancelled',
+          oldStatus,
+          order.payable_amount || 0,
+          this.cancelReason.trim(),
+          order.utr_no || ''
+        ).then(() => this.outboxService.processPendingOutbox().catch(() => {})).catch(() => {});
+
         this.showCancelModal = false;
         this.targetActionOrder = null;
         this.applyFilter();

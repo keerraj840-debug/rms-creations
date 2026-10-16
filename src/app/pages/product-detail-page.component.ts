@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +30,7 @@ export interface ProductDetail {
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-28">
         
         <!-- BREADCRUMBS BAR -->
-        <nav aria-label="Breadcrumb" class="container mx-auto px-4 sm:px-6 lg:px-8 py-3.5 text-xs text-[#7A6C5E] dark:text-[#C5A393] flex items-center gap-2">
+        <nav aria-label="Breadcrumb" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 text-xs text-[#7A6C5E] dark:text-[#C5A393] flex items-center gap-2">
           <a routerLink="/" class="hover:text-[#9C4738] transition">Home</a>
           <span>/</span>
           <a routerLink="/shop" class="hover:text-[#9C4738] transition">Shop</a>
@@ -57,7 +57,7 @@ export interface ProductDetail {
         </div>
 
         <!-- PRODUCT DETAILS CONTAINER -->
-        <main *ngIf="!loading && product" class="container mx-auto px-4 sm:px-6 lg:px-8 pt-2">
+        <main *ngIf="!loading && product" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
           
           <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-5 sm:p-8 lg:p-10 shadow-xs">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
@@ -289,7 +289,7 @@ export interface ProductDetail {
     </app-site-layout>
   `
 })
-export class ProductDetailPageComponent implements OnInit {
+export class ProductDetailPageComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly supabase = inject(SupabaseService);
@@ -360,11 +360,30 @@ export class ProductDetailPageComponent implements OnInit {
         this.activeImage = this.product.image;
 
         this.seo.setPageMetadata({
-          title: `${this.product.name} — RMS Gift Hampers`,
+          title: `${this.product.name} — RMS Creations`,
           description: this.product.description.slice(0, 160),
-          keywords: `${this.product.name}, ${this.product.category}, gift hamper, order gift hamper`,
-          slug: `product/${this.product.id}`
+          keywords: `${this.product.name}, ${this.product.category}, gift hamper, order gift hamper, luxury gift box`,
+          slug: `product/${this.product.id}`,
+          ogImage: this.product.image
         });
+
+        // Rich Schema.org Product & Breadcrumb JSON-LD for Search Engine Snippets
+        this.seo.setProductSchema({
+          id: this.product.id,
+          name: this.product.name,
+          description: this.product.description,
+          price: this.product.price,
+          image: this.product.image,
+          category: this.product.category,
+          inStock: this.product.inStock
+        });
+
+        this.seo.setBreadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: 'Shop All Hampers', url: '/shop' },
+          { name: this.product.category, url: `/shop?category=${encodeURIComponent(this.product.category)}` },
+          { name: this.product.name, url: `/product/${this.product.id}` }
+        ]);
       } else {
         this.product = null;
       }
@@ -422,5 +441,10 @@ export class ProductDetailPageComponent implements OnInit {
 
   openImageModal() {
     this.showImageModal = true;
+  }
+
+  ngOnDestroy() {
+    this.seo.removeJsonLd('product-json-ld');
+    this.seo.removeJsonLd('breadcrumbs-json-ld');
   }
 }

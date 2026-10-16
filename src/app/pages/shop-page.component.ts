@@ -22,6 +22,14 @@ export interface ShopProduct {
   inStock: boolean;
 }
 
+export function isWithinDateWindow(fromDate?: string | null, toDate?: string | null): boolean {
+  if (!fromDate && !toDate) return true;
+  const todayStr = new Date().toISOString().slice(0, 10);
+  if (fromDate && todayStr < fromDate) return false;
+  if (toDate && todayStr > toDate) return false;
+  return true;
+}
+
 @Component({
   selector: 'app-shop-page',
   standalone: true,
@@ -29,48 +37,45 @@ export interface ShopProduct {
   template: `
     <app-site-layout>
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-20">
-        
-        <!-- PROMOTIONAL HERO BANNER -->
-        <section class="relative overflow-hidden bg-gradient-to-r from-[#57251C] via-[#9C4738] to-[#BA5E4E] text-white py-10 md:py-16 shadow-md">
-          <div class="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
-          <div class="pointer-events-none absolute bottom-0 right-0 h-64 w-64 rounded-full bg-black/15 blur-2xl"></div>
-
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center max-w-4xl">
-            <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-white/15 border border-white/20 text-[#F3E7DC] backdrop-blur-md">
-              <i class="fa-solid fa-sparkles text-amber-300"></i>
-              Boutique Gifting Catalog
-            </span>
-            <h1 class="mt-3 font-serif text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight">
-              Curated Gift Hampers &amp; Festive Treats
-            </h1>
-            <p class="mt-2.5 text-xs sm:text-base text-[#F3E7DC] max-w-2xl mx-auto leading-relaxed">
-              Explore artisanal Ganpati pooja hampers, festive gift bundles, birthday favors, and luxury suites. Order online with Cash on Delivery or Free 0% UPI.
-            </p>
-            <div class="mt-5 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 text-xs font-semibold text-white/90">
-              <span class="inline-flex items-center gap-1.5"><i class="fa-solid fa-truck-fast text-amber-300"></i> Free Delivery on ₹499+</span>
-              <span class="hidden sm:inline">•</span>
-              <span class="inline-flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-emerald-300"></i> 100% Handcrafted</span>
-              <span class="hidden sm:inline">•</span>
-              <span class="inline-flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-300"></i> Dispatch in 24-48 Hours</span>
-            </div>
-          </div>
-        </section>
 
         <!-- MAIN SHOP CONTENT -->
-        <main class="container mx-auto px-3.5 sm:px-6 lg:px-8 pt-6 sm:pt-8">
-          
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+
+          <!-- Sleek Compact Page Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
+            <div>
+              <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#2E2825] dark:text-[#F4F1ED]">
+                Shop Gift Hampers
+              </h1>
+              <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
+                Handcrafted gift hampers with instant Cash on Delivery &amp; 0% Fee UPI
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-[11px] font-semibold text-[#7A6C5E] dark:text-[#C5A393]">
+              <span class="inline-flex items-center gap-1 rounded-full bg-white dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 px-2.5 py-1 shadow-2xs">
+                <i class="fa-solid fa-truck-fast text-[#9C4738] dark:text-[#EB9D8E]"></i> Free Delivery ₹499+
+              </span>
+              <span class="inline-flex items-center gap-1 rounded-full bg-white dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 px-2.5 py-1 shadow-2xs">
+                <i class="fa-solid fa-shield-halved text-emerald-600 dark:text-emerald-400"></i> Artisanal Quality
+              </span>
+              <span class="inline-flex items-center gap-1 rounded-full bg-white dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 px-2.5 py-1 shadow-2xs">
+                <i class="fa-solid fa-bolt text-amber-600 dark:text-amber-400"></i> 24-48h Dispatch
+              </span>
+            </div>
+          </div>
+
           <!-- SEARCH & FILTER TOOLBAR -->
           <div class="bg-white dark:bg-[#1E1916] rounded-2xl p-3.5 sm:p-5 border border-[#EADFD2] dark:border-white/10 shadow-xs space-y-3.5">
-            
+
             <!-- Top Controls Row -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
               <!-- Search bar -->
               <div class="relative flex-1 max-w-md">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-[#7A6C5E] dark:text-[#C5A393]"></i>
-                <input 
-                  type="text" 
-                  [(ngModel)]="searchQuery" 
-                  placeholder="Search hampers, Ganpati boxes, return gifts..." 
+                <input
+                  type="text"
+                  [(ngModel)]="searchQuery"
+                  placeholder="Search hampers, Ganpati boxes, return gifts..."
                   class="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738] transition"
                 />
                 <button *ngIf="searchQuery" (click)="searchQuery = ''" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#7A6C5E] hover:text-[#2E2825] p-1">
@@ -86,7 +91,7 @@ export interface ShopProduct {
 
                 <div class="flex items-center gap-2">
                   <label class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] hidden sm:inline">Sort By:</label>
-                  <select 
+                  <select
                     [(ngModel)]="sortBy"
                     class="px-2.5 sm:px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs font-semibold text-[#2E2825] dark:text-[#F4F1ED] outline-none cursor-pointer"
                   >
@@ -103,12 +108,12 @@ export interface ShopProduct {
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-[#EADFD2]/60 dark:border-white/10">
               <!-- Categories Horizontal Scroll -->
               <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none -mx-1 px-1">
-                <button 
+                <button
                   type="button"
                   *ngFor="let cat of availableCategories"
                   (click)="selectedCategory = cat"
-                  [class]="selectedCategory === cat 
-                    ? 'bg-[#9C4738] text-white font-bold shadow-xs' 
+                  [class]="selectedCategory === cat
+                    ? 'bg-[#9C4738] text-white font-bold shadow-xs'
                     : 'bg-[#FAF7F2] dark:bg-[#251F1C] text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#2E2825] dark:hover:text-[#F4F1ED] border border-[#EADFD2] dark:border-white/10 font-medium'"
                   class="min-h-[36px] px-3.5 py-1.5 rounded-full text-xs shrink-0 transition-all cursor-pointer whitespace-nowrap active:scale-95"
                 >
@@ -119,12 +124,12 @@ export interface ShopProduct {
               <!-- Budget filters -->
               <div class="flex items-center gap-1.5 shrink-0 overflow-x-auto pb-1 sm:pb-0">
                 <span class="text-[11px] font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider hidden lg:inline">Budget:</span>
-                <button 
+                <button
                   type="button"
                   *ngFor="let b of budgetFilters"
                   (click)="selectedBudget = b.value"
-                  [class]="selectedBudget === b.value 
-                    ? 'bg-[#57251C] dark:bg-white text-white dark:text-[#2E2825] font-bold' 
+                  [class]="selectedBudget === b.value
+                    ? 'bg-[#57251C] dark:bg-white text-white dark:text-[#2E2825] font-bold'
                     : 'bg-white dark:bg-[#251F1C] text-[#7A6C5E] dark:text-[#C5A393] border border-[#EADFD2] dark:border-white/10'"
                   class="min-h-[32px] px-2.5 py-1 rounded-lg text-[11px] transition-all cursor-pointer whitespace-nowrap active:scale-95"
                 >
@@ -148,9 +153,9 @@ export interface ShopProduct {
             </div>
             <h3 class="mt-4 font-serif text-lg font-bold text-[#2E2825] dark:text-[#F4F1ED]">No products match your filter</h3>
             <p class="mt-1.5 text-xs text-[#7A6C5E] dark:text-[#C5A393]">Try clearing search keywords or selecting "All Categories".</p>
-            <button 
-              type="button" 
-              (click)="resetFilters()" 
+            <button
+              type="button"
+              (click)="resetFilters()"
               class="mt-5 px-5 py-2.5 rounded-full bg-[#9C4738] text-white text-xs font-bold hover:bg-[#883B2D] transition cursor-pointer active:scale-95"
             >
               Reset All Filters
@@ -159,19 +164,19 @@ export interface ShopProduct {
 
           <!-- RESPONSIVE 2-COLUMN MOBILE PRODUCT GRID -->
           <div *ngIf="!loading && filteredProducts.length > 0" class="mt-6 sm:mt-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
-            <div 
-              *ngFor="let product of filteredProducts" 
+            <div
+              *ngFor="let product of filteredProducts"
               class="group bg-white dark:bg-[#1E1916] rounded-2xl border border-[#EADFD2] dark:border-white/10 overflow-hidden shadow-2xs hover:shadow-lg hover:border-[#9C4738]/50 transition-all duration-300 flex flex-col justify-between"
             >
               <!-- Card Media & Badges -->
               <div class="relative overflow-hidden bg-[#FAF7F2] dark:bg-[#251F1C] aspect-square cursor-pointer" [routerLink]="['/product', product.id]">
-                <img 
-                  [src]="product.image" 
-                  [alt]="product.name" 
+                <img
+                  [src]="product.image"
+                  [alt]="product.name"
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
-                
+
                 <!-- Category badge -->
                 <span class="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-bold bg-white/90 dark:bg-[#1E1916]/90 text-[#9C4738] dark:text-[#EB9D8E] backdrop-blur-md shadow-2xs border border-[#EADFD2]/60 dark:border-white/10 truncate max-w-[120px]">
                   {{ product.category }}
@@ -186,7 +191,7 @@ export interface ShopProduct {
               <!-- Card Content -->
               <div class="p-3 sm:p-4 flex-1 flex flex-col justify-between space-y-2.5 sm:space-y-3">
                 <div>
-                  <h3 
+                  <h3
                     [routerLink]="['/product', product.id]"
                     class="font-serif font-bold text-xs sm:text-sm text-[#2E2825] dark:text-[#F4F1ED] group-hover:text-[#9C4738] dark:group-hover:text-[#EB9D8E] transition-colors cursor-pointer line-clamp-2 min-h-[2rem]"
                     [title]="product.name"
@@ -213,7 +218,7 @@ export interface ShopProduct {
                   </div>
 
                   <!-- ADD TO CART BUTTON (Strict Ecommerce Standard: No Direct Order Bypass) -->
-                  <button 
+                  <button
                     type="button"
                     (click)="addToCart(product)"
                     class="w-full sm:w-auto min-h-[38px] px-3 py-2 rounded-xl bg-[#57251C] dark:bg-[#C56D5B] hover:bg-[#9C4738] dark:hover:bg-[#DD8776] text-white text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs hover:shadow active:scale-95 cursor-pointer shrink-0"
@@ -262,11 +267,16 @@ export class ShopPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.seo.setPageMetadata({
-      title: 'Shop Premium Gift Hampers & Festive Collections',
-      description: 'Explore the full RMS Gift Hampers collection. Handcrafted Ganpati boxes, birthday favors, festive hampers, and chocolate suites.',
-      keywords: 'shop hampers, buy gift hampers online, ganpati pooja box, return gifts, chocolate gifts',
+      title: 'Shop Handcrafted Gift Hampers — RMS Creations',
+      description: 'Explore the full RMS Creations collection. Handcrafted Diwali boxes, birthday favours, festive dry fruit hampers, and chocolate suites.',
+      keywords: 'shop hampers, buy gift hampers online, Diwali hamper Mumbai, return gifts, chocolate gifts, pooja kits',
       slug: 'shop'
     });
+
+    this.seo.setBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: 'Shop All Hampers', url: '/shop' }
+    ]);
 
     this.loadCatalog().then(() => {
       this.subscribeToQueryParams();
@@ -294,8 +304,8 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     const clean = catParam.toLowerCase().trim();
     const matched = this.availableCategories.find(c => {
       const lower = c.toLowerCase();
-      return lower === clean || 
-             lower.includes(clean) || 
+      return lower === clean ||
+             lower.includes(clean) ||
              clean.includes(lower) ||
              (clean.includes('ganpati') && lower.includes('ganpati')) ||
              (clean.includes('return') && lower.includes('return')) ||
@@ -319,33 +329,53 @@ export class ShopPageComponent implements OnInit, OnDestroy {
       ]);
 
       const catMap = new Map<number, any>();
+      const activeCategoryIds = new Set<number>();
+
       if (cRes.data) {
-        cRes.data.forEach((c: any) => catMap.set(Number(c.id), c));
-        this.availableCategories = ['All', ...new Set(cRes.data.map((c: any) => c.name).filter(Boolean))];
+        cRes.data.forEach((c: any) => {
+          if (isWithinDateWindow(c.from_date, c.to_date)) {
+            catMap.set(Number(c.id), c);
+            activeCategoryIds.add(Number(c.id));
+          }
+        });
+        const activeCatNames = Array.from(catMap.values()).map((c: any) => c.name).filter(Boolean);
+        this.availableCategories = ['All', ...new Set(activeCatNames)];
       }
 
       if (pRes.data && pRes.data.length > 0) {
-        this.products = pRes.data.map((p: any) => {
-          const cat = catMap.get(Number(p.category_id));
-          const catName = cat?.name || 'Gift Hamper';
-          const extractedPrice = parseInt(p.name.match(/₹(\d+)/)?.[1] || String(cat?.price || 199), 10);
-          const price = p.selling_price || p.price || (isNaN(extractedPrice) || extractedPrice <= 0 ? 199 : extractedPrice);
-          const image = (p.images && p.images[0]) || cat?.image || 'assets/banners/banner.png';
-          
-          return {
-            id: Number(p.id),
-            name: p.name,
-            description: p.description || 'Thoughtfully curated handcrafted gift creation.',
-            price: Number(price),
-            originalPrice: price < 300 ? Number(price) + 50 : Math.round(Number(price) * 1.25),
-            category: catName,
-            categoryId: Number(p.category_id),
-            image: image,
-            images: p.images && p.images.length > 0 ? p.images : [image],
-            badge: p.badge || undefined,
-            inStock: true
-          };
-        });
+        this.products = pRes.data
+          .filter((p: any) => {
+            // 1. Check product's own active date window
+            if (!isWithinDateWindow(p.from_date, p.to_date)) return false;
+
+            // 2. Check if the mapped category exists and is within its active date window
+            if (p.category_id && !activeCategoryIds.has(Number(p.category_id))) {
+              return false;
+            }
+
+            return true;
+          })
+          .map((p: any) => {
+            const cat = catMap.get(Number(p.category_id));
+            const catName = cat?.name || 'Gift Hamper';
+            const extractedPrice = parseInt(p.name.match(/₹(\d+)/)?.[1] || String(cat?.price || 199), 10);
+            const price = p.selling_price || p.price || (isNaN(extractedPrice) || extractedPrice <= 0 ? 199 : extractedPrice);
+            const image = (p.images && p.images[0]) || cat?.image || 'assets/banners/banner.png';
+
+            return {
+              id: Number(p.id),
+              name: p.name,
+              description: p.description || 'Thoughtfully curated handcrafted gift creation.',
+              price: Number(price),
+              originalPrice: price < 300 ? Number(price) + 50 : Math.round(Number(price) * 1.25),
+              category: catName,
+              categoryId: Number(p.category_id),
+              image: image,
+              images: p.images && p.images.length > 0 ? p.images : [image],
+              badge: p.badge || undefined,
+              inStock: true
+            };
+          });
       } else {
         this.products = [];
       }
@@ -368,7 +398,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         // Search Filter
         if (this.searchQuery.trim()) {
           const q = this.searchQuery.toLowerCase().trim();
-          const matches = p.name.toLowerCase().includes(q) || 
+          const matches = p.name.toLowerCase().includes(q) ||
                           p.description.toLowerCase().includes(q) ||
                           p.category.toLowerCase().includes(q);
           if (!matches) return false;

@@ -15,19 +15,22 @@ import { PinCodeAvailabilityService, DeliveryCheckResult } from '../services/pin
     <app-site-layout>
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-24">
         
-        <!-- Header -->
-        <div class="bg-gradient-to-b from-[#F3E7DC]/60 to-transparent dark:from-white/5 py-8 md:py-12 border-b border-[#EADFD2]/60 dark:border-white/10">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-2xl">
-            <h1 class="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#2E2825] dark:text-[#F4F1ED]">
-              Your Shopping Cart
-            </h1>
-            <p class="mt-2 text-xs sm:text-sm text-[#7A6C5E] dark:text-[#C5A393]">
-              Review your handpicked hampers before proceed to checkout.
-            </p>
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+          
+          <!-- Sleek Compact Page Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
+            <div>
+              <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#2E2825] dark:text-[#F4F1ED]">
+                Your Shopping Cart
+              </h1>
+              <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
+                Review items, check pin code delivery, and proceed to checkout
+              </p>
+            </div>
+            <a routerLink="/shop" class="text-xs font-bold text-[#9C4738] dark:text-[#EB9D8E] hover:underline">
+              &larr; Continue Shopping
+            </a>
           </div>
-        </div>
-
-        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           
           <!-- EMPTY CART STATE -->
           <div *ngIf="cartService.items.length === 0" class="py-20 text-center bg-white dark:bg-[#1E1916] rounded-3xl border border-dashed border-[#EADFD2] dark:border-white/10 p-8 max-w-lg mx-auto shadow-xs">
@@ -183,8 +186,8 @@ import { PinCodeAvailabilityService, DeliveryCheckResult } from '../services/pin
 
             </div>
 
-            <!-- RIGHT 4 COLS: ORDER SUMMARY & CHECKOUT -->
-            <div class="lg:col-span-4 space-y-4">
+            <!-- RIGHT 4 COLS: ORDER SUMMARY & CHECKOUT (STICKY ON DESKTOP) -->
+            <div class="lg:col-span-4 space-y-4 lg:sticky lg:top-24">
               
               <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-6 shadow-xs space-y-5">
                 

@@ -66,7 +66,7 @@ export class PinCodeAvailabilityService {
         console.error('Error checking PIN code availability:', error.message);
       }
 
-      if (!data || !data.pca_is_available) {
+      if (data && data.pca_is_available === false) {
         return {
           isServiceable: false,
           pinCode: cleanPin,
@@ -75,13 +75,32 @@ export class PinCodeAvailabilityService {
           calculatedDeliveryFee: 0,
           totalWeightKg,
           freeDeliveryApplied: false,
-          message: `Delivery is currently not available for PIN code ${cleanPin}. Please select another delivery address or contact RMS concierge.`
+          message: `Delivery is currently not available for PIN code ${cleanPin}. Please select another delivery address.`
         };
       }
 
-      const record: PinCodeAvailability = data;
-      const baseCharge = Number(record.pca_delivery_charges) || 49;
-      const above1kgCharge = Number(record.pca_delivery_charges_above_1kg) || 29;
+      // Valid Indian postal PIN code prefix range check (100000 to 899999)
+      const pinNum = parseInt(cleanPin, 10);
+      const isValidIndianPin = pinNum >= 100000 && pinNum <= 899999;
+
+      if (!data && !isValidIndianPin) {
+        return {
+          isServiceable: false,
+          pinCode: cleanPin,
+          baseCharge: 0,
+          above1kgCharge: 0,
+          calculatedDeliveryFee: 0,
+          totalWeightKg,
+          freeDeliveryApplied: false,
+          message: `Delivery is currently not available for PIN code ${cleanPin}. Please select a valid Indian delivery address.`
+        };
+      }
+
+      const baseCharge = data ? (Number(data.pca_delivery_charges) || 49) : 49;
+      const above1kgCharge = data ? (Number(data.pca_delivery_charges_above_1kg) || 29) : 29;
+      const state = data?.pca_state || 'Maharashtra / India';
+      const district = data?.pca_district || 'Express Zone';
+      const courierService = data?.courier_service || 'Pan-India Express Courier';
 
       // Weight-based charge calculation rule:
       // Base charge covers up to 1.0 kg. Additional kg is charged per kg.
@@ -95,16 +114,16 @@ export class PinCodeAvailabilityService {
       const isFreeDelivery = subtotal >= this.freeDeliveryThreshold;
       const finalDeliveryFee = isFreeDelivery ? 0 : weightFee;
 
-      const locationText = [record.pca_district, record.pca_state].filter(Boolean).join(', ');
-      const courierText = record.courier_service ? ` via ${record.courier_service}` : '';
-      const feeText = isFreeDelivery ? 'FREE (Special Order Offer)' : `₹${finalDeliveryFee}`;
+      const locationText = [district, state].filter(Boolean).join(', ');
+      const courierText = courierService ? ` via ${courierService}` : '';
+      const feeText = isFreeDelivery ? 'FREE (Special Offer)' : `₹${finalDeliveryFee}`;
 
       return {
         isServiceable: true,
         pinCode: cleanPin,
-        state: record.pca_state,
-        district: record.pca_district,
-        courierService: record.courier_service,
+        state,
+        district,
+        courierService,
         baseCharge,
         above1kgCharge,
         calculatedDeliveryFee: finalDeliveryFee,
@@ -150,9 +169,9 @@ export class PinCodeAvailabilityService {
       let list = (data as PinCodeAvailability[]) || [];
       if (searchQuery.trim()) {
         const q = searchQuery.trim().toLowerCase();
-        list = list.filter(p => 
-          p.pca_pin_code.includes(q) || 
-          p.pca_state?.toLowerCase().includes(q) || 
+        list = list.filter(p =>
+          p.pca_pin_code.includes(q) ||
+          p.pca_state?.toLowerCase().includes(q) ||
           p.pca_district?.toLowerCase().includes(q) ||
           p.courier_service?.toLowerCase().includes(q)
         );

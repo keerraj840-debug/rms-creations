@@ -124,6 +124,49 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/my-custom-hampers-page.component').then(m => m.MyCustomHampersPageComponent) 
   },
 
+  // Dedicated Statutory Legal & Policy Routes (Indian Consumer Protection & DPDP Act 2023)
+  {
+    path: 'terms',
+    loadComponent: () => import('./pages/policy-page.component').then(m => m.PolicyPageComponent),
+    data: { section: 'terms' }
+  },
+  {
+    path: 'terms-of-service',
+    redirectTo: 'terms'
+  },
+  {
+    path: 'privacy',
+    loadComponent: () => import('./pages/policy-page.component').then(m => m.PolicyPageComponent),
+    data: { section: 'privacy' }
+  },
+  {
+    path: 'privacy-policy',
+    redirectTo: 'privacy'
+  },
+  {
+    path: 'shipping-policy',
+    loadComponent: () => import('./pages/policy-page.component').then(m => m.PolicyPageComponent),
+    data: { section: 'shipping' }
+  },
+  {
+    path: 'refund-policy',
+    loadComponent: () => import('./pages/policy-page.component').then(m => m.PolicyPageComponent),
+    data: { section: 'refunds' }
+  },
+  {
+    path: 'cancellation-policy',
+    redirectTo: 'refund-policy'
+  },
+  {
+    path: 'grievance',
+    loadComponent: () => import('./pages/policy-page.component').then(m => m.PolicyPageComponent),
+    data: { section: 'grievance' }
+  },
+  {
+    path: 'policies',
+    redirectTo: 'terms'
+  },
+
   // Admin Routes (Protected by Auth Guard)
   { 
     path: 'admin', 

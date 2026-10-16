@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, inject, ChangeDetectorRef } from '@ang
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../services/supabase.service';
+import { NotificationOutboxService } from '../services/notification-outbox.service';
 
 @Component({
   selector: 'app-admin-settings-page',
@@ -9,10 +10,10 @@ import { SupabaseService } from '../services/supabase.service';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="max-w-7xl mx-auto pb-12 space-y-4 transition-colors duration-300">
-      
+
       <!-- Top Sticky Action Bar -->
       <div class="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#FAF7F2]/95 dark:bg-[#1E1916]/95 backdrop-blur-md border-b border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-between gap-4">
-        
+
         <!-- Left: Title & Status -->
         <div class="flex items-center gap-3 min-w-0">
           <div class="min-w-0">
@@ -33,7 +34,7 @@ import { SupabaseService } from '../services/supabase.service';
                 Maintenance Mode Active
               </span>
             </div>
-            
+
             <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] truncate">
               Manage your WhatsApp number, store contact details, email, address, and online status.
             </p>
@@ -73,10 +74,10 @@ import { SupabaseService } from '../services/supabase.service';
       <!-- UNIFIED 2-COLUMN WORKSPACE -->
       <div class="bg-white dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 rounded-2xl p-6 shadow-2xs">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           <!-- LEFT COLUMN: Contact, Concierge WhatsApp & Addresses (7 Cols) -->
           <div class="lg:col-span-7 space-y-5">
-            
+
             <!-- 1. WhatsApp Config -->
             <div class="space-y-4">
               <div class="border-b border-[#EADFD2]/60 dark:border-white/10 pb-2">
@@ -187,11 +188,93 @@ import { SupabaseService } from '../services/supabase.service';
               </div>
             </div>
 
+            <!-- 4. Instagram Direct Publishing API Config -->
+            <div class="space-y-4 pt-2">
+              <div class="border-b border-[#EADFD2]/60 dark:border-white/10 pb-2">
+                <h2 class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider flex items-center gap-2">
+                  <i class="fa-brands fa-instagram text-pink-600"></i>
+                  <span>Instagram Direct Publishing API (Meta Graph)</span>
+                </h2>
+              </div>
+
+              <div class="p-4 bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 rounded-2xl space-y-3">
+                <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393] leading-relaxed">
+                  Connect your Instagram Business or Creator account to publish product photos, price &amp; captions directly from the Product Form with 1 click.
+                </p>
+
+                <div class="space-y-2.5">
+                  <div>
+                    <label class="block text-[11px] font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+                      Instagram Business User ID
+                    </label>
+                    <input type="text" [(ngModel)]="settings.instagram_user_id" placeholder="e.g. 17841400000000000"
+                           class="w-full px-3 py-2 bg-white dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl text-xs font-mono outline-none focus:border-[#9C4738]">
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+                      Meta Access Token
+                    </label>
+                    <input type="password" [(ngModel)]="settings.instagram_access_token" placeholder="EAAG..."
+                           class="w-full px-3 py-2 bg-white dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl text-xs font-mono outline-none focus:border-[#9C4738]">
+                  </div>
+                </div>
+
+                <p class="text-[10px] text-[#A89F91]">
+                  Note: If left empty, the 1-click Instagram Publish button automatically copies the caption, link, and hashtags to your clipboard and opens Instagram Create in your browser!
+                </p>
+              </div>
+            </div>
+
+            <!-- 5. Email Notification Outbox Monitor -->
+            <div class="space-y-4 pt-2">
+              <div class="border-b border-[#EADFD2]/60 dark:border-white/10 pb-2">
+                <h2 class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider flex items-center gap-2">
+                  <i class="fa-solid fa-envelope text-[#9C4738]"></i>
+                  <span>Email Notification Outbox Monitor</span>
+                </h2>
+              </div>
+
+              <div class="p-4 bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 rounded-2xl space-y-3">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">Transactional Order Outbox</p>
+                    <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">Admin recipient: <strong>rmsgifthampers@gmail.com</strong></p>
+                  </div>
+
+                  <button type="button" (click)="processOutboxQueue()" [disabled]="processingOutbox"
+                          class="px-3 py-1.5 rounded-xl bg-[#9C4738] text-white text-xs font-bold hover:bg-[#883B2D] transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50">
+                    <i class="fa-solid fa-rotate text-[10px]" [class.animate-spin]="processingOutbox"></i>
+                    <span>{{ processingOutbox ? 'Processing...' : 'Process Outbox' }}</span>
+                  </button>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-xs pt-1">
+                  <div class="p-2 bg-white dark:bg-[#1C1917] rounded-xl border border-[#EADFD2] dark:border-white/10">
+                    <span class="text-[10px] text-[#7A6C5E] uppercase block font-bold">Pending</span>
+                    <span class="font-serif font-bold text-amber-600 text-sm">{{ outboxCounts.pending }}</span>
+                  </div>
+                  <div class="p-2 bg-white dark:bg-[#1C1917] rounded-xl border border-[#EADFD2] dark:border-white/10">
+                    <span class="text-[10px] text-[#7A6C5E] uppercase block font-bold">Sent</span>
+                    <span class="font-serif font-bold text-emerald-600 text-sm">{{ outboxCounts.sent }}</span>
+                  </div>
+                  <div class="p-2 bg-white dark:bg-[#1C1917] rounded-xl border border-[#EADFD2] dark:border-white/10">
+                    <span class="text-[10px] text-[#7A6C5E] uppercase block font-bold">Failed</span>
+                    <span class="font-serif font-bold text-rose-600 text-sm">{{ outboxCounts.failed }}</span>
+                  </div>
+                </div>
+
+                <p *ngIf="outboxResultMsg" class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                  <i class="fa-solid fa-circle-check"></i> {{ outboxResultMsg }}
+                </p>
+              </div>
+            </div>
+
           </div>
 
           <!-- RIGHT COLUMN: Live Contact Preview & Concierge Simulation (5 Cols) -->
           <div class="lg:col-span-5 space-y-5">
-            
+
             <div class="border-b border-[#EADFD2]/60 dark:border-white/10 pb-2">
               <h2 class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider flex items-center gap-2">
                 <i class="fa-solid fa-eye text-[#9C4738]"></i>
@@ -282,8 +365,9 @@ import { SupabaseService } from '../services/supabase.service';
 })
 export class AdminSettingsPageComponent implements OnInit {
   private supabase = inject(SupabaseService);
+  private outboxService = inject(NotificationOutboxService);
   private cdr = inject(ChangeDetectorRef);
-  
+
   settings: any = {
     is_app_live: true,
     under_maintenance: false,
@@ -293,19 +377,62 @@ export class AdminSettingsPageComponent implements OnInit {
     contact_email: 'contact@rmscreations.com',
     address: 'Maharashtra, India',
     whatsapp_no: '919284905118',
+    instagram_user_id: '',
+    instagram_access_token: '',
     is_active: true
   };
-  
+
   loading = true;
   saving = false;
   errorMessage = '';
   successMessage = '';
+
+  outboxCounts = { pending: 0, sent: 0, failed: 0 };
+  processingOutbox = false;
+  outboxResultMsg = '';
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
       event.preventDefault();
       this.saveSettings();
+    }
+  }
+
+  async loadOutboxMetrics() {
+    try {
+      const { data } = await this.supabase
+        .from('order_notification_outbox')
+        .select('status');
+
+      if (data) {
+        this.outboxCounts = {
+          pending: data.filter((d: any) => d.status === 'pending' || d.status === 'processing').length,
+          sent: data.filter((d: any) => d.status === 'sent').length,
+          failed: data.filter((d: any) => d.status === 'failed').length
+        };
+      }
+    } catch {
+      // Non-blocking
+    } finally {
+      this.cdr.markForCheck();
+    }
+  }
+
+  async processOutboxQueue() {
+    this.processingOutbox = true;
+    this.outboxResultMsg = '';
+    this.cdr.markForCheck();
+
+    try {
+      const result = await this.outboxService.processPendingOutbox();
+      this.outboxResultMsg = result.message || `Processed ${result.processed} notifications: ${result.sent} sent, ${result.failed} failed.`;
+      await this.loadOutboxMetrics();
+    } catch (err: any) {
+      this.outboxResultMsg = 'Failed to process outbox queue.';
+    } finally {
+      this.processingOutbox = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -316,6 +443,7 @@ export class AdminSettingsPageComponent implements OnInit {
   async ngOnInit() {
     this.loading = true;
     this.cdr.markForCheck();
+    this.loadOutboxMetrics();
     try {
       const { data, error } = await this.supabase.from('app_settings').select('*').limit(1).single();
       if (data) {
@@ -347,6 +475,8 @@ export class AdminSettingsPageComponent implements OnInit {
         contact_email: this.settings.contact_email?.trim() || null,
         address: this.settings.address?.trim() || null,
         whatsapp_no: this.settings.whatsapp_no?.trim() || null,
+        instagram_user_id: this.settings.instagram_user_id?.trim() || null,
+        instagram_access_token: this.settings.instagram_access_token?.trim() || null,
         is_active: true
       };
 

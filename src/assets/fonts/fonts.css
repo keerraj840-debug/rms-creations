@@ -1,0 +1,41 @@
+/* Self-hosted Local Font Definitions for GDPR / Privacy Compliance */
+
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 500 900;
+  font-display: swap;
+  src: local('Cinzel'), local('Cinzel-Regular'), system-ui, serif;
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: local('Cormorant Garamond'), local('CormorantGaramond-Regular'), Georgia, serif;
+}
+
+@font-face {
+  font-family: 'Libre Baskerville';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: local('Libre Baskerville'), local('LibreBaskerville-Regular'), Georgia, serif;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 500 900;
+  font-display: swap;
+  src: local('Playfair Display'), local('PlayfairDisplay-Regular'), Georgia, serif;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: local('Plus Jakarta Sans'), local('PlusJakartaSans-Regular'), system-ui, -apple-system, sans-serif;
+}

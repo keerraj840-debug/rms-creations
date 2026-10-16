@@ -4,22 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../services/supabase.service';
 import { FileUploadComponent } from '../shared/ui/file-upload.component';
-import { AiImageStudioComponent } from '../shared/ai-image-studio/ai-image-studio.component';
-import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.service';
 
 @Component({
   selector: 'app-admin-category-form-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, FileUploadComponent, AiImageStudioComponent],
+  imports: [CommonModule, FormsModule, RouterLink, FileUploadComponent],
   template: `
     <div class="max-w-7xl mx-auto pb-12 space-y-4 transition-colors duration-300">
-      
+
       <!-- Top Sticky Header Bar (Exact match to Product Studio) -->
       <div class="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#FAF7F2]/95 dark:bg-[#1E1916]/95 backdrop-blur-md border-b border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-between gap-4">
-        
+
         <!-- Left: Back, Title & Live Status -->
         <div class="flex items-center gap-3 min-w-0">
-          <a routerLink="/admin/categories" 
+          <a routerLink="/admin/categories"
              class="p-2 text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#4A3C31] dark:hover:text-[#F4F1ED] bg-white dark:bg-[#251F1C] rounded-xl border border-[#EADFD2] dark:border-white/10 transition-colors shadow-2xs shrink-0 cursor-pointer"
              title="Back to Categories List">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,23 +39,23 @@ import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.
                 <span>{{ category.is_active ? 'Live on Store' : 'Draft Mode' }}</span>
               </button>
 
-              <!-- Live Readiness Tracker Pill -->
+              <!-- Live Status Pill -->
               <div class="hidden md:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border shrink-0"
                    [ngClass]="readinessScore.isReady ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'">
                 <span class="w-1.5 h-1.5 rounded-full" [ngClass]="readinessScore.isReady ? 'bg-emerald-500' : 'bg-amber-500'"></span>
-                <span>{{ readinessScore.isReady ? 'All Essentials Filled' : (readinessScore.completed + ' of ' + readinessScore.total + ' fields filled') }}</span>
+                <span>{{ readinessScore.isReady ? 'Ready' : (readinessScore.completed + ' of ' + readinessScore.total + ' fields filled') }}</span>
               </div>
             </div>
-            
+
             <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] truncate">
-              {{ isEdit ? 'Update collection banner, pricing tier, and festive duration' : 'Configure your category showcase, pricing baseline, and target audience' }}
+              {{ isEdit ? 'Update category name, photo, and active dates' : 'Add category details, photo, and active dates' }}
             </p>
           </div>
         </div>
 
         <!-- Right: Actions -->
         <div class="flex items-center gap-2.5 shrink-0">
-          <button type="button" routerLink="/admin/categories" 
+          <button type="button" routerLink="/admin/categories"
                   class="px-3.5 py-2 text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#4A3C31] dark:hover:text-[#F4F1ED] rounded-xl transition-colors cursor-pointer">
             Cancel
           </button>
@@ -69,7 +67,7 @@ import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.
             <span class="hidden sm:inline">Save & Add Another</span>
             <span class="sm:hidden">+ Another</span>
           </button>
-          
+
           <!-- Primary Save / Publish Button -->
           <button type="button" (click)="saveCategory(false)" [disabled]="saving || uploadingImage"
                   class="px-5 py-2 rounded-xl bg-gradient-to-r from-[#9C4738] to-[#BA5E4E] hover:from-[#883B2D] text-white text-xs font-bold shadow-sm hover:shadow transition-all disabled:opacity-50 flex items-center gap-2 cursor-pointer"
@@ -102,10 +100,10 @@ import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.
       <!-- UNIFIED 2-COLUMN WORKSPACE -->
       <div class="bg-white dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 rounded-2xl p-6 shadow-2xs">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           <!-- LEFT COLUMN: Category Title, Generous Description, Pricing, Audience & Dates (7 Cols) -->
           <div class="lg:col-span-7 space-y-4.5">
-            
+
             <div class="border-b border-[#EADFD2]/60 dark:border-white/10 pb-2 flex items-center justify-between">
               <h2 class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider flex items-center gap-2">
                 <i class="fa-solid fa-folder-open text-[#9C4738]"></i>
@@ -123,11 +121,11 @@ import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.
                   {{ (category.name?.length || 0) }} / 60
                 </span>
               </div>
-              
+
               <input type="text" [(ngModel)]="category.name" placeholder="e.g. Diwali Premium Hampers, Corporate Gifts..."
                      class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border rounded-xl px-4 py-2.5 text-sm font-medium text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] transition-all"
                      [ngClass]="submitted && errors['name'] ? 'border-rose-500 ring-2 ring-rose-500/20 bg-rose-50/20' : 'border-[#EADFD2] focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738]'">
-              
+
               <p *ngIf="submitted && errors['name']" class="text-xs text-rose-500 font-semibold mt-1 flex items-center gap-1">
                 <i class="fa-solid fa-circle-exclamation"></i> <span>{{ errors['name'] }}</span>
               </p>
@@ -143,7 +141,7 @@ import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.
                   {{ (category.description?.length || 0) }} / 300
                 </span>
               </div>
-              
+
               <textarea [(ngModel)]="category.description" rows="3" placeholder="Festive occasion notes, gifting themes, curation story, or recipient highlights..."
                         class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-4 py-2.5 text-xs text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] focus:outline-none focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738] leading-relaxed resize-y"></textarea>
             </div>
@@ -227,25 +225,25 @@ import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.
 
           <!-- RIGHT COLUMN: Cover Media, Interactive Preview Card, & Live Readiness (5 Cols) -->
           <div class="lg:col-span-5 space-y-5">
-            
+
             <div class="border-b border-[#EADFD2]/60 dark:border-white/10 pb-2 flex items-center justify-between">
               <h2 class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider flex items-center gap-2">
                 <i class="fa-regular fa-image text-[#9C4738]"></i>
                 <span>Cover Media & Showcase</span>
               </h2>
 
-              <!-- ✨ AI Image Studio Trigger Button -->
-              <button type="button" (click)="openAiStudio()"
-                      class="px-2.5 py-1 rounded-xl bg-gradient-to-r from-purple-600 to-rose-600 hover:from-purple-700 hover:to-rose-700 text-white text-[11px] font-bold shadow-2xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer">
-                <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-                <span>AI Studio</span>
+              <!-- Copy ChatGPT / AI Prompt Button -->
+              <button type="button" (click)="copyChatGptPrompt()"
+                      class="px-2.5 py-1 rounded-xl bg-[#57251C] hover:bg-[#9C4738] text-white text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                <i class="fa-solid fa-copy text-[10px]"></i>
+                <span>{{ promptCopied ? 'Copied Prompt!' : 'Copy ChatGPT / AI Prompt' }}</span>
               </button>
             </div>
 
             <!-- Category Cover Image Upload (Strictly file selection, 1:1, <=1MB) -->
             <div>
-              <app-file-upload 
-                [aspectRatio]="1" 
+              <app-file-upload
+                [aspectRatio]="1"
                 targetLabel="Category Cover"
                 bucket="images"
                 [existingImageUrl]="category.image"
@@ -281,7 +279,7 @@ import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.
                       <span>{{ category.is_active ? 'Active' : 'Draft' }}</span>
                     </span>
 
-                    <span *ngIf="category.gender && category.gender !== 'unisex'" 
+                    <span *ngIf="category.gender && category.gender !== 'unisex'"
                           class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/90 text-[#4A3C31] backdrop-blur-xs shadow-xs">
                       {{ getAudienceLabel(category.gender) }}
                     </span>
@@ -294,7 +292,7 @@ import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.
                   </div>
 
                   <!-- Remove image button -->
-                  <button *ngIf="category.image" type="button" (click)="category.image = ''" 
+                  <button *ngIf="category.image" type="button" (click)="category.image = ''"
                           class="absolute top-2.5 right-2.5 p-1.5 rounded-lg bg-black/60 hover:bg-black/80 text-white text-xs cursor-pointer"
                           title="Remove cover photo">
                     <i class="fa-solid fa-trash-can"></i>
@@ -350,14 +348,6 @@ import { AiImageStudioContext } from '../shared/ai-image-studio/ai-image-studio.
         </div>
       </div>
 
-      <!-- AI Image Creation Studio Modal -->
-      <app-ai-image-studio
-        [isOpen]="showAiStudio"
-        [context]="aiStudioContext"
-        (close)="showAiStudio = false"
-        (applyImage)="onAiImageApplied($event)"
-      ></app-ai-image-studio>
-
     </div>
   `
 })
@@ -386,10 +376,6 @@ export class AdminCategoryFormPageComponent implements OnInit {
     is_active: true
   };
 
-  // AI Image Studio state
-  showAiStudio = false;
-  aiStudioContext: AiImageStudioContext = { targetType: 'category', title: '' };
-
   audienceOptions = [
     { value: 'unisex', label: 'All', iconClass: 'fa-solid fa-gift' },
     { value: 'girls', label: 'For Her', iconClass: 'fa-solid fa-venus' },
@@ -398,22 +384,21 @@ export class AdminCategoryFormPageComponent implements OnInit {
     { value: 'festive', label: 'Festive', iconClass: 'fa-solid fa-wand-magic-sparkles' }
   ];
 
-  openAiStudio() {
-    this.aiStudioContext = {
-      targetType: 'category',
-      title: this.category.name || 'Category Collection',
-      description: this.category.description || '',
-      gender: this.category.gender || undefined,
-      fromDate: this.category.from_date || undefined,
-      toDate: this.category.to_date || undefined,
-      existingImageUrl: this.category.image || undefined
-    };
-    this.showAiStudio = true;
+  promptCopied = false;
+
+  get chatGptPrompt(): string {
+    const name = this.category.name?.trim() || 'Festive Gift Collection';
+    const desc = this.category.description?.trim() || 'Curated luxury gift hampers collection';
+    return `Commercial 8K studio category cover photograph for a luxury gift hamper collection named "${name}". ${desc}. Contact RMS Gift Hampers: Phone/WhatsApp 9284905118, Email rmsgifthampers@gmail.com, Website https://rmscreations.netlify.app/. Symmetrical arrangement of handcrafted artisanal gift boxes with satin ribbon bow ties, gold foil details, arranged on a warm limestone backdrop, 45-degree studio lighting, soft shadows, photorealistic, no text.`;
   }
 
-  onAiImageApplied(imageUrl: string) {
-    this.category.image = imageUrl;
-    this.successMessage = '✨ AI Cover Image applied successfully! Click "Save Changes" to publish.';
+  copyChatGptPrompt() {
+    navigator.clipboard.writeText(this.chatGptPrompt);
+    this.promptCopied = true;
+    setTimeout(() => {
+      this.promptCopied = false;
+      this.cdr.markForCheck();
+    }, 3000);
     this.cdr.markForCheck();
   }
 

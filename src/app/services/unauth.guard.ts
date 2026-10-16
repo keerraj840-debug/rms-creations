@@ -1,16 +1,19 @@
 import { inject } from '@angular/core';
 import { Router, type CanActivateFn } from '@angular/router';
-import { LocalStorageService } from './local-storage.service';
+import { AuthService } from './auth.service';
 
+/**
+ * unauthGuard — prevents authenticated users from accessing auth pages.
+ * Role is read from AuthService.currentUser (verified session), not localStorage.
+ */
 export const unauthGuard: CanActivateFn = (route, state) => {
-  const localStorageService = inject(LocalStorageService);
+  const authService = inject(AuthService);
   const router = inject(Router);
 
-  const token = localStorageService.getItem<string>('auth_token');
-  const role = localStorageService.getItem<string>('user_role');
+  const currentUser = authService.currentUser;
 
-  if (token) {
-    if (role === 'admin') {
+  if (currentUser) {
+    if (currentUser.role === 'admin') {
       return router.parseUrl('/admin');
     }
     return router.parseUrl('/');
@@ -18,3 +21,4 @@ export const unauthGuard: CanActivateFn = (route, state) => {
 
   return true;
 };
+

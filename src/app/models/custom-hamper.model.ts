@@ -69,6 +69,7 @@ export interface HamperBuilderItem {
   price?: number | null; // NULL for custom item
   isPriceConfirmed: boolean;
   quantity: number;
+  stockQuantity?: number | null;
   imageUrl?: string;
   category?: string;
 }

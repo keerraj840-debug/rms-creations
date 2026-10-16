@@ -17,20 +17,23 @@ import { ModalComponent } from '../shared/ui/modal.component';
     <app-site-layout>
       <div class="min-h-screen bg-[#FAF7F2] dark:bg-[#14100E] text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-28">
         
-        <!-- HEADER -->
-        <section class="bg-gradient-to-b from-[#F3E7DC]/70 to-transparent dark:from-white/5 py-10 border-b border-[#EADFD2]/60 dark:border-white/10">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-2xl">
-            <span class="text-xs font-bold uppercase tracking-widest text-[#9C4738] dark:text-[#EB9D8E]">Personalized Consultations</span>
-            <h1 class="mt-2 font-serif text-3xl font-bold tracking-tight text-[#2E2825] dark:text-[#F4F1ED]">
-              My Custom Hamper Requests
-            </h1>
-            <p class="mt-2 text-xs sm:text-sm text-[#7A6C5E] dark:text-[#C5A393]">
-              Track artisan review progress, inspect personalized quotations, and accept proposals to place confirmed orders.
-            </p>
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+          
+          <!-- Sleek Compact Page Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
+            <div>
+              <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#2E2825] dark:text-[#F4F1ED]">
+                My Custom Hamper Requests
+              </h1>
+              <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
+                Artisan review progress, custom quotations, and proposal acceptance
+              </p>
+            </div>
+            <a routerLink="/build-hamper" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#9C4738] hover:bg-[#883B2D] text-white text-xs font-bold transition shadow-2xs active:scale-95 shrink-0">
+              <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+              <span>Build Another Hamper</span>
+            </a>
           </div>
-        </section>
-
-        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 max-w-5xl">
           
           <!-- AUTHENTICATION REQUIRED NOTICE -->
           <div *ngIf="!auth.isAuthenticated" class="text-center py-12 bg-white dark:bg-[#1E1916] rounded-3xl p-8 border border-[#EADFD2] dark:border-white/10 shadow-xs max-w-md mx-auto space-y-4">

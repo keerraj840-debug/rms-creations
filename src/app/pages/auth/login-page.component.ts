@@ -123,6 +123,12 @@ import { sanitizeReturnUrl } from '../../utils/security.utils';
           </a>
         </p>
 
+        <p class="mt-4 text-center text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">
+          By continuing, you agree to RMS Creations'
+          <a routerLink="/terms" target="_blank" class="underline hover:text-[#9C4738] dark:hover:text-[#EB9D8E]">Terms of Service</a> &amp;
+          <a routerLink="/privacy" target="_blank" class="underline hover:text-[#9C4738] dark:hover:text-[#EB9D8E]">Privacy Policy</a>.
+        </p>
+
       </app-auth-layout>
   `
 })

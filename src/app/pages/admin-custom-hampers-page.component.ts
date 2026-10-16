@@ -11,21 +11,20 @@ import { ModalComponent } from '../shared/ui/modal.component';
   imports: [CommonModule, FormsModule, ModalComponent],
   template: `
     <div class="max-w-7xl mx-auto space-y-6 pb-20">
-      
+
       <!-- Top Action Bar / Header -->
       <div class="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-[#EADFD2]/80 dark:border-white/10">
         <div>
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-              <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Bespoke Consultations
+              <i class="fa-solid fa-gift mr-1"></i> Custom Requests
             </span>
-            <span class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">• Distinct from Normal Orders</span>
           </div>
           <h1 class="font-serif text-2xl font-bold text-[#2E2825] dark:text-[#F4F1ED] mt-1">
-            Custom Hamper Requests Dashboard
+            Custom Hamper Requests
           </h1>
           <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
-            Review customer bespoke simulations, price custom requested items, and prepare personalized artisan quotations.
+            Review custom hamper requests, set item prices, and send quotes to customers.
           </p>
         </div>
 
@@ -40,12 +39,12 @@ import { ModalComponent } from '../shared/ui/modal.component';
       <!-- Filters & Search Toolbar -->
       <div class="bg-white dark:bg-[#1E1916] rounded-2xl border border-[#EADFD2] dark:border-white/10 p-4 shadow-2xs space-y-3">
         <div class="flex items-center justify-between flex-wrap gap-3">
-          
+
           <!-- Status Filter Tabs -->
           <div class="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full custom-scrollbar">
-            <button 
-              type="button" 
-              *ngFor="let s of statusTabs" 
+            <button
+              type="button"
+              *ngFor="let s of statusTabs"
               (click)="selectStatusTab(s)"
               class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer"
               [ngClass]="activeStatusTab === s ? 'bg-[#9C4738] text-white shadow-2xs' : 'text-[#7A6C5E] dark:text-[#C5A393] hover:bg-[#FAF7F2] dark:hover:bg-white/5'"
@@ -60,10 +59,10 @@ import { ModalComponent } from '../shared/ui/modal.component';
           <!-- Search Input -->
           <div class="relative w-full sm:w-64">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-[#A89F91]"></i>
-            <input 
-              type="text" 
-              [(ngModel)]="searchQuery" 
-              placeholder="Search by ref, customer, phone..." 
+            <input
+              type="text"
+              [(ngModel)]="searchQuery"
+              placeholder="Search by ref, customer, phone..."
               class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 focus:outline-hidden focus:border-[#9C4738] dark:text-[#F4F1ED]"
             >
           </div>
@@ -73,7 +72,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
 
       <!-- Requests List Table / Grid -->
       <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 overflow-hidden shadow-2xs">
-        
+
         <div *ngIf="filteredRequests.length === 0" class="p-12 text-center text-xs text-stone-400 space-y-2">
           <i class="fa-solid fa-inbox text-3xl text-stone-300 dark:text-stone-700 block mb-2"></i>
           <p>No custom hamper requests found for current filters.</p>
@@ -94,7 +93,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
             </thead>
             <tbody class="divide-y divide-[#EADFD2]/60 dark:divide-white/10">
               <tr *ngFor="let req of filteredRequests" class="hover:bg-[#FAF7F2]/50 dark:hover:bg-white/5 transition">
-                
+
                 <!-- Ref & Date -->
                 <td class="py-3.5 px-4 font-mono font-bold text-[#2E2825] dark:text-[#F4F1ED]">
                   <div>{{ req.request_no }}</div>
@@ -153,8 +152,8 @@ import { ModalComponent } from '../shared/ui/modal.component';
 
                 <!-- Action Button -->
                 <td class="py-3.5 px-4 text-right">
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     (click)="openReviewModal(req)"
                     class="px-3 py-1.5 rounded-xl bg-[#9C4738] hover:bg-[#883B2D] text-white text-xs font-bold transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5"
                   >
@@ -171,14 +170,14 @@ import { ModalComponent } from '../shared/ui/modal.component';
       </div>
 
       <!-- ADMIN REVIEW & QUOTATION MODAL -->
-      <app-modal 
-        [isOpen]="showReviewModal" 
-        [title]="'Artisan Review & Quotation: ' + selectedRequest?.request_no" 
+      <app-modal
+        [isOpen]="showReviewModal"
+        [title]="'Artisan Review & Quotation: ' + selectedRequest?.request_no"
         size="lg"
         (onClose)="showReviewModal = false"
       >
         <div *ngIf="selectedRequest" class="space-y-5 py-1 text-xs text-[#2E2825] dark:text-[#F4F1ED] max-h-[75vh] overflow-y-auto pr-1 custom-scrollbar">
-          
+
           <!-- Customer & Occasion Card -->
           <div class="p-4 rounded-2xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
@@ -231,13 +230,13 @@ import { ModalComponent } from '../shared/ui/modal.component';
             </div>
 
             <div class="space-y-3">
-              <div 
-                *ngFor="let it of selectedRequest.items; let idx = index" 
+              <div
+                *ngFor="let it of selectedRequest.items; let idx = index"
                 class="p-3.5 rounded-2xl border transition-all"
                 [ngClass]="it.is_confirmed_catalogue ? 'bg-[#FAF7F2] dark:bg-white/5 border-[#EADFD2] dark:border-white/10' : 'bg-purple-50/40 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800/40'"
               >
                 <div class="flex items-start justify-between gap-3 flex-wrap">
-                  
+
                   <!-- Thumbnail & Title -->
                   <div class="flex items-start gap-3 min-w-0">
                     <img [src]="it.reference_image_url || 'assets/logo.png'" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-black/10 dark:border-white/10 bg-white">
@@ -275,11 +274,11 @@ import { ModalComponent } from '../shared/ui/modal.component';
                       </label>
                       <div class="flex items-center gap-1">
                         <span>₹</span>
-                        <input 
-                          type="number" 
-                          [(ngModel)]="customItemPrices[it.item_name]" 
+                        <input
+                          type="number"
+                          [(ngModel)]="customItemPrices[it.item_name]"
                           (ngModelChange)="recalculateQuotationTotal()"
-                          min="0" 
+                          min="0"
                           placeholder="Price per unit"
                           class="w-24 px-2 py-1 text-xs rounded-lg border border-purple-300 dark:border-purple-700 bg-white dark:bg-[#1E1916] text-right font-bold"
                         >
@@ -307,20 +306,20 @@ import { ModalComponent } from '../shared/ui/modal.component';
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-[11px] font-bold mb-1">Items Total Amount (₹)</label>
-                <input 
-                  type="number" 
-                  [(ngModel)]="quotationItemsTotal" 
-                  min="0" 
+                <input
+                  type="number"
+                  [(ngModel)]="quotationItemsTotal"
+                  min="0"
                   class="w-full px-3 py-2 text-xs rounded-xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 font-bold"
                 >
               </div>
 
               <div>
                 <label class="block text-[11px] font-bold mb-1">Delivery / Courier Charge (₹)</label>
-                <input 
-                  type="number" 
-                  [(ngModel)]="quotationDeliveryCharge" 
-                  min="0" 
+                <input
+                  type="number"
+                  [(ngModel)]="quotationDeliveryCharge"
+                  min="0"
                   class="w-full px-3 py-2 text-xs rounded-xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 font-bold"
                 >
               </div>
@@ -338,9 +337,9 @@ import { ModalComponent } from '../shared/ui/modal.component';
               <label class="block text-[11px] font-bold mb-1">
                 Personalized Response / Quotation Message to Customer <span class="text-rose-500">*</span>
               </label>
-              <textarea 
-                [(ngModel)]="quotationAdminResponse" 
-                rows="3" 
+              <textarea
+                [(ngModel)]="quotationAdminResponse"
+                rows="3"
                 placeholder="e.g. Hello! We have sourced your requested brass aarti diya and confirmed availability for all Ganpati items. Your hamper will be packaged with satin ribbons and dispatch is scheduled for tomorrow."
                 class="w-full px-3 py-2 text-xs rounded-xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 focus:outline-hidden focus:border-[#9C4738]"
               ></textarea>
@@ -349,10 +348,10 @@ import { ModalComponent } from '../shared/ui/modal.component';
             <!-- Internal Admin Notes -->
             <div>
               <label class="block text-[11px] font-bold mb-1">Internal Admin Sourcing Notes (Private)</label>
-              <input 
-                type="text" 
-                [(ngModel)]="quotationAdminNotes" 
-                placeholder="e.g. Sourced via Ravi Handicrafts, cost price ₹280 per thali." 
+              <input
+                type="text"
+                [(ngModel)]="quotationAdminNotes"
+                placeholder="e.g. Sourced via Ravi Handicrafts, cost price ₹280 per thali."
                 class="w-full px-3 py-2 text-xs rounded-xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 focus:outline-hidden focus:border-[#9C4738]"
               >
             </div>
@@ -383,9 +382,9 @@ import { ModalComponent } from '../shared/ui/modal.component';
             Close
           </button>
 
-          <button 
-            type="button" 
-            (click)="saveQuotationAndNotifyCustomer()" 
+          <button
+            type="button"
+            (click)="saveQuotationAndNotifyCustomer()"
             [disabled]="isSaving"
             class="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#9C4738] to-[#BA5E4E] hover:from-[#883B2D] text-white text-xs font-bold shadow-md hover:shadow-lg transition cursor-pointer flex items-center gap-2"
           >

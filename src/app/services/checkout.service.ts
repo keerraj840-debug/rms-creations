@@ -29,10 +29,13 @@ export interface CustomerOrderPayload {
   item: CheckoutItem;
 }
 
+import { NotificationOutboxService } from './notification-outbox.service';
+
 @Injectable({ providedIn: 'root' })
 export class CheckoutService {
   private supabase = inject(SupabaseService);
   private orderTracker = inject(OrderTrackingService);
+  private outboxService = inject(NotificationOutboxService);
 
   private isOpenSubject = new BehaviorSubject<boolean>(false);
   public isOpen$ = this.isOpenSubject.asObservable();
@@ -135,6 +138,24 @@ export class CheckoutService {
         link: `Order #${orderNo} - ₹${payload.totalAmount}`,
         price: payload.totalAmount
       });
+
+      // 4. Enqueue Transactional Notification Outbox Entries (Admin Alert + Customer Confirmation)
+      const itemSummaryText = `${payload.item.title} (Qty: ${payload.quantity})`;
+      this.outboxService.recordOrderCreatedNotifications(
+        orderNo,
+        purchaseOrderId,
+        payload.customerName,
+        payload.email,
+        payload.phone,
+        itemSummaryText,
+        payload.totalAmount,
+        modeLabel,
+        fullAddress,
+        payload.pinCode
+      ).then(() => {
+        // Trigger background outbox processing
+        this.outboxService.processPendingOutbox().catch(() => {});
+      }).catch(() => {});
 
       return { success: true, orderNo };
     } catch (err: any) {

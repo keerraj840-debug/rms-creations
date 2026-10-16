@@ -32,6 +32,10 @@ export class SupabaseService {
         this.supabase = createClient(url, anonKey);
     }
 
+    get client(): SupabaseClient {
+        return this.supabase;
+    }
+
     /* ------------------------------------------------------------------ */
     /* Authentication                                                     */
     /* ------------------------------------------------------------------ */
@@ -53,8 +57,21 @@ export class SupabaseService {
     }
 
     async signOut() {
-        const { error } = await this.supabase.auth.signOut();
-        return { error };
+        try {
+            const { error } = await this.supabase.auth.signOut();
+            if (error) {
+                // If remote sign-out returned an error (such as session missing), clear locally
+                await this.supabase.auth.signOut({ scope: 'local' }).catch(() => {});
+            }
+            return { error };
+        } catch (err: any) {
+            try {
+                await this.supabase.auth.signOut({ scope: 'local' });
+            } catch {
+                // Ignore fallback error
+            }
+            return { error: null };
+        }
     }
 
     async signInWithOAuth(provider: 'google' | 'github', redirectTo?: string) {

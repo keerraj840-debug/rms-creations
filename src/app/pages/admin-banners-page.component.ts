@@ -331,16 +331,32 @@ export class AdminBannersPageComponent implements OnInit {
     if (!banner.id) return;
 
     try {
+      this.errorMessage = '';
+      this.successMessage = '';
+
+      // Check for active Supabase session
+      const { data: sessionData } = await this.supabase.getSession();
+      if (!sessionData?.session) {
+        throw new Error('Your session has expired. Please log in again to manage banners.');
+      }
+
       const nextStatus = !banner.is_active;
-      const { error } = await this.supabase
+      const { data, error } = await this.supabase
         .from('banner_images')
         .update({ is_active: nextStatus, updation_date: new Date().toISOString() })
-        .eq('id', banner.id);
+        .eq('id', banner.id)
+        .select();
 
       if (error) throw error;
 
-      banner.is_active = nextStatus;
-      this.successMessage = `Banner #${banner.id} is now ${nextStatus ? 'Live' : 'Hidden'}.`;
+      if (!data || data.length === 0) {
+        throw new Error(
+          `Database update rejected (0 rows changed). Please verify that your account (${sessionData.session.user.email}) has administrator permissions in the database.`
+        );
+      }
+
+      banner.is_active = data[0].is_active;
+      this.successMessage = `Banner #${banner.id} is now ${banner.is_active ? 'Live on homepage' : 'Deactivated / Hidden'}.`;
       this.cdr.markForCheck();
     } catch (err: any) {
       this.errorMessage = err?.message || 'Failed to update banner status.';
@@ -357,12 +373,25 @@ export class AdminBannersPageComponent implements OnInit {
 
     try {
       this.deleting = true;
-      const { error } = await this.supabase
+      this.errorMessage = '';
+      this.successMessage = '';
+
+      const { data: sessionData } = await this.supabase.getSession();
+      if (!sessionData?.session) {
+        throw new Error('Your session has expired. Please log in again to delete banners.');
+      }
+
+      const { data, error } = await this.supabase
         .from('banner_images')
         .delete()
-        .eq('id', this.bannerToDelete.id);
+        .eq('id', this.bannerToDelete.id)
+        .select();
 
       if (error) throw error;
+
+      if (!data || data.length === 0) {
+        throw new Error('Banner deletion was rejected by the database (0 rows deleted). Please check admin permissions.');
+      }
 
       this.successMessage = `Banner "${this.bannerToDelete.name}" deleted successfully.`;
       this.bannerToDelete = null;

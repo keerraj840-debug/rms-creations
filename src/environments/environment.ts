@@ -6,5 +6,5 @@
 export const environment = {
     production: false,
     SUPABASE_URL: 'https://igwbbfrhgyrfavvkpheh.supabase.co',
-    SUPABASE_ANON_KEY: 'sb_publishable_tooz3bkl3NXwLVgKMlT4zA_yZWxdYbZ',
+    SUPABASE_ANON_KEY: 'sb_publishable_tooz3bkl3NXwLVgKMlT4zA_yZWxdYbZ'
 };

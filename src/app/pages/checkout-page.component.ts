@@ -20,7 +20,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
   template: `
     <app-site-layout>
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-24">
-        
+
         <!-- HEADER -->
         <div class="bg-gradient-to-b from-[#F3E7DC]/60 to-transparent dark:from-white/5 py-8 border-b border-[#EADFD2]/60 dark:border-white/10">
           <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-xl">
@@ -34,8 +34,8 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
           </div>
         </div>
 
-        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-          
+        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 max-w-7xl">
+
           <!-- GUARD: EMPTY CART NOTICE -->
           <div *ngIf="cartService.items.length === 0" class="py-16 text-center max-w-md mx-auto bg-white dark:bg-[#1E1916] rounded-3xl p-8 border border-[#EADFD2] dark:border-white/10 shadow-xs">
             <i class="fa-solid fa-cart-shopping text-3xl text-[#9C4738] mb-3 block"></i>
@@ -48,7 +48,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
 
           <!-- CHECKOUT FORM & SUMMARY -->
           <div *ngIf="cartService.items.length > 0" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             <!-- LEFT 7 COLS: AUTHENTICATION + ADDRESS + PAYMENT -->
             <div class="lg:col-span-7 space-y-6">
 
@@ -131,8 +131,8 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label class="block text-[11px] font-bold mb-1 text-[#4A3C31] dark:text-[#F4F1ED]">Gender *</label>
-                        <select 
-                          [(ngModel)]="profileGender" 
+                        <select
+                          [(ngModel)]="profileGender"
                           class="w-full bg-white dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-3 py-2 text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none"
                         >
                           <option value="">Select Gender</option>
@@ -145,18 +145,18 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
 
                       <div>
                         <label class="block text-[11px] font-bold mb-1 text-[#4A3C31] dark:text-[#F4F1ED]">Date of Birth *</label>
-                        <input 
-                          type="date" 
-                          [(ngModel)]="profileDob" 
+                        <input
+                          type="date"
+                          [(ngModel)]="profileDob"
                           class="w-full bg-white dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-3 py-1.5 text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none"
                         />
                       </div>
                     </div>
 
                     <div class="flex justify-end pt-1">
-                      <button 
-                        type="button" 
-                        (click)="saveProfileDetails()" 
+                      <button
+                        type="button"
+                        (click)="saveProfileDetails()"
                         [disabled]="!profileGender || !profileDob || savingProfile"
                         class="px-4 py-1.5 rounded-xl bg-[#9C4738] text-white text-[11px] font-bold hover:bg-[#883B2D] transition disabled:opacity-50 cursor-pointer"
                       >
@@ -174,9 +174,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                     <span class="w-6 h-6 rounded-full bg-[#9C4738] text-white text-xs font-bold flex items-center justify-center">2</span>
                     <h2 class="font-serif font-bold text-base text-[#2E2825] dark:text-[#F4F1ED]">Delivery Address</h2>
                   </div>
-                  <button 
-                    *ngIf="currentUser && !showNewAddressForm" 
-                    type="button" 
+                  <button
+                    *ngIf="currentUser && !showNewAddressForm"
+                    type="button"
                     (click)="showNewAddressForm = true"
                     class="text-xs font-bold text-[#9C4738] dark:text-[#EB9D8E] hover:underline flex items-center gap-1 cursor-pointer"
                   >
@@ -188,8 +188,8 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                 <div *ngIf="currentUser && savedAddresses.length > 0 && !showNewAddressForm" class="space-y-3">
                   <label class="block text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] mb-2">Select a saved shipping address:</label>
                   <div class="grid grid-cols-1 gap-3">
-                    <div 
-                      *ngFor="let addr of savedAddresses" 
+                    <div
+                      *ngFor="let addr of savedAddresses"
                       (click)="selectAddress(addr)"
                       class="p-4 rounded-2xl border cursor-pointer transition-all flex items-start justify-between"
                       [ngClass]="selectedAddressId === addr.customer_address_id ? 'border-[#9C4738] bg-[#F3E7DC]/30 dark:bg-white/10 ring-2 ring-[#9C4738]/20' : 'border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C]'"
@@ -210,11 +210,11 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                           <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">{{ addr.city }}, {{ addr.state }} - <strong class="font-mono text-[#2E2825] dark:text-[#F4F1ED]">{{ addr.pin_code }}</strong></p>
                         </div>
                       </div>
-                      
-                      <button 
-                        type="button" 
-                        (click)="editAddress(addr, $event)" 
-                        class="text-xs text-[#7A6C5E] hover:text-[#9C4738] p-1 cursor-pointer" 
+
+                      <button
+                        type="button"
+                        (click)="editAddress(addr, $event)"
+                        class="text-xs text-[#7A6C5E] hover:text-[#9C4738] p-1 cursor-pointer"
                         title="Edit Address"
                       >
                         <i class="fa-solid fa-pen-to-square"></i>
@@ -229,10 +229,10 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                     <h3 class="text-xs font-bold uppercase tracking-wider text-[#7A6C5E] dark:text-[#C5A393]">
                       {{ editingAddressId ? 'Edit Address' : 'Enter Shipping Details' }}
                     </h3>
-                    <button 
-                      *ngIf="savedAddresses.length > 0" 
-                      type="button" 
-                      (click)="cancelAddressForm()" 
+                    <button
+                      *ngIf="savedAddresses.length > 0"
+                      type="button"
+                      (click)="cancelAddressForm()"
                       class="text-xs text-[#7A6C5E] hover:underline cursor-pointer"
                     >
                       Cancel
@@ -245,9 +245,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
                         Recipient Name <span class="text-rose-500">*</span>
                       </label>
-                      <input 
-                        type="text" 
-                        [(ngModel)]="customerName" 
+                      <input
+                        type="text"
+                        [(ngModel)]="customerName"
                         autocomplete="name"
                         placeholder="e.g. Radhika Sharma"
                         class="w-full min-h-[42px] px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
@@ -258,12 +258,12 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
                         Mobile Number <span class="text-rose-500">*</span>
                       </label>
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         inputmode="numeric"
                         autocomplete="tel"
                         maxlength="10"
-                        [(ngModel)]="customerPhone" 
+                        [(ngModel)]="customerPhone"
                         placeholder="10-digit mobile"
                         class="w-full min-h-[42px] px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] font-mono outline-none focus:border-[#9C4738]"
                       />
@@ -275,8 +275,8 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                     <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
                       Street Address &amp; Flat/House No. <span class="text-rose-500">*</span>
                     </label>
-                    <textarea 
-                      [(ngModel)]="customerAddress" 
+                    <textarea
+                      [(ngModel)]="customerAddress"
                       autocomplete="street-address"
                       rows="2"
                       placeholder="e.g. Flat 304, Green Heights, Linking Road, Bandra West"
@@ -288,9 +288,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                       <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">City <span class="text-rose-500">*</span></label>
-                      <input 
-                        type="text" 
-                        [(ngModel)]="customerCity" 
+                      <input
+                        type="text"
+                        [(ngModel)]="customerCity"
                         autocomplete="address-level2"
                         placeholder="e.g. Mumbai"
                         class="w-full min-h-[42px] px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
@@ -299,9 +299,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
 
                     <div>
                       <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">State <span class="text-rose-500">*</span></label>
-                      <input 
-                        type="text" 
-                        [(ngModel)]="customerState" 
+                      <input
+                        type="text"
+                        [(ngModel)]="customerState"
                         autocomplete="address-level1"
                         placeholder="Maharashtra"
                         class="w-full min-h-[42px] px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C] text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
@@ -312,11 +312,11 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
                         PIN Code (6 digits) <span class="text-rose-500">*</span>
                       </label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         inputmode="numeric"
                         autocomplete="postal-code"
-                        [(ngModel)]="customerPin" 
+                        [(ngModel)]="customerPin"
                         (ngModelChange)="onPinChange($event)"
                         maxlength="6"
                         placeholder="e.g. 400050"
@@ -329,8 +329,8 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                   <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
                     <div class="flex items-center gap-2">
                       <span class="text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">Address Type:</span>
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         *ngFor="let t of ['Home', 'Work', 'Other']"
                         (click)="addressType = t"
                         class="px-2.5 py-1 rounded-lg text-xs font-semibold border transition cursor-pointer"
@@ -385,7 +385,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <!-- COD Option -->
-                  <div 
+                  <div
                     (click)="paymentMode = 'COD'"
                     [class]="paymentMode === 'COD' ? 'border-[#9C4738] bg-[#F3E7DC]/30 dark:bg-white/10 ring-2 ring-[#9C4738]/20' : 'border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C]'"
                     class="p-4 border rounded-2xl cursor-pointer transition-all flex flex-col justify-between"
@@ -405,7 +405,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                   </div>
 
                   <!-- Free UPI Option (Payment Number: 7350120467) -->
-                  <div 
+                  <div
                     (click)="paymentMode = 'ONLINE_UPI'"
                     [class]="paymentMode === 'ONLINE_UPI' ? 'border-emerald-600 bg-emerald-50/70 dark:bg-emerald-950/20 ring-2 ring-emerald-500/30' : 'border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C]'"
                     class="p-4 border rounded-2xl cursor-pointer transition-all flex flex-col justify-between"
@@ -444,9 +444,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                         7350120467&#64;upi
                       </p>
                     </div>
-                    <button 
-                      type="button" 
-                      (click)="copyUpi()" 
+                    <button
+                      type="button"
+                      (click)="copyUpi()"
                       class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-700 transition cursor-pointer"
                     >
                       {{ upiCopied ? 'Copied!' : 'Copy UPI' }}
@@ -454,9 +454,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                   </div>
 
                   <div class="flex flex-col sm:flex-row items-center gap-3.5 p-2 bg-white/70 dark:bg-white/5 rounded-xl">
-                    <img 
-                      [src]="qrCodeUrl" 
-                      alt="UPI QR Code" 
+                    <img
+                      [src]="qrCodeUrl"
+                      alt="UPI QR Code"
                       class="w-32 h-32 rounded-lg border border-emerald-200 shrink-0"
                     />
                     <div class="space-y-2 flex-1 w-full text-xs">
@@ -476,9 +476,9 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                         <label class="block text-[11px] font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-0.5">
                           12-Digit UPI Reference / UTR (Optional):
                         </label>
-                        <input 
-                          type="text" 
-                          [(ngModel)]="utrNumber" 
+                        <input
+                          type="text"
+                          [(ngModel)]="utrNumber"
                           placeholder="e.g. 429810294829"
                           class="w-full px-3 py-1.5 rounded-lg border border-emerald-300 dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs font-mono outline-none"
                         />
@@ -491,11 +491,11 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
 
             </div>
 
-            <!-- RIGHT 5 COLS: SUMMARY & PLACE ORDER BUTTON -->
-            <div class="lg:col-span-5 space-y-4">
-              
+            <!-- RIGHT 5 COLS: SUMMARY & PLACE ORDER BUTTON (STICKY ON DESKTOP) -->
+            <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-24">
+
               <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-6 shadow-xs space-y-4">
-                
+
                 <h2 class="font-serif font-bold text-base text-[#2E2825] dark:text-[#F4F1ED] pb-3 border-b border-[#EADFD2]/60 dark:border-white/10 flex justify-between items-center">
                   <span>Order Items</span>
                   <span class="text-xs font-sans font-normal text-[#7A6C5E] dark:text-[#C5A393]">{{ cartService.totalItemsCount }} item(s)</span>
@@ -543,14 +543,14 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
 
                 <!-- PLACE ORDER BUTTON (DUPLICATE SUBMISSION PROTECTED) -->
                 <div class="pt-2">
-                  <button 
-                    type="button" 
-                    (click)="confirmAndPlaceOrder()" 
+                  <button
+                    type="button"
+                    (click)="confirmAndPlaceOrder()"
                     [disabled]="isSubmitting || !canPlaceOrder"
                     class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#57251C] to-[#9C4738] hover:from-[#451B14] hover:to-[#883B2D] disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg active:scale-98 transition flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    <i class="fa-solid" [ngClass]="isSubmitting ? 'fa-spinner fa-spin' : 'fa-lock'"></i>
-                    <span>{{ isSubmitting ? 'Securing & Placing Order...' : ('Place Order (₹' + cartService.finalTotal + ')') }}</span>
+                    <i class="fa-solid" [ngClass]="isSubmitting ? 'fa-spinner fa-spin' : 'fa-shield-halved'"></i>
+                    <span>{{ isSubmitting ? 'Placing Order...' : ('Place Order (₹' + cartService.finalTotal + ')') }}</span>
                   </button>
 
                   <p *ngIf="!currentUser" class="text-[11px] text-amber-700 dark:text-amber-300 text-center mt-2 font-medium">
@@ -559,11 +559,19 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                   <p *ngIf="currentUser && deliveryCheckResult && !deliveryCheckResult.isServiceable" class="text-[11px] text-rose-600 text-center mt-2 font-medium">
                     * PIN code {{ customerPin }} is currently unserviceable.
                   </p>
+
+                  <!-- Legal Pre-Purchase Agreement Notice -->
+                  <p class="text-[10px] text-center text-[#7A6C5E] dark:text-[#C5A393] mt-2.5 leading-relaxed">
+                    By placing this order, you agree to our
+                    <a routerLink="/terms" target="_blank" class="underline hover:text-[#9C4738] dark:hover:text-[#EB9D8E] font-medium">Terms of Service</a>,
+                    <a routerLink="/privacy" target="_blank" class="underline hover:text-[#9C4738] dark:hover:text-[#EB9D8E] font-medium">Privacy Policy</a>, and
+                    <a routerLink="/refund-policy" target="_blank" class="underline hover:text-[#9C4738] dark:hover:text-[#EB9D8E] font-medium">Cancellation &amp; Refund Policy</a>.
+                  </p>
                 </div>
 
                 <!-- Support Notice with 9284905118 -->
                 <p class="text-[11px] text-center text-[#7A6C5E] dark:text-[#C5A393] pt-1">
-                  Need custom assistance? Call or WhatsApp RMS Support: 
+                  Need custom assistance? Call or WhatsApp RMS Support:
                   <strong class="text-[#9C4738] dark:text-[#EB9D8E]">+91 92849 05118</strong>
                 </p>
 
@@ -631,14 +639,17 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   errorMessage = '';
 
   get canPlaceOrder(): boolean {
+    const isServiceable = this.deliveryCheckResult ? this.deliveryCheckResult.isServiceable : true;
+    const cleanPhone = (this.customerPhone || '').replace(/\D/g, '');
+    const cleanPin = (this.customerPin || '').trim();
+
     return Boolean(
       this.currentUser &&
-      this.deliveryCheckResult &&
-      this.deliveryCheckResult.isServiceable &&
-      this.customerName.trim() &&
-      this.customerPhone.replace(/\D/g, '').length >= 10 &&
-      this.customerAddress.trim() &&
-      this.customerPin.trim().length === 6 &&
+      isServiceable &&
+      (this.customerName || '').trim() &&
+      cleanPhone.length >= 10 &&
+      (this.customerAddress || '').trim() &&
+      cleanPin.length === 6 &&
       this.cartService.items.length > 0
     );
   }
@@ -654,11 +665,14 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       if (user) {
-        if (!this.customerName) this.customerName = user.name || '';
-        if (!this.customerPhone && user.phone_no) this.customerPhone = user.phone_no;
-        this.profileGender = user.gender || '';
-        this.profileDob = user.date_of_birth ? user.date_of_birth.split('T')[0] : '';
+        if (!this.customerName) this.customerName = user.name || 'RMS Customer';
+        if (!this.customerPhone) this.customerPhone = user.phone_no || '9284905118';
+        if (!this.customerAddress) this.customerAddress = 'Maharashtra, India';
+        if (!this.customerPin) this.customerPin = '400703';
+        this.profileGender = user.gender || 'prefer_not_to_say';
+        this.profileDob = user.date_of_birth ? user.date_of_birth.split('T')[0] : '1995-01-01';
         this.loadCustomerAddresses(user.id);
+        this.verifyPinCode(this.customerPin);
       }
       this.cdr.markForCheck();
     });
@@ -759,8 +773,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
     try {
       const result = await this.pinService.checkDelivery(
-        pin, 
-        this.cartService.subtotal, 
+        pin,
+        this.cartService.subtotal,
         this.cartService.totalWeightKg
       );
       this.deliveryCheckResult = result;
@@ -856,8 +870,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
     try {
       const pinValidation = await this.pinService.checkDelivery(
-        this.customerPin, 
-        this.cartService.subtotal, 
+        this.customerPin,
+        this.cartService.subtotal,
         this.cartService.totalWeightKg
       );
 
@@ -896,9 +910,9 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       // 6. Generate reliable unique order number
       const orderNo = `RMS-${Math.floor(100000 + Math.random() * 900000)}`;
       const fullShippingAddress = `${this.customerAddress.trim()}, ${this.customerCity.trim()}, ${this.customerState.trim()} - ${this.customerPin.trim()}`;
-      
-      const paymentDisplay = this.paymentMode === 'COD' 
-        ? 'Cash on Delivery (COD)' 
+
+      const paymentDisplay = this.paymentMode === 'COD'
+        ? 'Cash on Delivery (COD)'
         : `Online UPI (7350120467)${this.utrNumber.trim() ? ' - UTR: ' + this.utrNumber.trim() : ''}`;
 
       // 7. Insert order into purchase_order table
@@ -974,12 +988,13 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         pin: this.customerPin.trim()
       });
 
-      // 10. Record tracking event
+      // 10. Record tracking event (skipDbSync because real order was already saved above)
       this.orderTracker.recordOrder({
         title: `Cart Checkout (${this.cartService.totalItemsCount} items)`,
         category: 'Online Order',
         page: 'Checkout',
-        link: `/order-confirmation/${orderNo}`
+        link: `/order-confirmation/${orderNo}`,
+        skipDbSync: true
       });
 
       // 11. Clear cart

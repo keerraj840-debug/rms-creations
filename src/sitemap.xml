@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home Page -->
   <url>
     <loc>https://rmsgifthampers.com/</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Complete Catalogue Shop -->
   <url>
     <loc>https://rmsgifthampers.com/shop</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- Interactive Custom Hamper Studio -->
   <url>
     <loc>https://rmsgifthampers.com/build-hamper</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Hamper Lookbook & Styling Gallery -->
+  <url>
+    <loc>https://rmsgifthampers.com/gallery</loc>
+    <lastmod>2026-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <url>
-    <loc>https://rmsgifthampers.com/gallery</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
+
+  <!-- Studio Contact & Concierge Support -->
   <url>
     <loc>https://rmsgifthampers.com/contact</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Customer Policies & Compliance Hub -->
+  <url>
+    <loc>https://rmsgifthampers.com/policy</loc>
+    <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

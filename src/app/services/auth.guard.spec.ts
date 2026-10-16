@@ -1,28 +1,26 @@
 import { TestBed } from '@angular/core/testing';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { authGuard } from './auth.guard';
-import { LocalStorageService } from './local-storage.service';
+import { AuthService } from './auth.service';
 
 describe('authGuard', () => {
-  let routerSpy: { parseUrl: ReturnEvent };
-  let localStorageSpy: { getItem: ReturnEvent };
-
-  type ReturnEvent = any;
+  let routerSpy: { parseUrl: any };
+  let authServiceSpy: { currentUser: any };
 
   beforeEach(() => {
     routerSpy = { parseUrl: vi.fn((url: string) => url as unknown as UrlTree) };
-    localStorageSpy = { getItem: vi.fn() };
+    authServiceSpy = { currentUser: null };
 
     TestBed.configureTestingModule({
       providers: [
         { provide: Router, useValue: routerSpy },
-        { provide: LocalStorageService, useValue: localStorageSpy }
+        { provide: AuthService, useValue: authServiceSpy }
       ]
     });
   });
 
-  it('should redirect to /login when token is missing', () => {
-    localStorageSpy.getItem.mockReturnValue(null);
+  it('should redirect to /login when user is not logged in', () => {
+    authServiceSpy.currentUser = null;
 
     const route = { data: {} } as unknown as ActivatedRouteSnapshot;
     const state = {} as RouterStateSnapshot;
@@ -32,11 +30,8 @@ describe('authGuard', () => {
     expect(result).toBe('/login');
   });
 
-  it('should allow navigation when token is present and no roles required', () => {
-    localStorageSpy.getItem.mockImplementation((key: string) => {
-      if (key === 'auth_token') return 'valid_token';
-      return null;
-    });
+  it('should allow navigation when user is logged in and no roles required', () => {
+    authServiceSpy.currentUser = { id: 1, name: 'Test', email: 'test@test.com', role: 'customer' };
 
     const route = { data: {} } as unknown as ActivatedRouteSnapshot;
     const state = {} as RouterStateSnapshot;
@@ -46,11 +41,7 @@ describe('authGuard', () => {
   });
 
   it('should allow navigation when role matches expected role', () => {
-    localStorageSpy.getItem.mockImplementation((key: string) => {
-      if (key === 'auth_token') return 'valid_token';
-      if (key === 'user_role') return 'admin';
-      return null;
-    });
+    authServiceSpy.currentUser = { id: 1, name: 'Admin', email: 'admin@test.com', role: 'admin' };
 
     const route = { data: { roles: ['admin'] } } as unknown as ActivatedRouteSnapshot;
     const state = {} as RouterStateSnapshot;
@@ -59,12 +50,8 @@ describe('authGuard', () => {
     expect(result).toBe(true);
   });
 
-  it('should redirect to / when role does not match expected role', () => {
-    localStorageSpy.getItem.mockImplementation((key: string) => {
-      if (key === 'auth_token') return 'valid_token';
-      if (key === 'user_role') return 'customer';
-      return null;
-    });
+  it('should redirect to / when customer tries to access admin route', () => {
+    authServiceSpy.currentUser = { id: 2, name: 'Customer', email: 'customer@test.com', role: 'customer' };
 
     const route = { data: { roles: ['admin'] } } as unknown as ActivatedRouteSnapshot;
     const state = {} as RouterStateSnapshot;
@@ -74,12 +61,8 @@ describe('authGuard', () => {
     expect(result).toBe('/');
   });
 
-  it('should redirect to / when role is missing but role is required', () => {
-    localStorageSpy.getItem.mockImplementation((key: string) => {
-      if (key === 'auth_token') return 'valid_token';
-      if (key === 'user_role') return null;
-      return null;
-    });
+  it('should redirect to / when user role is undefined but role is required', () => {
+    authServiceSpy.currentUser = { id: 3, name: 'NoRole', email: 'norole@test.com', role: undefined };
 
     const route = { data: { roles: ['admin'] } } as unknown as ActivatedRouteSnapshot;
     const state = {} as RouterStateSnapshot;
@@ -89,3 +72,4 @@ describe('authGuard', () => {
     expect(result).toBe('/');
   });
 });
+

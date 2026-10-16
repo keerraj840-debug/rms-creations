@@ -2,6 +2,7 @@
    RMS GIFT HAMPERS - LUXURY BOUTIQUE THEME STYLES
    ========================================================================== */
 
+@import './assets/fonts/fonts.css';
 @import 'tailwindcss';
 
 /* Enable .dark class-based dark mode for Tailwind v4 */
