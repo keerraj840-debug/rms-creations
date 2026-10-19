@@ -15,20 +15,20 @@ import { SupabaseService } from '../services/supabase.service';
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-20">
 
         <!-- MAIN SMART WORKSPACE (FLUID 2-COLUMN DESKTOP SPLIT) -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <main class=" mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
 
           <!-- Sleek Compact Page Header -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
             <div>
               <div class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-0.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Concierge Studio Desk
+                We are online &amp; ready to help
               </div>
               <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#2E2825] dark:text-[#F4F1ED]">
-                Get in Touch with Our Studio
+                Contact Us &amp; WhatsApp Support
               </h1>
               <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
-                Custom hampers, festival bulk orders, or live delivery status inquiries
+                Custom hampers, festival bulk orders, or order status inquiries
               </p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
@@ -39,7 +39,7 @@ import { SupabaseService } from '../services/supabase.service';
                 class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-2xs transition active:scale-95"
               >
                 <i class="fa-brands fa-whatsapp text-sm"></i>
-                <span>WhatsApp Concierge</span>
+                <span>Chat on WhatsApp</span>
               </a>
               <a
                 [href]="'tel:' + settings.whatsapp_no"
@@ -70,7 +70,7 @@ import { SupabaseService } from '../services/supabase.service';
                   </div>
 
                   <div>
-                    <h3 class="font-serif font-bold text-base text-[#2E2825] dark:text-[#F4F1ED]">WhatsApp Concierge</h3>
+                    <h3 class="font-serif font-bold text-base text-[#2E2825] dark:text-[#F4F1ED]">WhatsApp Support</h3>
                     <p class="text-xs font-bold text-[#9C4738] dark:text-[#EB9D8E] mt-0.5">{{ settings.contact_no }}</p>
                     <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-1 leading-relaxed">
                       Instant replies for urgent orders, custom photos, live quotes, and delivery tracking.
@@ -155,14 +155,14 @@ import { SupabaseService } from '../services/supabase.service';
                     <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">Leave your details and our team will get back to you promptly.</p>
                   </div>
                   <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FAF7F2] dark:bg-white/10 text-[#9C4738] dark:text-[#EB9D8E]">
-                    Concierge Inquiry
+                    Quick Support
                   </span>
                 </div>
 
                 <div *ngIf="inquirySent" class="p-4 rounded-2xl bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 flex items-center justify-between">
                   <div class="flex items-center gap-2">
                     <i class="fa-solid fa-circle-check text-base"></i>
-                    <span>Thank you! Your inquiry message has been formatted. Our concierge is ready to assist.</span>
+                    <span>Thank you! Your inquiry has been sent. Our team will reply shortly.</span>
                   </div>
                   <button (click)="inquirySent = false" class="text-xs underline text-emerald-800">Send Another</button>
                 </div>
@@ -301,7 +301,7 @@ import { SupabaseService } from '../services/supabase.service';
                   <div class="flex items-center gap-2">
                     <i class="fa-solid fa-circle-question text-[#9C4738] text-sm"></i>
                     <h3 class="font-serif font-bold text-sm text-[#2E2825] dark:text-[#F4F1ED]">
-                      Common Questions
+                      FAQs
                     </h3>
                   </div>
                   <span class="text-[10px] text-[#7A6C5E] font-medium">Quick Answers</span>
@@ -446,7 +446,7 @@ export class ContactPageComponent implements OnInit, OnDestroy {
 
     const formattedText = `Hello RMS Creations! My name is ${encodeURIComponent(this.inquiryName)} (${encodeURIComponent(this.inquiryPhone)}). Regarding: ${encodeURIComponent(this.inquiryCategory)}. Inquiry: ${encodeURIComponent(this.inquiryMessage)}`;
     const url = `https://wa.me/${this.settings.whatsapp_no}?text=${formattedText}`;
-    
+
     this.inquirySent = true;
     if (typeof window !== 'undefined') {
       window.open(url, '_blank');

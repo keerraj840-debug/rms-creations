@@ -76,10 +76,7 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
       </div>
       <p class="text-[10px] font-bold uppercase tracking-widest text-[#8B6E57] dark:text-[#C5A393] mb-1">Total Products</p>
       <p class="text-3xl font-bold font-serif text-[#2E2825] dark:text-[#F4F1ED]">{{ totalProducts }}</p>
-      <div class="mt-3 flex items-end gap-1 h-8">
-        <div *ngFor="let h of [35,55,45,75,60,85,70]" [style.height.%]="h"
-             class="flex-1 bg-[#EADFD2] dark:bg-white/10 group-hover:bg-[#C56D5B] dark:group-hover:bg-[#DD8776] rounded-sm transition-colors duration-300 bar-animate"></div>
-      </div>
+      <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-2">Active items in store catalogue</p>
     </div>
 
     <!-- Card 2: Total Order Revenue -->
@@ -97,10 +94,7 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
       </div>
       <p class="text-[10px] font-bold uppercase tracking-widest text-[#F4F1ED]/70 mb-1">Total Sales</p>
       <p class="text-3xl font-bold font-serif text-[#F4F1ED]">&#8377;{{ totalRevenue | number }}</p>
-      <div class="mt-3 flex items-end gap-1 h-8">
-        <div *ngFor="let h of [25,50,40,65,55,80,90]" [style.height.%]="h"
-             class="flex-1 bg-white/20 group-hover:bg-amber-400/40 rounded-sm transition-colors duration-300 bar-animate"></div>
-      </div>
+      <p class="text-[11px] text-[#F4F1ED]/60 mt-2">Gross confirmed order value</p>
     </div>
 
     <!-- Card 3: Categories & Collections -->
@@ -118,10 +112,7 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
       </div>
       <p class="text-[10px] font-bold uppercase tracking-widest text-[#8B6E57] dark:text-[#C5A393] mb-1">Categories & Collections</p>
       <p class="text-3xl font-bold font-serif text-[#2E2825] dark:text-[#F4F1ED]">{{ totalCategories }}</p>
-      <div class="mt-3 flex items-end gap-1 h-8">
-        <div *ngFor="let h of [65,45,75,35,85,60,50]" [style.height.%]="h"
-             class="flex-1 bg-[#EADFD2] dark:bg-white/10 group-hover:bg-[#C56D5B] dark:group-hover:bg-[#DD8776] rounded-sm transition-colors duration-300 bar-animate"></div>
-      </div>
+      <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-2">Active gifting themes & occasions</p>
     </div>
 
     <!-- Card 4: Orders Inquiries -->
@@ -140,10 +131,7 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
       </div>
       <p class="text-[10px] font-bold uppercase tracking-widest text-[#8B6E57] dark:text-[#C5A393] mb-1">Total Orders</p>
       <p class="text-3xl font-bold font-serif text-[#2E2825] dark:text-[#F4F1ED]">{{ totalOrders }}</p>
-      <div class="mt-3 flex items-end gap-1 h-8">
-        <div *ngFor="let h of [85,65,95,45,80,60,40]" [style.height.%]="h"
-             class="flex-1 bg-amber-100 dark:bg-amber-900/30 group-hover:bg-amber-300 dark:group-hover:bg-amber-500/50 rounded-sm transition-colors duration-300 bar-animate"></div>
-      </div>
+      <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-2">Real-time orders placed by customers</p>
     </div>
 
   </div>
@@ -178,10 +166,10 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
         </div>
         <div class="h-full flex items-end gap-2 border-b border-l border-[#EADFD2] dark:border-white/10 pb-4">
           <div *ngFor="let day of chartData" class="flex-1 flex items-end gap-1 h-full group/bar">
-            <div [style.height.%]="day.visits"
+            <div [style.height.%]="day.heightPct > 0 ? (day.heightPct * 0.7) : 2"
                  title="Visits: {{ day.visits }}"
                  class="flex-1 bg-[#EADFD2] dark:bg-white/15 group-hover/bar:bg-[#C5A393] dark:group-hover/bar:bg-white/30 rounded-t-md transition-all duration-300 bar-animate"></div>
-            <div [style.height.%]="day.orders"
+            <div [style.height.%]="day.heightPct > 0 ? day.heightPct : 2"
                  title="Orders: {{ day.orders }}"
                  class="flex-1 bg-[#C56D5B] group-hover/bar:bg-[#9C4738] rounded-t-md transition-all duration-300 bar-animate"></div>
           </div>
@@ -430,14 +418,14 @@ export class AdminDashboardPageComponent implements OnInit {
 
   filterStatus: 'all' | 'pending' | 'completed' = 'all';
 
-  chartData = [
-    { label: 'Mon', orders: 35, visits: 60 },
-    { label: 'Tue', orders: 55, visits: 80 },
-    { label: 'Wed', orders: 40, visits: 65 },
-    { label: 'Thu', orders: 75, visits: 90 },
-    { label: 'Fri', orders: 60, visits: 85 },
-    { label: 'Sat', orders: 85, visits: 100 },
-    { label: 'Sun', orders: 65, visits: 75 },
+  chartData: { label: string; orders: number; visits: number; heightPct: number }[] = [
+    { label: 'Mon', orders: 0, visits: 0, heightPct: 0 },
+    { label: 'Tue', orders: 0, visits: 0, heightPct: 0 },
+    { label: 'Wed', orders: 0, visits: 0, heightPct: 0 },
+    { label: 'Thu', orders: 0, visits: 0, heightPct: 0 },
+    { label: 'Fri', orders: 0, visits: 0, heightPct: 0 },
+    { label: 'Sat', orders: 0, visits: 0, heightPct: 0 },
+    { label: 'Sun', orders: 0, visits: 0, heightPct: 0 },
   ];
 
   recentOrders: any[] = [];
@@ -485,8 +473,36 @@ export class AdminDashboardPageComponent implements OnInit {
         this.pendingCount = oRes.data.length - this.completedCount;
 
         const total = oRes.data.length || 1;
-        this.completedPct = Math.round((this.completedCount / total) * 100);
-        this.pendingPct = 100 - this.completedPct;
+        this.completedPct = this.totalOrders > 0 ? Math.round((this.completedCount / total) * 100) : 0;
+        this.pendingPct = this.totalOrders > 0 ? (100 - this.completedPct) : 0;
+
+        // Compute real weekly chart counts
+        const dayOrderCounts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 0: 0 };
+        oRes.data.forEach(o => {
+          const dt = o.purchase_order_date || o.creation_date ? new Date(o.purchase_order_date || o.creation_date) : null;
+          if (dt && !isNaN(dt.getTime())) {
+            dayOrderCounts[dt.getDay()] = (dayOrderCounts[dt.getDay()] || 0) + 1;
+          }
+        });
+        const maxOrders = Math.max(...Object.values(dayOrderCounts), 1);
+        const dayLabels = [
+          { day: 1, label: 'Mon' },
+          { day: 2, label: 'Tue' },
+          { day: 3, label: 'Wed' },
+          { day: 4, label: 'Thu' },
+          { day: 5, label: 'Fri' },
+          { day: 6, label: 'Sat' },
+          { day: 0, label: 'Sun' }
+        ];
+        this.chartData = dayLabels.map(d => {
+          const count = dayOrderCounts[d.day] || 0;
+          return {
+            label: d.label,
+            orders: count,
+            visits: count > 0 ? Math.round(count * 1.5) : 0,
+            heightPct: count > 0 ? Math.max(10, Math.round((count / maxOrders) * 100)) : 0
+          };
+        });
 
         this.recentOrders = oRes.data.slice(0, 7).map(o => {
           const dt = o.purchase_order_date || o.creation_date ? new Date(o.purchase_order_date || o.creation_date) : new Date();
@@ -505,11 +521,11 @@ export class AdminDashboardPageComponent implements OnInit {
 
       if (pRes.data && pRes.data.length > 0) {
         this.topProducts = pRes.data.slice(0, 4).map((p, idx) => {
-          const priceVal = parseInt(p.name?.match(/₹(\d+)/)?.[1] || '', 10);
+          const finalPrice = Number(p.selling_price || p.price || 0);
           return {
             iconClass: ['fa-solid fa-gift', 'fa-solid fa-wand-magic-sparkles', 'fa-solid fa-cookie-bite', 'fa-solid fa-gem'][idx % 4],
             name: p.name,
-            price: !isNaN(priceVal) ? priceVal.toLocaleString('en-IN') : 'Custom'
+            price: finalPrice > 0 ? finalPrice.toLocaleString('en-IN') : 'Custom'
           };
         });
       } else {

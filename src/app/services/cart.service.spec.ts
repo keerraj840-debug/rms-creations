@@ -46,17 +46,35 @@ describe('CartService', () => {
     expect(service.finalTotal).toBe(347);
   });
 
-  it('should qualify for free delivery when subtotal >= 499', () => {
+  it('should qualify for free delivery when subtotal >= 499 on regular items', () => {
     service.addToCart({
       id: 'prod-2',
-      title: 'Festive Luxury Hamper',
+      title: 'Festive Brass Diya Set',
+      category: 'Pooja Items',
       price: 999,
       image: 'img.jpg'
     }, 1);
 
+    expect(service.hasHamper).toBe(false);
     expect(service.subtotal).toBe(999);
     expect(service.deliveryFee).toBe(0);
     expect(service.finalTotal).toBe(999);
+  });
+
+  it('should charge delivery fee for hampers even if subtotal >= 499 (PIN delivery logic)', () => {
+    service.addToCart({
+      id: 'prod-hamper',
+      title: 'Festive Luxury Hamper',
+      category: 'Custom Hamper',
+      price: 1200,
+      image: 'img.jpg'
+    }, 1);
+
+    expect(service.hasHamper).toBe(true);
+    expect(service.subtotal).toBe(1200);
+    // Base PIN delivery applies (49)
+    expect(service.deliveryFee).toBe(49);
+    expect(service.finalTotal).toBe(1249);
   });
 
   it('should increment existing item quantity when added again', () => {

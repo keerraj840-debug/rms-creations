@@ -37,8 +37,9 @@ serve(async (req: Request) => {
   // 2. Load Server-Side Secrets
   const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
-  const resendApiKey = Deno.env.get('RESEND_API_KEY') || '';
-  const senderEmail = Deno.env.get('NOTIFICATION_SENDER_EMAIL') || 'RMS Creations <orders@resend.dev>';
+  const envSecrets = Deno.env.toObject();
+  const resendApiKey = Deno.env.get('RESEND_API_KEY') || envSecrets['rms key'] || Deno.env.get('RMS_KEY') || '';
+  const senderEmail = Deno.env.get('NOTIFICATION_SENDER_EMAIL') || 'RMS Creations <onboarding@resend.dev>';
   const notificationSecret = Deno.env.get('NOTIFICATION_SECRET') || '';
 
   // 3. Worker Authorization Check (Bearer token or matching secret header)
@@ -120,8 +121,10 @@ serve(async (req: Request) => {
 
     if (lockErr) continue; // Skip if another worker picked it up
 
-    // B. Build HTML Content
+    // B. Build HTML and Plain Text Content (Multipart MIME avoids Spam flags)
     const htmlBody = buildNotificationHtml(entry);
+    const textBody = buildNotificationText(entry);
+    const replyToEmail = 'supportrmsgifthampers@gmail.com';
 
     // C. Deliver via Resend API
     try {
@@ -134,8 +137,13 @@ serve(async (req: Request) => {
         body: JSON.stringify({
           from: senderEmail,
           to: [entry.recipient_email],
+          reply_to: replyToEmail,
           subject: entry.subject,
-          html: htmlBody
+          html: htmlBody,
+          text: textBody,
+          headers: {
+            'X-Entity-Ref-ID': entry.idempotency_key
+          }
         })
       });
 
@@ -298,7 +306,7 @@ function buildNotificationHtml(entry: OutboxItem): string {
 
           <div style="border-top: 1px solid #EADFD2; padding-top: 18px; font-size: 12px; color: #7A6C5E; text-align: center;">
             <p style="margin: 0 0 6px 0;">Need assistance? Call or WhatsApp RMS Support: <strong>+91 92849 05118</strong></p>
-            <p style="margin: 0;">Email: <strong>rmsgifthampers@gmail.com</strong> &bull; <a href="https://rmscreations.netlify.app/" style="color: ${brandRose}; text-decoration: none;">www.rmscreations.com</a></p>
+            <p style="margin: 0;">Support Email: <strong>supportrmsgifthampers@gmail.com</strong> &bull; <a href="https://rmscreations.netlify.app/" style="color: ${brandRose}; text-decoration: none;">www.rmscreations.com</a></p>
           </div>
         </div>
       </body>
@@ -346,10 +354,21 @@ function buildNotificationHtml(entry: OutboxItem): string {
 
         <div style="border-top: 1px solid #EADFD2; padding-top: 18px; font-size: 12px; color: #7A6C5E; text-align: center;">
           <p style="margin: 0 0 6px 0;">Questions about your delivery? Contact RMS Support: <strong>+91 92849 05118</strong></p>
-          <p style="margin: 0;">Email: <strong>rmsgifthampers@gmail.com</strong></p>
+          <p style="margin: 0;">Support Email: <strong>supportrmsgifthampers@gmail.com</strong></p>
         </div>
       </div>
     </body>
     </html>
   `;
+}
+
+function buildNotificationText(entry: OutboxItem): string {
+  const data = entry.template_data || {};
+  if (entry.event_type === 'order_created' && entry.recipient_role === 'admin') {
+    return `NEW ORDER RECEIVED #${data.orderNo}\nTotal: Rs.${data.totalAmount}\nCustomer: ${data.customerName}\nPhone: ${data.customerPhone}\nAddress: ${data.shippingAddress}\nItems: ${data.itemSummary}\nManage: https://rmscreations.netlify.app/admin/orders`;
+  }
+  if (entry.event_type === 'order_created') {
+    return `ORDER CONFIRMATION #${data.orderNo} - RMS CREATIONS\n\nHello ${data.customerName},\nThank you for ordering with RMS Creations! We have received your order.\n\nOrder #: ${data.orderNo}\nTotal: Rs.${data.totalAmount}\nPayment Mode: ${data.paymentMode}\nDelivery To: ${data.shippingAddress}\n\nTrack your order: https://rmscreations.netlify.app/my-orders\nSupport: supportrmsgifthampers@gmail.com | +91 9284905118`;
+  }
+  return `ORDER STATUS UPDATE #${data.orderNo} - RMS CREATIONS\n\nHello ${data.customerName},\nYour order #${data.orderNo} status has been updated to: ${data.newStatus}.\n\nTracking: ${data.trackingRemark || 'In Progress'}\nTrack: https://rmscreations.netlify.app/my-orders\nSupport: supportrmsgifthampers@gmail.com`;
 }

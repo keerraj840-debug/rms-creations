@@ -184,4 +184,136 @@ describe('AdminOrdersPageComponent (Smart Order Processing Dashboard)', () => {
     expect(component.filteredOrders.length).toBe(1);
     expect(component.filteredOrders[0].purchase_order_no).toBe('ORD-101');
   });
+
+  it('requires double confirmation before advancing status to prevent accidental clicks', () => {
+    const order: PurchaseOrder = {
+      purchase_order_id: 301,
+      purchase_order_no: 'ORD-301',
+      purchase_order_status: 'confirmed',
+      payable_amount: 1500
+    };
+
+    // Clicking advance should open confirmation modal, NOT immediately change status
+    component.promptStatusAdvance(order, 'accepted');
+
+    expect(component.showStatusConfirmModal).toBe(true);
+    expect(component.pendingStatusOrder).toBe(order);
+    expect(component.pendingTargetStatus).toBe('accepted');
+    expect(order.purchase_order_status).toBe('confirmed'); // Still confirmed!
+
+    // Cancelling should close modal without any modification
+    component.cancelStatusAdvance();
+    expect(component.showStatusConfirmModal).toBe(false);
+    expect(component.pendingStatusOrder).toBeNull();
+    expect(component.pendingTargetStatus).toBe('');
+    expect(order.purchase_order_status).toBe('confirmed');
+  });
+
+  it('updates order status only after explicit confirmation in double confirmation modal', async () => {
+    const order: PurchaseOrder = {
+      purchase_order_id: 302,
+      purchase_order_no: 'ORD-302',
+      purchase_order_status: 'pending',
+      payable_amount: 999
+    };
+
+    component.promptStatusAdvance(order, 'confirmed');
+    expect(component.showStatusConfirmModal).toBe(true);
+
+    // Confirm advance
+    await component.confirmStatusAdvance();
+    expect(component.showStatusConfirmModal).toBe(false);
+    expect(order.purchase_order_status).toBe('confirmed');
+  });
+
+  it('requires double confirmation for bulk order status updates', () => {
+    component.selectedOrderIds.add(1);
+    component.selectedOrderIds.add(2);
+
+    component.promptBulkStatus('accepted');
+    expect(component.showBulkConfirmModal).toBe(true);
+    expect(component.pendingBulkStatus).toBe('accepted');
+  });
+
+  it('correctly classifies paid vs pending/COD orders and generates payment labels', () => {
+    const codOrder: PurchaseOrder = {
+      purchase_order_id: 401,
+      purchase_order_no: 'ORD-401',
+      payment_mode: 'Cash on Delivery (COD)',
+      transaction_status: 'PENDING',
+      payable_amount: 1200
+    };
+
+    const upiPaidOrder: PurchaseOrder = {
+      purchase_order_id: 402,
+      purchase_order_no: 'ORD-402',
+      payment_mode: 'Paid via UPI',
+      transaction_status: 'PAID',
+      utr_no: '987654321012',
+      payable_amount: 1500
+    };
+
+    const cashPaidOrder: PurchaseOrder = {
+      purchase_order_id: 403,
+      purchase_order_no: 'ORD-403',
+      payment_mode: 'Paid via Cash (COD)',
+      transaction_status: 'PAID',
+      payable_amount: 800
+    };
+
+    expect(component.isOrderPaid(codOrder)).toBe(false);
+    expect(component.getOrderPaymentLabel(codOrder)).toBe('Pending / COD');
+
+    expect(component.isOrderPaid(upiPaidOrder)).toBe(true);
+    expect(component.getOrderPaymentLabel(upiPaidOrder)).toBe('Paid (UPI)');
+
+    expect(component.isOrderPaid(cashPaidOrder)).toBe(true);
+    expect(component.getOrderPaymentLabel(cashPaidOrder)).toBe('Paid (Cash)');
+  });
+
+  it('allows admin to open quick payment modal and update payment status to Paid via UPI', async () => {
+    const order: PurchaseOrder = {
+      purchase_order_id: 404,
+      purchase_order_no: 'ORD-404',
+      payment_mode: 'Cash on Delivery (COD)',
+      transaction_status: 'PENDING',
+      payable_amount: 2200
+    };
+
+    component.orders = [order];
+    component.openQuickPaymentModal(order);
+
+    expect(component.showPaymentModal).toBe(true);
+    expect(component.paymentOrderTarget).toBe(order);
+    expect(component.paymentActionType).toBe('PAID_UPI');
+
+    component.paymentReferenceNote = 'GPay-Verified-4411';
+    await component.submitPaymentStatusUpdate();
+
+    expect(component.showPaymentModal).toBe(false);
+    expect(order.transaction_status).toBe('PAID');
+    expect(order.payment_mode).toBe('Paid via UPI');
+    expect(order.utr_no).toBe('GPay-Verified-4411');
+    expect(component.paymentSuccessBanner).toContain('Paid via UPI');
+  });
+
+  it('allows admin to revert an order back to COD/Pending', async () => {
+    const paidOrder: PurchaseOrder = {
+      purchase_order_id: 405,
+      purchase_order_no: 'ORD-405',
+      payment_mode: 'Paid via UPI',
+      transaction_status: 'PAID',
+      utr_no: '123456',
+      payable_amount: 1999
+    };
+
+    component.orders = [paidOrder];
+    await component.markOrderAsUnpaid(paidOrder);
+
+    expect(paidOrder.transaction_status).toBe('PENDING');
+    expect(paidOrder.payment_mode).toBe('Cash on Delivery (COD)');
+    expect(paidOrder.utr_no).toBeNull();
+    expect(component.paymentSuccessBanner).toContain('reverted');
+  });
 });
+

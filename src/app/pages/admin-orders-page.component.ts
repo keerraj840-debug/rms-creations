@@ -22,7 +22,7 @@ export interface OrderAuditEntry {
   standalone: true,
   imports: [CommonModule, FormsModule, CardComponent, ModalComponent, TableComponent],
   template: `
-    <div class="space-y-5 max-w-7xl mx-auto pb-12 transition-colors duration-300">
+    <div class="space-y-5  mx-auto pb-12 transition-colors duration-300">
 
       <!-- Top Action Bar -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -136,12 +136,12 @@ export interface OrderAuditEntry {
         </div>
 
         <div class="flex items-center gap-2 flex-wrap">
-          <button type="button" (click)="bulkUpdateStatus('confirmed')"
+          <button type="button" (click)="promptBulkStatus('confirmed')"
                   class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer">
             <i class="fa-solid fa-check mr-1"></i> Confirm Selected
           </button>
 
-          <button type="button" (click)="bulkUpdateStatus('accepted')"
+          <button type="button" (click)="promptBulkStatus('accepted')"
                   class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition cursor-pointer">
             <i class="fa-solid fa-box mr-1"></i> Start Processing
           </button>
@@ -156,6 +156,17 @@ export interface OrderAuditEntry {
             Cancel
           </button>
         </div>
+      </div>
+
+      <!-- Payment Status Update Feedback Toast -->
+      <div *ngIf="paymentSuccessBanner" class="p-3 rounded-2xl bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700/60 flex items-center justify-between shadow-xs transition-all">
+        <div class="flex items-center gap-2 text-xs font-bold">
+          <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+          <span>{{ paymentSuccessBanner }}</span>
+        </div>
+        <button type="button" (click)="paymentSuccessBanner = ''" class="text-emerald-700 hover:text-emerald-900 cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
       <!-- Main Orders Table Card -->
@@ -238,9 +249,11 @@ export interface OrderAuditEntry {
                 <span class="text-[10px] font-bold uppercase tracking-wider">Payment:</span>
                 <select [(ngModel)]="paymentFilter" (ngModelChange)="applyFilter()"
                         class="px-2.5 py-1 rounded-lg border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#251F1C] text-xs font-medium text-[#4A3C31] dark:text-[#F4F1ED] outline-none">
-                  <option value="all">All Modes</option>
-                  <option value="cod">Cash on Delivery</option>
-                  <option value="upi">Online UPI</option>
+                  <option value="all">All Payments</option>
+                  <option value="cod">Pending / COD</option>
+                  <option value="paid">Paid (Verified)</option>
+                  <option value="upi">Paid via UPI</option>
+                  <option value="cash">Paid via Cash</option>
                 </select>
               </div>
 
@@ -354,22 +367,30 @@ export interface OrderAuditEntry {
               </span>
             </td>
 
-            <!-- Amount & Payment Mode -->
+            <!-- Amount & Payment Status -->
             <td class="px-4 py-3.5 text-right">
               <span class="font-bold font-serif text-sm sm:text-base text-[#2E2825] dark:text-[#F4F1ED] block">
                 ₹{{ (order.payable_amount ?? order.total_amount ?? 0) | number }}
               </span>
-              <span class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] block">
-                {{ order.payment_mode ? (order.payment_mode.includes('COD') ? 'COD' : 'UPI') : 'COD' }}
-              </span>
+              <div class="mt-1 flex items-center justify-end">
+                <button type="button" (click)="openQuickPaymentModal(order)"
+                        [class]="isOrderPaid(order) 
+                          ? 'bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/60 hover:bg-emerald-200' 
+                          : 'bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-700/60 hover:bg-amber-200'"
+                        class="px-2 py-0.5 rounded-full text-[10px] font-bold border inline-flex items-center gap-1 transition cursor-pointer"
+                        [title]="isOrderPaid(order) ? 'Payment received - click to update' : 'Pending payment - click to mark paid'">
+                  <i [class]="isOrderPaid(order) ? 'fa-solid fa-circle-check text-emerald-600' : 'fa-regular fa-clock text-amber-600'"></i>
+                  <span>{{ getOrderPaymentLabel(order) }}</span>
+                </button>
+              </div>
             </td>
 
             <!-- Actions -->
             <td class="px-4 py-3.5 text-right">
               <div class="flex items-center justify-end gap-1.5">
-                <!-- Fast Status Step Button (One-click progression) -->
+                <!-- Fast Status Step Button (Prompts Double Confirmation) -->
                 <button *ngIf="getNextSafeStatus(order) as nextSt"
-                        type="button" (click)="executeQuickAdvance(order, nextSt)"
+                        type="button" (click)="promptStatusAdvance(order, nextSt)"
                         class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-[#FAF7F2] dark:bg-white/10 hover:bg-[#F3E7DC] dark:hover:bg-white/20 text-[#9C4738] dark:text-[#DD8776] border border-[#EADFD2] dark:border-white/10 transition cursor-pointer"
                         [title]="'Advance to ' + nextSt">
                   <i class="fa-solid fa-arrow-right text-[10px] mr-1"></i>
@@ -480,19 +501,19 @@ export interface OrderAuditEntry {
             <span class="text-[10px] font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider">Next Allowed Action:</span>
             <div class="flex items-center gap-2 flex-wrap">
               <button *ngIf="selectedOrder.purchase_order_status === 'pending'" type="button"
-                      (click)="confirmOrderStatus(selectedOrder, 'confirmed')"
+                      (click)="promptStatusAdvance(selectedOrder, 'confirmed')"
                       class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs cursor-pointer">
                 <i class="fa-solid fa-check mr-1"></i> Confirm Order
               </button>
 
               <button *ngIf="selectedOrder.purchase_order_status === 'confirmed'" type="button"
-                      (click)="confirmOrderStatus(selectedOrder, 'accepted')"
+                      (click)="promptStatusAdvance(selectedOrder, 'accepted')"
                       class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs cursor-pointer">
                 <i class="fa-solid fa-box mr-1"></i> Start Assembly / Processing
               </button>
 
               <button *ngIf="selectedOrder.purchase_order_status === 'accepted'" type="button"
-                      (click)="confirmOrderStatus(selectedOrder, 'packed')"
+                      (click)="promptStatusAdvance(selectedOrder, 'packed')"
                       class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs cursor-pointer">
                 <i class="fa-solid fa-boxes-packing mr-1"></i> Mark Packed
               </button>
@@ -552,19 +573,32 @@ export interface OrderAuditEntry {
               </p>
             </div>
 
-            <!-- Payment & UTR Proof -->
-            <div class="p-3 bg-white dark:bg-[#1E1916] border border-[#EADFD2]/70 dark:border-white/10 rounded-xl">
-              <span class="text-[10px] font-bold text-[#A89F91] block uppercase tracking-wider">Payment &amp; Proof</span>
-              <p class="font-medium text-[#4A3C31] dark:text-[#F4F1ED] mt-0.5">
+            <!-- Payment & Settlement Management -->
+            <div class="p-3 bg-white dark:bg-[#1E1916] border border-[#EADFD2]/70 dark:border-white/10 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold text-[#A89F91] block uppercase tracking-wider">Payment Status &amp; Collection</span>
+                <span [class]="isOrderPaid(selectedOrder) ? 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/70 dark:text-amber-300'"
+                      class="px-2 py-0.5 rounded-full text-[10px] font-bold border inline-flex items-center gap-1">
+                  <i [class]="isOrderPaid(selectedOrder) ? 'fa-solid fa-circle-check text-emerald-600' : 'fa-regular fa-clock text-amber-600'"></i>
+                  <span>{{ isOrderPaid(selectedOrder) ? 'PAID / COLLECTED' : 'PENDING / COD' }}</span>
+                </span>
+              </div>
+              <p class="font-medium text-xs text-[#4A3C31] dark:text-[#F4F1ED]">
                 {{ selectedOrder.payment_mode || 'Cash on Delivery (COD)' }}
               </p>
-              <div class="mt-1">
-                <span *ngIf="selectedOrder.utr_no" class="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
-                  UTR: {{ selectedOrder.utr_no }}
-                </span>
-                <span *ngIf="!selectedOrder.utr_no && selectedOrder.payment_mode?.includes('UPI')" class="text-[10px] text-rose-600 font-bold">
-                  ⚠️ No UTR number recorded
-                </span>
+              <div *ngIf="selectedOrder.utr_no" class="font-mono text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/40 w-fit">
+                Ref/Note: {{ selectedOrder.utr_no }}
+              </div>
+              <div class="pt-1.5 flex items-center gap-2">
+                <button type="button" (click)="openQuickPaymentModal(selectedOrder)"
+                        class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition cursor-pointer flex items-center gap-1">
+                  <i class="fa-solid fa-hand-holding-dollar text-[11px]"></i>
+                  <span>{{ isOrderPaid(selectedOrder) ? 'Update Payment' : 'Mark as Paid' }}</span>
+                </button>
+                <button *ngIf="isOrderPaid(selectedOrder)" type="button" (click)="markOrderAsUnpaid(selectedOrder)"
+                        class="px-2.5 py-1 text-xs font-bold rounded-lg bg-white dark:bg-[#251F1C] hover:bg-rose-50 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-700/50 transition cursor-pointer">
+                  <span>Revert to COD</span>
+                </button>
               </div>
             </div>
           </div>
@@ -762,6 +796,193 @@ export interface OrderAuditEntry {
         </div>
       </app-modal>
 
+      <!-- STATUS PROGRESSION DOUBLE CONFIRMATION MODAL -->
+      <app-modal [isOpen]="showStatusConfirmModal" title="Confirm Order Status Progression" size="md" (onClose)="cancelStatusAdvance()">
+        <div *ngIf="pendingStatusOrder" class="space-y-4 py-1 text-xs">
+          <!-- Warning banner -->
+          <div class="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 rounded-xl flex items-start gap-2.5">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600 dark:text-amber-400 mt-0.5 text-sm"></i>
+            <div>
+              <p class="font-bold text-amber-900 dark:text-amber-200">Confirmation Required</p>
+              <p class="text-amber-800 dark:text-amber-300 text-[11px] mt-0.5">
+                To prevent accidental clicks, please verify the order details below before moving to the next workflow step.
+              </p>
+            </div>
+          </div>
+
+          <!-- Order Summary Card -->
+          <div class="p-3.5 bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 rounded-xl space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-bold text-sm text-[#2E2825] dark:text-[#F4F1ED]">
+                Order #{{ pendingStatusOrder.purchase_order_no || pendingStatusOrder.purchase_order_id }}
+              </span>
+              <span class="font-bold font-serif text-sm text-[#9C4738] dark:text-[#DD8776]">
+                ₹{{ (pendingStatusOrder.payable_amount ?? pendingStatusOrder.total_amount ?? 0) | number }}
+              </span>
+            </div>
+
+            <!-- Transition Visual: Current -> Target -->
+            <div class="flex items-center justify-between p-2.5 bg-white dark:bg-[#1C1917] border border-[#EADFD2]/70 dark:border-white/10 rounded-lg">
+              <div class="flex flex-col">
+                <span class="text-[10px] text-[#A89F91] font-semibold">Current Status</span>
+                <span [class]="getStatusBadgeClass(pendingStatusOrder.purchase_order_status)" class="px-2 py-0.5 text-[11px] font-bold rounded-md border mt-0.5 inline-block text-center">
+                  {{ (pendingStatusOrder.purchase_order_status || 'Pending') | uppercase }}
+                </span>
+              </div>
+
+              <div class="flex flex-col items-center px-2">
+                <i class="fa-solid fa-arrow-right text-base text-[#9C4738] dark:text-[#DD8776]"></i>
+                <span class="text-[9px] text-[#A89F91] font-bold mt-0.5">NEXT STEP</span>
+              </div>
+
+              <div class="flex flex-col text-right">
+                <span class="text-[10px] text-[#A89F91] font-semibold">Target Status</span>
+                <span [class]="getStatusBadgeClass(pendingTargetStatus)" class="px-2 py-0.5 text-[11px] font-bold rounded-md border mt-0.5 inline-block text-center">
+                  {{ pendingTargetStatus | uppercase }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Customer Details & Effect -->
+            <div class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] space-y-1">
+              <p><strong>Customer:</strong> {{ extractCustomerDetails(pendingStatusOrder).name }}</p>
+              <p><strong>Contact:</strong> {{ pendingStatusOrder.contact_no || 'No mobile saved' }} &bull; {{ extractCustomerDetails(pendingStatusOrder).email }}</p>
+              <p *ngIf="getStatusExplanation(pendingTargetStatus) as expl" class="text-[#9C4738] dark:text-[#DD8776] font-semibold pt-1">
+                ✓ {{ expl }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div modal-footer class="w-full flex justify-end gap-2">
+          <button type="button" (click)="cancelStatusAdvance()" [disabled]="updatingStatus"
+                  class="px-3.5 py-2 text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#4A3C31] dark:hover:text-[#F4F1ED] cursor-pointer">
+            No, Keep Current Status
+          </button>
+          <button type="button" (click)="confirmStatusAdvance()" [disabled]="updatingStatus"
+                  class="px-4 py-2 rounded-xl bg-[#9C4738] hover:bg-[#853C2F] text-white text-xs font-bold shadow-2xs cursor-pointer flex items-center gap-1.5 disabled:opacity-50">
+            <i *ngIf="updatingStatus" class="fa-solid fa-spinner fa-spin text-xs"></i>
+            <i *ngIf="!updatingStatus" class="fa-solid fa-check text-xs"></i>
+            <span>{{ updatingStatus ? 'Updating Status...' : 'Yes, Advance to ' + (pendingTargetStatus | uppercase) }}</span>
+          </button>
+        </div>
+      </app-modal>
+
+      <!-- BULK STATUS DOUBLE CONFIRMATION MODAL -->
+      <app-modal [isOpen]="showBulkConfirmModal" title="Confirm Bulk Status Update" size="sm" (onClose)="showBulkConfirmModal = false">
+        <div class="space-y-3 py-1 text-xs">
+          <div class="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 rounded-xl flex items-start gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5"></i>
+            <p class="text-amber-900 dark:text-amber-200 text-[11px] font-medium">
+              You are about to change the status of <strong>{{ selectedOrderIds.size }}</strong> selected orders to
+              <strong class="uppercase text-[#9C4738] dark:text-[#DD8776]">{{ pendingBulkStatus }}</strong>.
+            </p>
+          </div>
+          <p class="text-[#7A6C5E] dark:text-[#C5A393] text-[11px]">
+            This bulk progression will update fulfillment records and queue customer status updates.
+          </p>
+        </div>
+
+        <div modal-footer class="w-full flex justify-end gap-2">
+          <button type="button" (click)="showBulkConfirmModal = false" [disabled]="updatingStatus"
+                  class="px-3 py-1.5 text-xs font-bold text-[#7A6C5E] cursor-pointer">
+            Cancel
+          </button>
+          <button type="button" (click)="confirmBulkStatus()" [disabled]="updatingStatus"
+                  class="px-4 py-2 rounded-xl bg-[#9C4738] hover:bg-[#853C2F] text-white text-xs font-bold shadow-2xs cursor-pointer">
+            Confirm Bulk Update
+          </button>
+        </div>
+      </app-modal>
+
+      <!-- QUICK PAYMENT STATUS MANAGEMENT MODAL -->
+      <app-modal [isOpen]="showPaymentModal" [title]="'Update Payment: Order #' + (paymentOrderTarget?.purchase_order_no || '')" size="md" (onClose)="closePaymentModal()">
+        <div class="space-y-4 py-1 text-xs">
+          <!-- Order Summary Header -->
+          <div class="p-3 bg-[#FAF7F2] dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase text-[#7A6C5E] dark:text-[#C5A393] block">Order Amount</span>
+              <span class="font-serif font-bold text-base text-[#9C4738] dark:text-[#EB9D8E]">
+                ₹{{ (paymentOrderTarget?.payable_amount ?? paymentOrderTarget?.total_amount ?? 0) | number }}
+              </span>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] font-bold uppercase text-[#7A6C5E] dark:text-[#C5A393] block">Current Status</span>
+              <span [class]="isOrderPaid(paymentOrderTarget) ? 'text-emerald-700 dark:text-emerald-300 font-bold' : 'text-amber-700 dark:text-amber-300 font-bold'">
+                {{ getOrderPaymentLabel(paymentOrderTarget) }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Select Payment Option -->
+          <div class="space-y-2">
+            <label class="block font-bold text-[#4A3C31] dark:text-[#F4F1ED]">Choose Payment Collection State:</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button type="button" (click)="paymentActionType = 'PAID_UPI'"
+                      [class]="paymentActionType === 'PAID_UPI' ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 ring-2 ring-emerald-500/20 text-emerald-900 dark:text-emerald-200' : 'border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#251F1C] text-[#4A3C31] dark:text-[#F4F1ED]'"
+                      class="p-3 rounded-xl border text-left transition cursor-pointer">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-mobile-screen-button text-emerald-600"></i>
+                  <span class="font-bold text-xs">Paid via UPI</span>
+                </div>
+                <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] mt-1">GPay, PhonePe, Paytm, QR</p>
+              </button>
+
+              <button type="button" (click)="paymentActionType = 'PAID_CASH'"
+                      [class]="paymentActionType === 'PAID_CASH' ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 ring-2 ring-emerald-500/20 text-emerald-900 dark:text-emerald-200' : 'border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#251F1C] text-[#4A3C31] dark:text-[#F4F1ED]'"
+                      class="p-3 rounded-xl border text-left transition cursor-pointer">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-money-bill-wave text-emerald-600"></i>
+                  <span class="font-bold text-xs">Paid via Cash (COD)</span>
+                </div>
+                <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] mt-1">Cash collected upon delivery</p>
+              </button>
+
+              <button type="button" (click)="paymentActionType = 'PAID_BANK'"
+                      [class]="paymentActionType === 'PAID_BANK' ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 ring-2 ring-emerald-500/20 text-emerald-900 dark:text-emerald-200' : 'border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#251F1C] text-[#4A3C31] dark:text-[#F4F1ED]'"
+                      class="p-3 rounded-xl border text-left transition cursor-pointer">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-building-columns text-emerald-600"></i>
+                  <span class="font-bold text-xs">Paid via Bank Transfer</span>
+                </div>
+                <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] mt-1">Direct NEFT / IMPS transfer</p>
+              </button>
+
+              <button type="button" (click)="paymentActionType = 'COD'"
+                      [class]="paymentActionType === 'COD' ? 'border-amber-600 bg-amber-50 dark:bg-amber-950/60 ring-2 ring-amber-500/20 text-amber-900 dark:text-amber-200' : 'border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#251F1C] text-[#4A3C31] dark:text-[#F4F1ED]'"
+                      class="p-3 rounded-xl border text-left transition cursor-pointer">
+                <div class="flex items-center gap-2">
+                  <i class="fa-regular fa-clock text-amber-600"></i>
+                  <span class="font-bold text-xs">Pending / COD (Unpaid)</span>
+                </div>
+                <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] mt-1">Awaiting payment or delivery</p>
+              </button>
+            </div>
+          </div>
+
+          <!-- Optional UTR / Reference / Admin Note -->
+          <div>
+            <label class="block font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+              Payment Reference / UTR / Note (Optional):
+            </label>
+            <input type="text" [(ngModel)]="paymentReferenceNote" placeholder="e.g. GPay UTR 429381... or 'Paid at store'"
+                   class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1C1917] font-mono text-xs outline-none" />
+          </div>
+        </div>
+
+        <div modal-footer class="w-full flex justify-end gap-2">
+          <button type="button" (click)="closePaymentModal()" [disabled]="updatingPayment"
+                  class="px-3 py-1.5 text-xs font-bold text-[#7A6C5E] cursor-pointer">
+            Cancel
+          </button>
+          <button type="button" (click)="submitPaymentStatusUpdate()" [disabled]="updatingPayment"
+                  class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs cursor-pointer flex items-center gap-1.5">
+            <i class="fa-solid fa-check"></i>
+            <span>{{ updatingPayment ? 'Saving...' : 'Save Payment Status' }}</span>
+          </button>
+        </div>
+      </app-modal>
+
       <!-- RECORD ORDER MODAL -->
       <app-modal [isOpen]="showCreateModal" title="Record Manual Order / Inquiry" size="md" (onClose)="showCreateModal = false">
         <form (ngSubmit)="saveManualOrder()" class="space-y-3.5 py-1 text-xs">
@@ -884,6 +1105,24 @@ export class AdminOrdersPageComponent implements OnInit {
   shipTrackingNo = '';
   cancelReason = '';
 
+  // Double confirmation state for status progression
+  showStatusConfirmModal = false;
+  pendingStatusOrder: PurchaseOrder | null = null;
+  pendingTargetStatus = '';
+  updatingStatus = false;
+
+  // Double confirmation state for bulk actions
+  showBulkConfirmModal = false;
+  pendingBulkStatus = '';
+
+  // Payment status modal & editing state
+  showPaymentModal = false;
+  paymentOrderTarget: PurchaseOrder | null = null;
+  paymentActionType: 'PAID_UPI' | 'PAID_CASH' | 'PAID_BANK' | 'COD' = 'PAID_UPI';
+  paymentReferenceNote = '';
+  updatingPayment = false;
+  paymentSuccessBanner = '';
+
   // Real-time PIN check result for selected order
   pinCheckResult: DeliveryCheckResult | null = null;
 
@@ -902,12 +1141,12 @@ export class AdminOrdersPageComponent implements OnInit {
   };
 
   columns: TableColumn[] = [
-    { label: 'Order ID / Urgency', width: '24%' },
-    { label: 'Customer / Delivery', width: '26%' },
+    { label: 'Order ID / Urgency', width: '22%' },
+    { label: 'Customer / Delivery', width: '24%' },
     { label: 'Date', width: '16%' },
     { label: 'Status', width: '14%' },
-    { label: 'Amount', width: '10%', align: 'right' },
-    { label: 'Actions', width: '10%', align: 'right' }
+    { label: 'Amount / Payment', width: '13%', align: 'right' },
+    { label: 'Actions', width: '11%', align: 'right' }
   ];
 
   get confirmedCount(): number {
@@ -1026,16 +1265,87 @@ export class AdminOrdersPageComponent implements OnInit {
     }
   }
 
-  async executeQuickAdvance(order: PurchaseOrder, nextStatus: string) {
-    if (nextStatus === 'shipped') {
+  promptStatusAdvance(order: PurchaseOrder, targetStatus: string) {
+    if (targetStatus === 'shipped') {
       this.openShipModal(order);
       return;
     }
-    if (nextStatus === 'delivered') {
+    if (targetStatus === 'delivered') {
       this.openDeliverModal(order);
       return;
     }
-    await this.confirmOrderStatus(order, nextStatus);
+    if (targetStatus === 'cancelled') {
+      this.openCancelModal(order);
+      return;
+    }
+    this.pendingStatusOrder = order;
+    this.pendingTargetStatus = targetStatus;
+    this.showStatusConfirmModal = true;
+    this.cdr.markForCheck();
+  }
+
+  cancelStatusAdvance() {
+    this.showStatusConfirmModal = false;
+    this.pendingStatusOrder = null;
+    this.pendingTargetStatus = '';
+    this.cdr.markForCheck();
+  }
+
+  async confirmStatusAdvance() {
+    if (!this.pendingStatusOrder || !this.pendingTargetStatus) return;
+    this.updatingStatus = true;
+    this.cdr.markForCheck();
+    try {
+      await this.confirmOrderStatus(this.pendingStatusOrder, this.pendingTargetStatus);
+      this.showStatusConfirmModal = false;
+      this.pendingStatusOrder = null;
+      this.pendingTargetStatus = '';
+    } finally {
+      this.updatingStatus = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  promptBulkStatus(newStatus: string) {
+    if (this.selectedOrderIds.size === 0) return;
+    this.pendingBulkStatus = newStatus;
+    this.showBulkConfirmModal = true;
+    this.cdr.markForCheck();
+  }
+
+  async confirmBulkStatus() {
+    if (!this.pendingBulkStatus) return;
+    this.updatingStatus = true;
+    this.cdr.markForCheck();
+    try {
+      await this.bulkUpdateStatus(this.pendingBulkStatus);
+      this.showBulkConfirmModal = false;
+      this.pendingBulkStatus = '';
+    } finally {
+      this.updatingStatus = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  getStatusExplanation(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'confirmed':
+        return 'Order is confirmed and queued for preparation in the studio.';
+      case 'accepted':
+        return 'Hamper assembly, custom curation, and processing begins.';
+      case 'packed':
+        return 'Hamper is packed in custom gift box and sealed for dispatch handover.';
+      case 'shipped':
+        return 'Courier tracking is assigned and order is handed over for dispatch.';
+      case 'delivered':
+        return 'Recipient received the gift hamper successfully.';
+      default:
+        return 'Order progression step will be recorded.';
+    }
+  }
+
+  async executeQuickAdvance(order: PurchaseOrder, nextStatus: string) {
+    this.promptStatusAdvance(order, nextStatus);
   }
 
   getStatusBadgeClass(status?: string): string {
@@ -1133,10 +1443,15 @@ export class AdminOrdersPageComponent implements OnInit {
       // 5. Payment Mode Filter
       let matchesPayment = true;
       const pMode = (order.payment_mode || '').toLowerCase();
+      const isPaid = this.isOrderPaid(order);
       if (this.paymentFilter === 'cod') {
-        matchesPayment = pMode.includes('cod') || pMode.includes('cash');
+        matchesPayment = !isPaid;
+      } else if (this.paymentFilter === 'paid') {
+        matchesPayment = isPaid;
       } else if (this.paymentFilter === 'upi') {
         matchesPayment = pMode.includes('upi');
+      } else if (this.paymentFilter === 'cash') {
+        matchesPayment = pMode.includes('cash');
       }
 
       return matchesSearch && matchesStatus && matchesAttention && matchesDate && matchesPayment;
@@ -1189,9 +1504,25 @@ export class AdminOrdersPageComponent implements OnInit {
       if (!error) {
         this.orders.forEach(o => {
           if (this.selectedOrderIds.has(o.purchase_order_id)) {
+            const oldStatus = o.purchase_order_status || 'confirmed';
             o.purchase_order_status = newStatus;
+
+            // Trigger outbox notifications for each updated order
+            const cust = this.extractCustomerDetails(o);
+            this.outboxService.recordStatusUpdatedNotification(
+              o.purchase_order_no,
+              o.purchase_order_id,
+              cust.name,
+              cust.email,
+              newStatus,
+              oldStatus,
+              o.payable_amount || 0,
+              o.shipping_remark || '',
+              o.utr_no || ''
+            ).catch(() => { });
           }
         });
+        this.outboxService.processPendingOutbox().catch(() => { });
         this.logAuditAction(`Bulk Updated ${ids.length} orders to ${newStatus}`, ids[0], { count: ids.length, newStatus });
         this.clearSelection();
         this.applyFilter();
@@ -1260,14 +1591,14 @@ export class AdminOrdersPageComponent implements OnInit {
     }
   }
 
-  private extractCustomerDetails(order: PurchaseOrder): { name: string; email: string } {
+  extractCustomerDetails(order: PurchaseOrder): { name: string; email: string } {
     const remark = order.shipping_remark || '';
     const nameMatch = remark.match(/Customer:\s*([^|]+)/);
     const emailMatch = remark.match(/Email:\s*([^|]+)/);
 
     return {
       name: (nameMatch ? nameMatch[1].trim() : 'Valued Customer'),
-      email: (emailMatch ? emailMatch[1].trim() : 'contact@rmscreations.com')
+      email: (emailMatch ? emailMatch[1].trim() : 'rmsgifthampers@gmail.com')
     };
   }
 
@@ -1310,7 +1641,7 @@ export class AdminOrdersPageComponent implements OnInit {
           order.payable_amount || 0,
           order.shipping_remark || '',
           order.utr_no || ''
-        ).then(() => this.outboxService.processPendingOutbox().catch(() => {})).catch(() => {});
+        ).then(() => this.outboxService.processPendingOutbox().catch(() => { })).catch(() => { });
       }
     } catch {
       order.purchase_order_status = oldStatus;
@@ -1361,7 +1692,7 @@ export class AdminOrdersPageComponent implements OnInit {
           order.payable_amount || 0,
           remark,
           order.utr_no || ''
-        ).then(() => this.outboxService.processPendingOutbox().catch(() => {})).catch(() => {});
+        ).then(() => this.outboxService.processPendingOutbox().catch(() => { })).catch(() => { });
 
         this.showShipModal = false;
         this.targetActionOrder = null;
@@ -1411,7 +1742,7 @@ export class AdminOrdersPageComponent implements OnInit {
           order.payable_amount || 0,
           order.shipping_remark || '',
           order.utr_no || ''
-        ).then(() => this.outboxService.processPendingOutbox().catch(() => {})).catch(() => {});
+        ).then(() => this.outboxService.processPendingOutbox().catch(() => { })).catch(() => { });
 
         this.showDeliverModal = false;
         this.targetActionOrder = null;
@@ -1464,7 +1795,7 @@ export class AdminOrdersPageComponent implements OnInit {
           order.payable_amount || 0,
           this.cancelReason.trim(),
           order.utr_no || ''
-        ).then(() => this.outboxService.processPendingOutbox().catch(() => {})).catch(() => {});
+        ).then(() => this.outboxService.processPendingOutbox().catch(() => { })).catch(() => { });
 
         this.showCancelModal = false;
         this.targetActionOrder = null;
@@ -1617,5 +1948,161 @@ export class AdminOrdersPageComponent implements OnInit {
     link.download = filename;
     link.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  // ==============================================================================
+  // PAYMENT STATUS & COLLECTION MANAGEMENT (ADMIN ONLY)
+  // ==============================================================================
+
+  isOrderPaid(order?: PurchaseOrder | null): boolean {
+    if (!order) return false;
+    const status = (order.transaction_status || '').toUpperCase();
+    const mode = (order.payment_mode || '').toLowerCase();
+    return status === 'PAID' || mode.startsWith('paid');
+  }
+
+  getOrderPaymentLabel(order?: PurchaseOrder | null): string {
+    if (!order) return 'COD';
+    const mode = (order.payment_mode || '').trim();
+    if (this.isOrderPaid(order)) {
+      if (mode.toLowerCase().includes('upi')) return 'Paid (UPI)';
+      if (mode.toLowerCase().includes('cash')) return 'Paid (Cash)';
+      if (mode.toLowerCase().includes('bank')) return 'Paid (Bank)';
+      return 'Paid';
+    }
+    return 'Pending / COD';
+  }
+
+  openQuickPaymentModal(order: PurchaseOrder) {
+    this.paymentOrderTarget = order;
+    if (this.isOrderPaid(order)) {
+      const mode = (order.payment_mode || '').toLowerCase();
+      if (mode.includes('cash')) this.paymentActionType = 'PAID_CASH';
+      else if (mode.includes('bank')) this.paymentActionType = 'PAID_BANK';
+      else this.paymentActionType = 'PAID_UPI';
+    } else {
+      this.paymentActionType = 'PAID_UPI';
+    }
+    this.paymentReferenceNote = order.utr_no || '';
+    this.showPaymentModal = true;
+    this.cdr.markForCheck();
+  }
+
+  closePaymentModal() {
+    this.showPaymentModal = false;
+    this.paymentOrderTarget = null;
+    this.paymentReferenceNote = '';
+    this.updatingPayment = false;
+    this.cdr.markForCheck();
+  }
+
+  async submitPaymentStatusUpdate() {
+    if (!this.paymentOrderTarget) return;
+    const order = this.paymentOrderTarget;
+    this.updatingPayment = true;
+
+    let newStatus = 'PAID';
+    let newMode = 'Paid via UPI';
+
+    if (this.paymentActionType === 'PAID_UPI') {
+      newStatus = 'PAID';
+      newMode = 'Paid via UPI';
+    } else if (this.paymentActionType === 'PAID_CASH') {
+      newStatus = 'PAID';
+      newMode = 'Paid via Cash (COD)';
+    } else if (this.paymentActionType === 'PAID_BANK') {
+      newStatus = 'PAID';
+      newMode = 'Paid via Bank Transfer';
+    } else if (this.paymentActionType === 'COD') {
+      newStatus = 'PENDING';
+      newMode = 'Cash on Delivery (COD)';
+    }
+
+    const refNote = this.paymentReferenceNote.trim() || null;
+
+    try {
+      const payload: any = {
+        transaction_status: newStatus,
+        payment_mode: newMode,
+        utr_no: refNote,
+        updation_date: new Date().toISOString()
+      };
+
+      const { error } = await this.supabase
+        .from('purchase_order')
+        .update(payload)
+        .eq('purchase_order_id', order.purchase_order_id);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      // Update in local memory
+      order.transaction_status = newStatus;
+      order.payment_mode = newMode;
+      order.utr_no = refNote;
+      if (this.selectedOrder && this.selectedOrder.purchase_order_id === order.purchase_order_id) {
+        this.selectedOrder.transaction_status = newStatus;
+        this.selectedOrder.payment_mode = newMode;
+        this.selectedOrder.utr_no = refNote;
+      }
+
+      this.logAuditAction(`Updated payment for Order #${order.purchase_order_no} to ${newMode}`, order.purchase_order_id, {
+        status: newStatus,
+        mode: newMode,
+        ref: refNote
+      });
+
+      this.paymentSuccessBanner = `Order #${order.purchase_order_no} marked as ${newMode}`;
+      setTimeout(() => {
+        this.paymentSuccessBanner = '';
+        this.cdr.markForCheck();
+      }, 4000);
+
+      this.closePaymentModal();
+      this.applyFilter();
+      this.cdr.markForCheck();
+    } catch (err: any) {
+      console.error('Failed to update payment status:', err);
+    } finally {
+      this.updatingPayment = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  async markOrderAsUnpaid(order: PurchaseOrder) {
+    try {
+      const payload = {
+        transaction_status: 'PENDING',
+        payment_mode: 'Cash on Delivery (COD)',
+        utr_no: null,
+        updation_date: new Date().toISOString()
+      };
+
+      const { error } = await this.supabase
+        .from('purchase_order')
+        .update(payload)
+        .eq('purchase_order_id', order.purchase_order_id);
+
+      if (!error) {
+        order.transaction_status = 'PENDING';
+        order.payment_mode = 'Cash on Delivery (COD)';
+        order.utr_no = null;
+        if (this.selectedOrder && this.selectedOrder.purchase_order_id === order.purchase_order_id) {
+          this.selectedOrder.transaction_status = 'PENDING';
+          this.selectedOrder.payment_mode = 'Cash on Delivery (COD)';
+          this.selectedOrder.utr_no = null;
+        }
+        this.paymentSuccessBanner = `Order #${order.purchase_order_no} reverted to Cash on Delivery (Unpaid)`;
+        setTimeout(() => {
+          this.paymentSuccessBanner = '';
+          this.cdr.markForCheck();
+        }, 4000);
+        this.applyFilter();
+        this.cdr.markForCheck();
+      }
+    } catch (err) {
+      console.error('Error marking order unpaid:', err);
+    }
   }
 }

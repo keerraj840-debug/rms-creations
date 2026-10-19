@@ -65,12 +65,24 @@ export class CartService {
     this.verifiedDeliveryFee = fee;
   }
 
+  get hasHamper(): boolean {
+    return this.items.some(item =>
+      item.category === 'Custom Hamper' ||
+      item.category?.toLowerCase().includes('hamper') ||
+      item.title?.toLowerCase().includes('hamper')
+    );
+  }
+
   get deliveryFee(): number {
     if (this.subtotal === 0) return 0;
     if (this.verifiedDeliveryFee !== null) {
       return this.verifiedDeliveryFee;
     }
-    // Free delivery on orders ₹499 and above
+    // For orders containing hampers, PIN-code delivery applies (base ₹49 before PIN verification)
+    if (this.hasHamper) {
+      return 49;
+    }
+    // Free delivery on standard catalog orders ₹499 and above
     return this.subtotal >= 499 ? 0 : 49;
   }
 

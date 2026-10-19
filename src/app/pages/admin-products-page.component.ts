@@ -13,7 +13,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, CardComponent, ButtonComponent, TableComponent, ModalComponent],
   template: `
-    <div class="space-y-5 max-w-7xl mx-auto pb-12 transition-colors duration-300">
+    <div class="space-y-5  mx-auto pb-12 transition-colors duration-300">
       
       <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

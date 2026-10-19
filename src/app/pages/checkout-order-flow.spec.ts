@@ -98,6 +98,36 @@ describe('Ecommerce Order Processing & PIN Delivery Calculations', () => {
       expect(res.district).toBe('Mumbai');
     });
 
+    it('should charge PIN-code delivery fee for hampers even when subtotal is >= 499', async () => {
+      mockSupabase.from.mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              maybeSingle: vi.fn().mockResolvedValue({
+                data: {
+                  pca_pin_code: '400001',
+                  pca_is_available: true,
+                  pca_delivery_charges: 60,
+                  pca_delivery_charges_above_1kg: 30,
+                  pca_district: 'Mumbai',
+                  pca_state: 'Maharashtra',
+                  courier_service: 'Bluedart Express'
+                },
+                error: null
+              })
+            })
+          })
+        })
+      });
+
+      // Hamper with subtotal 999 and weight 1.5kg: 60 base + 1*30 = 90
+      const res = await pinService.checkDelivery('400001', 999, 1.5, true);
+      expect(res.isServiceable).toBe(true);
+      expect(res.freeDeliveryApplied).toBe(false);
+      expect(res.calculatedDeliveryFee).toBe(90);
+      expect(res.isHamperDelivery).toBe(true);
+    });
+
     it('should charge base delivery fee when subtotal is < 499 and weight <= 1.0 kg', async () => {
       mockSupabase.from.mockReturnValue({
         select: vi.fn().mockReturnValue({

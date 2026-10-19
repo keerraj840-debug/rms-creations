@@ -67,9 +67,16 @@ export interface HamperBuilderItem {
   name: string;
   description?: string;
   price?: number | null; // NULL for custom item
+  basePrice?: number | null;
+  markupAmount?: number;
   isPriceConfirmed: boolean;
   quantity: number;
   stockQuantity?: number | null;
   imageUrl?: string;
   category?: string;
+}
+
+export interface HamperMarkupConfig {
+  percent: number;      // percentage markup e.g. 10 (%)
+  fixedAmount: number;  // fixed surcharge e.g. 20 (₹)
 }

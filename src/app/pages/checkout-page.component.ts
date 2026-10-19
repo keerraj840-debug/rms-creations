@@ -34,7 +34,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
           </div>
         </div>
 
-        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 max-w-7xl">
+        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 ">
 
           <!-- GUARD: EMPTY CART NOTICE -->
           <div *ngIf="cartService.items.length === 0" class="py-16 text-center max-w-md mx-auto bg-white dark:bg-[#1E1916] rounded-3xl p-8 border border-[#EADFD2] dark:border-white/10 shadow-xs">
@@ -526,7 +526,12 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                     <span class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">{{ cartService.totalWeightKg }} kg</span>
                   </div>
                   <div class="flex justify-between text-[#7A6C5E] dark:text-[#C5A393]">
-                    <span>Delivery Charges:</span>
+                    <div>
+                      <span>Delivery Charges:</span>
+                      <span *ngIf="cartService.hasHamper" class="text-[10px] text-amber-700 dark:text-amber-400 font-semibold block">
+                        PIN-code courier rate (Hamper Parcel)
+                      </span>
+                    </div>
                     <span *ngIf="cartService.deliveryFee === 0" class="font-bold text-emerald-600">FREE</span>
                     <span *ngIf="cartService.deliveryFee > 0" class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">₹{{ cartService.deliveryFee }}</span>
                   </div>
@@ -775,7 +780,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       const result = await this.pinService.checkDelivery(
         pin,
         this.cartService.subtotal,
-        this.cartService.totalWeightKg
+        this.cartService.totalWeightKg,
+        this.cartService.hasHamper
       );
       this.deliveryCheckResult = result;
       if (result.isServiceable) {
@@ -872,7 +878,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       const pinValidation = await this.pinService.checkDelivery(
         this.customerPin,
         this.cartService.subtotal,
-        this.cartService.totalWeightKg
+        this.cartService.totalWeightKg,
+        this.cartService.hasHamper
       );
 
       if (!pinValidation.isServiceable) {
@@ -922,11 +929,12 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         purchase_order_status: 'confirmed',
         payable_amount: this.cartService.finalTotal,
         total_amount: this.cartService.finalTotal,
+        delivery_amount: this.cartService.deliveryFee,
         customer_id: this.currentUser.id || null,
         contact_no: cleanPhone,
         payment_mode: paymentDisplay,
         shipping_address: fullShippingAddress,
-        shipping_remark: `Customer: ${this.customerName.trim()} | Email: ${this.currentUser.email} | Courier: ${pinValidation.courierService || 'Express DTDC'}`,
+        shipping_remark: `Customer: ${this.customerName.trim()} | Email: ${this.currentUser.email} | Courier: ${pinValidation.courierService || 'Express DTDC'} | Items: ${this.cartService.items.map(i => `${i.quantity}x ${i.title}${i.notes ? ` [${i.notes}]` : ''}`).join('; ')}`,
         is_active: true,
         creation_date: new Date().toISOString()
       };
@@ -1005,7 +1013,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
     } catch (err: any) {
       console.error('Order creation error:', err);
-      this.errorMessage = err?.message || 'An error occurred while placing your order. Please try again or contact RMS concierge at +91 92849 05118.';
+      this.errorMessage = err?.message || 'An error occurred while placing your order. Please try again or message RMS WhatsApp Support at +91 92849 05118.';
       this.isSubmitting = false;
       this.cdr.markForCheck();
     }

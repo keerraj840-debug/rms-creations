@@ -26,6 +26,7 @@ export interface DeliveryCheckResult {
   calculatedDeliveryFee: number;
   totalWeightKg: number;
   freeDeliveryApplied: boolean;
+  isHamperDelivery?: boolean;
   message: string;
 }
 
@@ -35,10 +36,15 @@ export interface DeliveryCheckResult {
 export class PinCodeAvailabilityService {
   private readonly supabase = inject(SupabaseService);
 
-  // Free delivery threshold across store (e.g. Orders ₹499 and above enjoy Free Delivery on serviceable pins)
+  // Free delivery threshold across store for standard catalog items
   public readonly freeDeliveryThreshold = 499;
 
-  async checkDelivery(pinCode: string, subtotal: number = 0, totalWeightKg: number = 0.5): Promise<DeliveryCheckResult> {
+  async checkDelivery(
+    pinCode: string,
+    subtotal: number = 0,
+    totalWeightKg: number = 0.5,
+    hasHamper: boolean = false
+  ): Promise<DeliveryCheckResult> {
     const cleanPin = (pinCode || '').trim().replace(/\D/g, '');
 
     if (!cleanPin || cleanPin.length !== 6) {
@@ -110,13 +116,16 @@ export class PinCodeAvailabilityService {
         weightFee += extraKg * above1kgCharge;
       }
 
-      // Check free delivery threshold
-      const isFreeDelivery = subtotal >= this.freeDeliveryThreshold;
+      // Check free delivery threshold:
+      // Orders containing hampers do not qualify for storewide free shipping;
+      // PIN-code delivery charges are always applied for hampers.
+      const isFreeDelivery = !hasHamper && subtotal >= this.freeDeliveryThreshold;
       const finalDeliveryFee = isFreeDelivery ? 0 : weightFee;
 
       const locationText = [district, state].filter(Boolean).join(', ');
       const courierText = courierService ? ` via ${courierService}` : '';
       const feeText = isFreeDelivery ? 'FREE (Special Offer)' : `₹${finalDeliveryFee}`;
+      const hamperNote = hasHamper ? ' (Hamper parcel PIN-code shipping)' : '';
 
       return {
         isServiceable: true,
@@ -129,7 +138,8 @@ export class PinCodeAvailabilityService {
         calculatedDeliveryFee: finalDeliveryFee,
         totalWeightKg,
         freeDeliveryApplied: isFreeDelivery,
-        message: `Delivery available to ${locationText}${courierText}. Delivery charge: ${feeText}.`
+        isHamperDelivery: hasHamper,
+        message: `Delivery available to ${locationText}${courierText}. Delivery charge: ${feeText}${hamperNote}.`
       };
     } catch (err: any) {
       return {

@@ -22,7 +22,7 @@ import { isWithinDateWindow } from './shop-page.component';
           <div class="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-[#EB9D8E]/20 dark:bg-[#EB9D8E]/10 blur-3xl"></div>
           <div class="pointer-events-none absolute top-1/2 -right-24 h-96 w-96 rounded-full bg-[#DD8776]/15 dark:bg-[#DD8776]/5 blur-3xl"></div>
 
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div class=" mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             <!-- Hero Top Row: Headline + Live 16:9 Showcase Banner -->
             <div class="grid items-center gap-6 lg:grid-cols-12 lg:gap-8">
@@ -30,19 +30,19 @@ import { isWithinDateWindow } from './shop-page.component';
               <!-- Left Hero Pitch -->
               <div class="lg:col-span-7 space-y-4">
                 <div class="inline-flex items-center gap-2 rounded-full border border-[#D9C3B9]/70 dark:border-white/10 bg-white/90 dark:bg-white/5 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#9C4738] dark:text-[#EB9D8E] shadow-2xs backdrop-blur-md">
-                  <span class="inline-block h-2 w-2 rounded-full bg-[#C56D5B] animate-pulse"></span>
-                  Festive &amp; Year-Round Gift Studio
+                  <span class="inline-block h-2 w-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                  Handmade Gift Hampers &bull; All-India Delivery
                 </div>
 
                 <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#57251C] dark:text-[#F4F1ED] leading-[1.15]">
-                  Handcrafted Gift Hampers <br class="hidden sm:inline" />
+                  Beautiful Gift Hampers <br class="hidden sm:inline" />
                   <span class="font-serif italic font-normal text-[#C56D5B] dark:text-[#EB9D8E] underline decoration-[#EB9D8E] decoration-wavy decoration-1 underline-offset-8">
-                    Curated with Heart
+                    Made with Love
                   </span>
                 </h1>
 
                 <p class="max-w-xl text-xs sm:text-sm md:text-base leading-relaxed text-[#57251C]/80 dark:text-[#D9C3B9]">
-                  Thoughtful hampers for Diwali, birthdays, weddings, baby showers &amp; corporate milestones. Beautifully partitioned, personalized with care, and delivered safely across India.
+                  Special gift hampers for Diwali, Birthdays, Weddings, Anniversaries &amp; Return Gifts. Packed with chocolates, dry fruits, sweets &amp; custom greeting cards. Starting at just ₹99.
                 </p>
 
                 <!-- Quick Action Buttons -->
@@ -52,7 +52,7 @@ import { isWithinDateWindow } from './shop-page.component';
                     class="inline-flex items-center justify-center gap-2 rounded-full bg-[#57251C] dark:bg-[#C56D5B] px-6 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#FFFDFC] shadow-md shadow-[#57251C]/15 transition-all duration-300 hover:bg-[#9C4738] dark:hover:bg-[#DD8776] hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <i class="fa-solid fa-gift text-xs"></i>
-                    <span>Shop All Hampers</span>
+                    <span>See All Hampers</span>
                   </a>
 
                   <a
@@ -60,7 +60,7 @@ import { isWithinDateWindow } from './shop-page.component';
                     class="inline-flex items-center justify-center gap-2 rounded-full border border-[#57251C]/35 dark:border-white/20 bg-white dark:bg-[#251F1C] px-5 py-2.5 text-xs sm:text-sm font-bold text-[#57251C] dark:text-[#F4F1ED] transition-all duration-300 hover:border-[#9C4738] hover:text-[#9C4738] active:scale-95 shadow-2xs cursor-pointer"
                   >
                     <i class="fa-solid fa-wand-magic-sparkles text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i>
-                    <span>Build Your Own Hamper &rarr;</span>
+                    <span>Make Your Own Hamper &rarr;</span>
                   </a>
                 </div>
               </div>
@@ -107,17 +107,17 @@ import { isWithinDateWindow } from './shop-page.component';
                   </span>
                   <div>
                     <h2 class="font-serif font-bold text-sm sm:text-base text-[#2E2825] dark:text-[#F4F1ED]">
-                      Smart Gifting Finder
+                      Find the Right Gift in Seconds
                     </h2>
                     <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">
-                      Tell us what you're looking for to catch the perfect match in seconds.
+                      Choose who you are gifting for and your budget to see the best hampers.
                     </p>
                   </div>
                 </div>
 
                 <div class="flex items-center gap-2 text-xs font-bold text-[#9C4738] dark:text-[#EB9D8E]">
                   <i class="fa-solid fa-bolt"></i>
-                  <span>Instant Match Filter</span>
+                  <span>Quick Filter</span>
                 </div>
               </div>
 
@@ -133,7 +133,7 @@ import { isWithinDateWindow } from './shop-page.component';
                     <button
                       type="button"
                       *ngFor="let r of [
-                        { id: 'all', label: 'Everyone' },
+                        { id: 'all', label: 'All' },
                         { id: 'her', label: 'For Her' },
                         { id: 'him', label: 'For Him' },
                         { id: 'kids', label: 'Kids & Family' }
@@ -173,15 +173,15 @@ import { isWithinDateWindow } from './shop-page.component';
                 <!-- 3. Celebration Occasion -->
                 <div class="space-y-1.5">
                   <label class="block text-[11px] font-bold uppercase tracking-wider text-[#7A6C5E] dark:text-[#C5A393]">
-                    3. Celebration
+                    3. Occasion
                   </label>
                   <div class="flex items-center gap-1.5 flex-wrap">
                     <button
                       type="button"
                       *ngFor="let o of [
-                        { id: 'all', label: 'All Occasions' },
-                        { id: 'diwali', label: 'Diwali 2026 🪔' },
-                        { id: 'return-gifts', label: 'Favours & Events' }
+                        { id: 'all', label: 'All' },
+                        { id: 'diwali', label: 'Diwali 🪔' },
+                        { id: 'return-gifts', label: 'Return Gifts' }
                       ]"
                       (click)="selectedOccasion = o.id; applyFinderFilter()"
                       class="px-2.5 py-1 rounded-xl text-xs font-semibold border transition cursor-pointer"
@@ -222,7 +222,7 @@ import { isWithinDateWindow } from './shop-page.component';
                     class="px-4 py-2 rounded-xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 hover:border-[#9C4738] text-[#9C4738] dark:text-[#EB9D8E] text-xs font-bold transition cursor-pointer flex items-center gap-1.5"
                   >
                     <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-                    <span>Custom Hamper Studio</span>
+                    <span>Make Custom Hamper</span>
                   </a>
                 </div>
               </div>
@@ -233,19 +233,19 @@ import { isWithinDateWindow } from './shop-page.component';
             <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-1 text-center">
               <div class="p-2.5 rounded-xl bg-white dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-2xs flex items-center justify-center gap-2">
                 <i class="fa-solid fa-truck-fast text-[#9C4738] dark:text-[#EB9D8E] text-sm"></i>
-                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">All-India Delivery</span>
+                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">Safe Pan-India Delivery</span>
               </div>
               <div class="p-2.5 rounded-xl bg-white dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-2xs flex items-center justify-center gap-2">
                 <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
-                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">WhatsApp Concierge</span>
+                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">WhatsApp Support</span>
               </div>
               <div class="p-2.5 rounded-xl bg-white dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-2xs flex items-center justify-center gap-2">
                 <i class="fa-solid fa-shield-heart text-[#9C4738] dark:text-[#EB9D8E] text-sm"></i>
-                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">Pristine Packaging</span>
+                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">Safe Gift Packaging</span>
               </div>
               <div class="p-2.5 rounded-xl bg-white dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-2xs flex items-center justify-center gap-2">
                 <i class="fa-solid fa-indian-rupee-sign text-[#9C4738] dark:text-[#EB9D8E] text-sm"></i>
-                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">COD &amp; UPI Accepted</span>
+                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">Cash on Delivery Available</span>
               </div>
             </div>
 
@@ -270,7 +270,7 @@ import { isWithinDateWindow } from './shop-page.component';
         </div>
 
         <!-- 2. SMART BESTSELLERS & CURATED MATCHES SECTION -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-6">
+        <section class=" mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-6">
 
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-[#EADFD2]/70 dark:border-white/10 pb-3">
             <div>
@@ -381,64 +381,62 @@ import { isWithinDateWindow } from './shop-page.component';
 
         </section>
 
-        <!-- 3. INTERACTIVE "BUILD YOUR OWN HAMPER" TEASER SPOTLIGHT -->
+        <!-- 3. BUILD YOUR OWN HAMPER SPOTLIGHT -->
         <section class="bg-[#57251C] text-white py-10 sm:py-12 my-6">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class=" mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid items-center gap-6 lg:grid-cols-12">
 
               <div class="lg:col-span-8 space-y-3">
-                <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold uppercase tracking-wider text-amber-200">
-                  <i class="fa-solid fa-wand-magic-sparkles"></i> Bespoke Custom Hamper Studio
+                <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold uppercase tracking-wider text-[#D9C3B9]">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> Custom Hamper Studio
                 </span>
 
                 <h2 class="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#FFFDFC]">
-                  Want something uniquely yours? <br />
-                  Handpick individual goodies with live simulation.
+                  Build Your Own Gift Box
                 </h2>
 
-                <p class="text-xs sm:text-sm text-[#D9C3B9] leading-relaxed max-w-2xl">
-                  Select almonds, cashews, pooja diyas, traditional ladoos, and scented candles. Preview your curated hamper in real time, add a personalized greeting card, and request a personalized artisan quotation in 60 seconds with no upfront payment.
+                <p class="text-xs sm:text-sm text-[#D9C3B9] leading-relaxed max-w-xl">
+                  Handpick dry fruits, sweets, diyas, and greeting cards. See live pricing and checkout instantly.
                 </p>
 
                 <!-- Sample Inclusions Chips -->
-                <div class="flex items-center gap-2 flex-wrap pt-2 text-xs">
+                <div class="flex items-center gap-2 flex-wrap pt-1 text-xs">
                   <span class="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15">🪔 Pooja Diya ₹49</span>
-                  <span class="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15">🌰 California Almonds ₹20</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15">🌰 Almonds ₹20</span>
                   <span class="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15">🍬 Besan Ladoo ₹10</span>
                   <span class="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15">🕯️ Essence Candle ₹10</span>
                   <span class="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15">💌 Custom Card ₹50</span>
                 </div>
 
-                <div class="pt-3">
+                <div class="pt-2">
                   <a
                     routerLink="/build-hamper"
-                    class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-[#57251C] text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white text-[#57251C] hover:bg-stone-100 text-xs sm:text-sm font-bold uppercase tracking-wider shadow transition cursor-pointer"
                   >
-                    <i class="fa-solid fa-sparkles text-sm"></i>
-                    <span>Launch Hamper Studio &rarr;</span>
+                    <span>Start Curating &rarr;</span>
                   </a>
                 </div>
               </div>
 
-              <!-- Teaser Graphic / Mini Box Visual -->
+              <!-- Mini Box Visual -->
               <div class="lg:col-span-4">
-                <div class="p-5 rounded-3xl bg-white/10 border border-white/20 backdrop-blur-md shadow-xl text-center space-y-3">
-                  <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 to-[#EB9D8E] mx-auto flex items-center justify-center text-2xl text-[#57251C] shadow-md">
+                <div class="p-5 rounded-2xl bg-white/5 border border-white/15 text-center space-y-3">
+                  <div class="w-12 h-12 rounded-xl bg-white/10 mx-auto flex items-center justify-center text-xl text-white">
                     <i class="fa-solid fa-gift"></i>
                   </div>
-                  <h3 class="font-serif font-bold text-base text-white">How It Works</h3>
-                  <div class="text-[11px] text-stone-200 space-y-2 text-left">
-                    <div class="flex items-start gap-2">
-                      <span class="w-4 h-4 rounded-full bg-amber-400 text-[#57251C] font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">1</span>
-                      <span>Pick theme &amp; celebration occasion</span>
+                  <h3 class="font-serif font-bold text-sm text-white">How It Works</h3>
+                  <div class="text-xs text-stone-300 space-y-2 text-left">
+                    <div class="flex items-center gap-2">
+                      <span class="w-5 h-5 rounded-full bg-white/15 text-white font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
+                      <span>Pick items &amp; occasion</span>
                     </div>
-                    <div class="flex items-start gap-2">
-                      <span class="w-4 h-4 rounded-full bg-amber-400 text-[#57251C] font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">2</span>
-                      <span>Add goodies, sweets, dry fruits &amp; keepsakes</span>
+                    <div class="flex items-center gap-2">
+                      <span class="w-5 h-5 rounded-full bg-white/15 text-white font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
+                      <span>Add free personalized message</span>
                     </div>
-                    <div class="flex items-start gap-2">
-                      <span class="w-4 h-4 rounded-full bg-amber-400 text-[#57251C] font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">3</span>
-                      <span>Review live simulation &amp; submit for free quote</span>
+                    <div class="flex items-center gap-2">
+                      <span class="w-5 h-5 rounded-full bg-white/15 text-white font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
+                      <span>Checkout or order via WhatsApp</span>
                     </div>
                   </div>
                 </div>
@@ -449,7 +447,7 @@ import { isWithinDateWindow } from './shop-page.component';
         </section>
 
         <!-- 4. CATEGORIES BROWSER -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-5">
+        <section class=" mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-5">
           <div class="flex items-center justify-between border-b border-[#EADFD2]/70 dark:border-white/10 pb-3">
             <div>
               <span class="text-xs font-bold uppercase tracking-wider text-[#9C4738] dark:text-[#EB9D8E]">
@@ -493,17 +491,17 @@ import { isWithinDateWindow } from './shop-page.component';
         </section>
 
         <!-- 5. DIRECT CONCIERGE & BULK ORDERS CALLOUT -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <section class=" mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div class="rounded-3xl border border-[#EADFD2] dark:border-white/10 bg-gradient-to-r from-[#FAF7F2] via-white to-[#FAF7F2] dark:from-[#1E1916] dark:via-[#251F1C] dark:to-[#1E1916] p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="space-y-2 text-center md:text-left">
               <span class="inline-block px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
-                <i class="fa-brands fa-whatsapp"></i> Quick WhatsApp Concierge
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp Support &amp; Bulk Orders
               </span>
               <h3 class="font-serif text-lg sm:text-xl font-bold text-[#2E2825] dark:text-[#F4F1ED]">
                 Planning Corporate Gifts, Wedding Favours, or Bulk Orders?
               </h3>
               <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393] max-w-xl">
-                Enjoy personalized branding, custom ribbon embossing, and special tiered pricing on bulk orders of 10+ hampers. Connect directly with our lead artisan.
+                Enjoy personalized branding, custom ribbon packaging, and special discount pricing on bulk orders. Connect directly with our team for quick quotes.
               </p>
             </div>
 
@@ -577,7 +575,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     this.seo.setFaqSchema([
       {
         question: 'How do I build a custom gift hamper with RMS Creations?',
-        answer: 'You can use our interactive Build Hamper Studio to handpick authentic dry fruits, traditional sweets, pooja diyas, and greeting cards. See live pricing and request an artisan quotation in 60 seconds with no upfront payment.'
+        answer: 'You can use our interactive Build Hamper Studio to handpick dry fruits, sweets, pooja diyas, and greeting cards. See live pricing and checkout directly online or order via WhatsApp.'
       },
       {
         question: 'Where does RMS Creations deliver in India?',
@@ -640,14 +638,23 @@ export class HomePageComponent implements OnInit, OnDestroy {
           })
           .map((p: any) => {
             const cat = activeCatMap.get(Number(p.category_id));
-            const price = Number(p.selling_price || p.price || 149);
+            const rawPrice = Number(p.price || 0);
+            const rawSellingPrice = Number(p.selling_price || 0);
+            let finalPrice = rawSellingPrice || rawPrice || 149;
+            let originalPrice: number | undefined = undefined;
+
+            if (rawPrice > 0 && rawSellingPrice > 0 && rawPrice > rawSellingPrice) {
+              finalPrice = rawSellingPrice;
+              originalPrice = rawPrice;
+            }
+
             return {
               id: p.id,
               name: p.name,
               category: cat?.name || 'Gift Hamper',
               categoryId: p.category_id,
-              price: price,
-              originalPrice: Math.round(price * 1.25),
+              price: finalPrice,
+              originalPrice: originalPrice,
               image: (p.images && p.images[0]) || 'assets/banners/banner.png',
               badge: p.badge || (p.is_featured ? 'Bestseller' : 'Popular'),
               description: p.description || ''
@@ -792,9 +799,9 @@ export class HomePageComponent implements OnInit, OnDestroy {
           .map((c: any) => {
             const lower = c.name.toLowerCase();
             const badge = lower.includes('diwali') ? 'Active Festival' :
-                          lower.includes('ganpati') ? 'Festive' :
-                          lower.includes('friendship') || lower.includes('raksha') ? 'Seasonal' :
-                          lower.includes('girl') || lower.includes('boy') ? 'Popular' : 'Featured';
+              lower.includes('ganpati') ? 'Festive' :
+                lower.includes('friendship') || lower.includes('raksha') ? 'Seasonal' :
+                  lower.includes('girl') || lower.includes('boy') ? 'Popular' : 'Featured';
             return {
               id: c.id,
               name: c.name,

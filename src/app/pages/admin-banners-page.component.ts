@@ -20,7 +20,7 @@ export interface BannerItem {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="space-y-6 max-w-7xl mx-auto pb-16 transition-colors duration-300">
+    <div class="space-y-6  mx-auto pb-16 transition-colors duration-300">
 
       <!-- Header Section -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

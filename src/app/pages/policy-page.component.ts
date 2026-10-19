@@ -15,16 +15,16 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-24">
 
         <!-- MAIN CONTENT WITH SMART FLUID 2-COLUMN LAYOUT -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <main class=" mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
 
           <!-- Sleek Header Row with Instant Grievance Support CTA -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
             <div>
               <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#2E2825] dark:text-[#F4F1ED]">
-                Customer Policies &amp; Compliance Hub
+                Customer Policies &amp; Help
               </h1>
               <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
-                Indian Consumer Protection Rules 2020 &bull; DPDP Act 2023 &bull; Navi Mumbai Jurisdiction
+                Terms &bull; Shipping &bull; Returns &bull; Navi Mumbai, India
               </p>
             </div>
             <a
@@ -32,7 +32,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
               class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-2xs transition active:scale-95 shrink-0"
             >
               <i class="fa-brands fa-whatsapp text-sm"></i>
-              <span>Grievance Concierge (+91 92849 05118)</span>
+              <span>Need Help? WhatsApp: +91 92849 05118</span>
             </a>
           </div>
           
@@ -143,7 +143,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                     <strong>Standard Catalogue Orders:</strong> Placing an order through our shopping cart constitutes an offer to purchase. Order acceptance is confirmed when an official Order ID is generated and communicated via on-screen confirmation, email, and WhatsApp notification.
                   </p>
                   <p>
-                    <strong>Build Your Own Hamper Studio:</strong> Custom hamper requests submitted via our interactive builder represent bespoke consultation requests. No payment is charged at the point of submission. Our concierge will review your selections, verify item sourcing, and communicate an individualized feasibility quote for your explicit acceptance prior to packaging.
+                    <strong>Build Your Own Hamper Studio:</strong> When you create a custom hamper, you can order directly through our cart, chat on WhatsApp, or request a custom bulk quote. For quote requests, no payment is charged until you review and approve your hamper with our team.
                   </p>
 
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">6. Payment Methods &amp; Safety</h3>
@@ -207,7 +207,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                   <ul class="list-disc pl-5 space-y-1">
                     <li>Assembling and dispatching orders to the recipient's doorstep.</li>
                     <li>Transmitting automated transactional confirmations and courier dispatch notifications.</li>
-                    <li>Facilitating customer-initiated support via WhatsApp concierge or email.</li>
+                    <li>Facilitating customer-initiated support via WhatsApp support or email.</li>
                     <li>Preventing duplicate orders and unauthorized access through Row Level Security (RLS).</li>
                   </ul>
 
@@ -218,7 +218,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                   <ul class="list-disc pl-5 space-y-1">
                     <li><strong>Courier &amp; Logistics Partners:</strong> Recipient shipping details are shared solely to effectuate parcel transit.</li>
                     <li><strong>Database &amp; Cloud Infrastructure:</strong> Hosted securely on Supabase with encrypted data stores and PostgreSQL Row Level Security.</li>
-                    <li><strong>Transactional Communications:</strong> Email delivery via Resend/SMTP infrastructure; instant customer concierge updates via WhatsApp Business API.</li>
+                    <li><strong>Transactional Communications:</strong> Email delivery via Resend/SMTP infrastructure; instant customer order updates via WhatsApp Business API.</li>
                   </ul>
 
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">5. Privacy Rights &amp; Data Deletion</h3>
@@ -308,7 +308,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                 <div class="space-y-4 text-xs sm:text-sm text-[#4A3C31] dark:text-[#D9C3B9] leading-relaxed">
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base">1. Order Cancellation Policy</h3>
                   <p>
-                    <strong>Standard Catalogue Hampers:</strong> You may cancel your order free of charge at any time <strong>prior to shipment dispatch</strong>. To cancel, please contact our concierge team immediately on WhatsApp (<strong>+91 92849 05118</strong>) or email <strong>rmsgifthampers&#64;gmail.com</strong> with your Order ID.
+                    <strong>Standard Catalogue Hampers:</strong> You may cancel your order free of charge at any time <strong>prior to shipment dispatch</strong>. To cancel, please contact our support team immediately on WhatsApp (<strong>+91 92849 05118</strong>) or email <strong>rmsgifthampers&#64;gmail.com</strong> with your Order ID.
                   </p>
                   <p>
                     <strong>Custom &amp; Personalized Hampers:</strong> Because bespoke hampers involve personalized printing, names, and perishable ingredients, cancellation is permitted only <strong>prior to the commencement of artisan assembly</strong>. Once personalized materials or food seals are assembled, custom orders cannot be cancelled.
@@ -335,7 +335,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">4. Refund Processing Timelines &amp; Methods</h3>
                   <ul class="list-disc pl-5 space-y-1">
                     <li><strong>UPI &amp; Online Payments:</strong> Refunds are credited directly back to your original source UPI VPA or bank account within <strong>5 to 7 business days</strong>.</li>
-                    <li><strong>Cash on Delivery (COD) Orders:</strong> Refunds for verified returns on COD orders are credited via direct UPI or NEFT upon customer providing bank details to our official concierge.</li>
+                    <li><strong>Cash on Delivery (COD) Orders:</strong> Refunds for verified returns on COD orders are credited via direct UPI or NEFT upon customer providing bank details to our official support team.</li>
                     <li>You will receive an email confirmation and reference transaction ID immediately upon refund initiation.</li>
                   </ul>
                 </div>
@@ -379,7 +379,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                       </div>
                       <div>
                         <span class="text-[10px] font-bold text-[#7A6C5E] uppercase block">Designated Email:</span>
-                        <a href="mailto:rmsgifthampers@gmail.com" class="font-semibold text-[#9C4738] dark:text-[#EB9D8E] hover:underline">rmsgifthampers&#64;gmail.com</a>
+                        <a href="mailto:supportrmsgifthampers@gmail.com" class="font-semibold text-[#9C4738] dark:text-[#EB9D8E] hover:underline">supportrmsgifthampers&#64;gmail.com</a>
                       </div>
                       <div>
                         <span class="text-[10px] font-bold text-[#7A6C5E] uppercase block">Dedicated Telephone / WhatsApp:</span>

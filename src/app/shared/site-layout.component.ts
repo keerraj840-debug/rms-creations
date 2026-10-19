@@ -14,26 +14,19 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
   imports: [RouterLink, RouterLinkActive, AsyncPipe, NgClass, NgIf, FormsModule, CheckoutModalComponent],
   template: `
     <!-- Main Shell -->
-    <div class="flex min-h-screen flex-col bg-[#F7F6F3] dark:bg-[#14100E] font-sans text-[#57251C] dark:text-[#F4F1ED] selection:bg-[#EB9D8E] selection:text-[#57251C] transition-colors duration-200">
-
-      <!-- Top Announcement Bar (Brand Banner) -->
-      <aside aria-label="Announcement" class="relative z-50 bg-gradient-to-r from-[#57251C] via-[#9C4738] to-[#C56D5B] px-4 py-2 text-center text-xs font-semibold text-[#FFFDFC] shadow-sm sm:text-sm">
-        <div class="flex items-center justify-center gap-2 flex-wrap">
-          <i class="fa-solid fa-gift text-[#EB9D8E]"></i>
-          <span><strong>Handcrafted Luxury Hampers:</strong> Bespoke gift curations, celebration treats &amp; pooja essentials!</span>
-          <a routerLink="/shop" class="rounded-full bg-white/20 px-3 py-0.5 font-bold text-[#FFFDFC] hover:bg-white/30 transition">Explore Catalogue &rarr;</a>
-        </div>
-      </aside>
-
+    <div
+      class="flex flex-col bg-[#F7F6F3] dark:bg-[#14100E] font-sans text-[#57251C] dark:text-[#F4F1ED] selection:bg-[#EB9D8E] selection:text-[#57251C] transition-colors duration-200"
+      [ngClass]="hideFooter ? 'min-h-screen lg:h-screen lg:overflow-hidden' : 'min-h-screen'"
+    >
       <!-- Sticky Luxury Glassmorphism Header -->
       <header
-        class="sticky top-0 z-40 w-full border-b border-[#D9C3B9]/45 dark:border-[#3D302A] bg-[#FFFDFC]/92 dark:bg-[#1C1816]/95 backdrop-blur-md transition-all duration-300"
+        class="sticky top-0 z-40 w-full shrink-0 border-b border-[#D9C3B9]/45 dark:border-[#3D302A] bg-[#FFFDFC]/92 dark:bg-[#1C1816]/95 backdrop-blur-md transition-all duration-300"
         [ngClass]="{
           'shadow-md shadow-[#57251C]/5 py-1 bg-[#FFFDFC]/96 dark:bg-[#1C1816]/98': isScrolled,
           'py-2 bg-[#FFFDFC]/88 dark:bg-[#1C1816]/90': !isScrolled
         }"
       >
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto  px-4 sm:px-6 lg:px-8">
           <div class="flex h-16 items-center justify-between sm:h-18">
 
             <!-- Logo Section -->
@@ -67,7 +60,7 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
                 routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full"
                 class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
-                Shop All
+                All Hampers
               </a>
               <a
                 routerLink="/build-hamper"
@@ -75,28 +68,28 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
                 class="relative inline-flex items-center gap-1.5 text-sm font-bold text-[#9C4738] dark:text-[#EB9D8E] transition-colors hover:text-[#57251C] dark:hover:text-[#F4F1ED] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
                 <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
-                <span>Build a Hamper</span>
+                <span>Customize Hamper</span>
               </a>
               <a
                 routerLink="/gallery"
                 routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full"
                 class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
-                Lookbook
+                Hamper Gallery
               </a>
               <a
                 routerLink="/my-orders"
                 routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full"
                 class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
-                My Orders
+                Track Order
               </a>
               <a
                 routerLink="/contact"
                 routerLinkActive="text-[#9C4738] dark:text-[#EB9D8E] font-bold after:w-full"
                 class="relative text-sm font-medium text-[#57251C]/80 dark:text-[#D9C3B9] transition-colors hover:text-[#9C4738] dark:hover:text-[#EB9D8E] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:rounded-full after:bg-[#C56D5B] after:transition-all hover:after:w-full"
               >
-                Contact
+                Contact Us
               </a>
             </nav>
 
@@ -206,15 +199,6 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
                 </div>
               </div>
 
-              <!-- Shop Now CTA Button -->
-              <a
-                routerLink="/shop"
-                class="items-center justify-center gap-1.5 rounded-full bg-[#57251C] dark:bg-[#C56D5B] px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-bold uppercase tracking-wider text-[#FFFDFC] shadow-sm shadow-[#57251C]/20 transition-all hover:-translate-y-0.5 hover:bg-[#9C4738] dark:hover:bg-[#DD8776] hover:shadow-md active:scale-95 inline-flex"
-              >
-                <i class="fa-solid fa-gift text-xs"></i>
-                <span>Shop Gifts</span>
-              </a>
-
               <!-- Mobile Hamburger Button -->
               <button
                 type="button"
@@ -289,9 +273,7 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
                 (click)="openWhatsapp('Mobile menu')"
                 class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#57251C] dark:bg-[#C56D5B] px-4 py-3.5 text-base font-semibold text-[#FFFDFC] shadow-md transition-all hover:bg-[#9C4738] active:scale-95"
               >
-                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.124.551 4.195 1.597 6.02L.055 24l6.105-1.602c1.745.952 3.712 1.455 5.871 1.455 6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm3.896 17.266c-.183.513-1.045.962-1.464 1.002-.42.04-1.001.077-2.923-.717-2.316-.957-3.805-3.32-3.921-3.475-.116-.155-.936-1.246-.936-2.378 0-1.132.585-1.688.794-1.921.209-.233.456-.291.608-.291.152 0 .304 0 .436.007.14.008.33.025.517.47.195.467.666 1.632.724 1.748.058.116.097.252.019.408-.078.155-.116.252-.233.388-.116.136-.245.298-.348.396-.115.109-.239.229-.107.457.132.228.588.973 1.259 1.573.864.773 1.603 1.012 1.832 1.127.228.116.363.097.498-.058.136-.155.585-.68.74-.913.155-.233.228-.155.443.058.558.214.724.348 1.267.504 1.344.155.077.33.078.503-.131z"/>
-                </svg>
+                <i class="fa-brands fa-whatsapp text-lg text-emerald-400"></i>
                 Chat on WhatsApp
               </button>
             </div>
@@ -300,13 +282,13 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
       </header>
 
       <!-- Main Outlet Container -->
-      <main class="w-full flex-grow pb-16 md:pb-0">
+      <main class="w-full flex-grow flex flex-col min-h-0" [ngClass]="hideFooter ? 'pb-0 overflow-hidden' : 'pb-16 md:pb-0'">
         <ng-content></ng-content>
       </main>
 
       <!-- Editorial Luxury Footer -->
-      <footer class="mt-auto border-t border-[#57251C] bg-[#57251C] text-[#FFFDFC] pb-16 md:pb-0">
-        <div class="mx-auto max-w-7xl px-4 pb-8 pt-12 sm:px-6 lg:px-8">
+      <footer *ngIf="!hideFooter" class="mt-auto border-t border-[#57251C] bg-[#57251C] text-[#FFFDFC] pb-16 md:pb-0">
+        <div class="mx-auto  px-4 pb-8 pt-12 sm:px-6 lg:px-8">
           <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
 
             <!-- Brand Info Column (4 cols) -->
@@ -335,41 +317,39 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
 
             <!-- Quick Links / Discover (3 cols) -->
             <div class="lg:col-span-3">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-[#EB9D8E]">Discover</h3>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-[#EB9D8E]">Quick Links</h3>
               <ul class="mt-3 space-y-2 text-xs font-medium text-[#D9C3B9]">
                 <li><a routerLink="/" class="transition-colors hover:text-[#FFFDFC]">Home</a></li>
-                <li><a routerLink="/shop" class="text-white font-bold hover:text-[#DD8776] flex items-center gap-1.5"><i class="fa-solid fa-gift text-xs"></i> Shop All Gifts</a></li>
-                <li><a routerLink="/build-hamper" class="text-white font-bold hover:text-[#DD8776] flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-xs"></i> Build Your Own Hamper</a></li>
-                <li><a routerLink="/gallery" class="transition-colors hover:text-[#FFFDFC]">Lookbook &amp; Gallery</a></li>
-                <li><a routerLink="/my-orders" class="transition-colors hover:text-[#FFFDFC]">Track My Orders</a></li>
-                <li><a routerLink="/my-account" class="transition-colors hover:text-[#FFFDFC]">My Account &amp; Profile</a></li>
+                <li><a routerLink="/shop" class="text-white font-bold hover:text-[#DD8776] flex items-center gap-1.5"><i class="fa-solid fa-gift text-xs"></i> All Gift Hampers</a></li>
+                <li><a routerLink="/build-hamper" class="text-white font-bold hover:text-[#DD8776] flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-xs"></i> Customize Hamper</a></li>
+                <li><a routerLink="/gallery" class="transition-colors hover:text-[#FFFDFC]">Hamper Gallery</a></li>
+                <li><a routerLink="/my-orders" class="transition-colors hover:text-[#FFFDFC]">Track My Order</a></li>
               </ul>
             </div>
 
-            <!-- Customer Policies & Trust Column (3 cols) -->
+            <!-- Trust Highlights Column (3 cols) -->
             <div class="lg:col-span-3">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-[#EB9D8E]">Policies &amp; Trust</h3>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-[#EB9D8E]">Why RMS Creations</h3>
               <ul class="mt-3 space-y-2 text-xs font-medium text-[#D9C3B9]">
-                <li><a routerLink="/terms" class="transition-colors hover:text-[#FFFDFC] flex items-center gap-1.5"><i class="fa-solid fa-file-contract text-[10px] text-[#EB9D8E]"></i> Terms &amp; Conditions</a></li>
-                <li><a routerLink="/privacy" class="transition-colors hover:text-[#FFFDFC] flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-[10px] text-[#EB9D8E]"></i> Privacy Policy (DPDP 2023)</a></li>
-                <li><a routerLink="/shipping-policy" class="transition-colors hover:text-[#FFFDFC] flex items-center gap-1.5"><i class="fa-solid fa-truck-fast text-[10px] text-[#EB9D8E]"></i> Shipping &amp; Doorstep Delivery</a></li>
-                <li><a routerLink="/refund-policy" class="transition-colors hover:text-[#FFFDFC] flex items-center gap-1.5"><i class="fa-solid fa-rotate-left text-[10px] text-[#EB9D8E]"></i> Cancellation &amp; Refunds</a></li>
-                <li><a routerLink="/grievance" class="transition-colors hover:text-[#FFFDFC] flex items-center gap-1.5"><i class="fa-solid fa-user-shield text-[10px] text-[#EB9D8E]"></i> Statutory Grievance Redressal</a></li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400 text-xs"></i> 100% Quality Checked Items</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-truck-fast text-[#EB9D8E] text-xs"></i> Safe Delivery Across India</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-box text-amber-400 text-xs"></i> Premium Gift Packaging</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-wallet text-emerald-400 text-xs"></i> Cash on Delivery Available</li>
               </ul>
             </div>
 
             <!-- Contact & Studio Column (2 cols) -->
             <div class="lg:col-span-2">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-[#EB9D8E]">Concierge</h3>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-[#EB9D8E]">Help &amp; Support</h3>
               <ul class="mt-3 space-y-2 text-xs text-[#D9C3B9]">
                 <li>
                   <a href="tel:+919284905118" class="font-semibold text-[#FFFDFC] hover:text-[#DD8776] transition-colors flex items-center gap-1.5">
-                    <i class="fa-solid fa-phone text-xs text-[#DD8776]"></i> +91 92849 05118
+                    <i class="fa-solid fa-phone text-xs text-[#DD8776]"></i> Call: +91 92849 05118
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:rmsgifthampers@gmail.com" class="font-semibold text-[#FFFDFC] hover:text-[#DD8776] transition-colors break-all flex items-center gap-1.5">
-                    <i class="fa-solid fa-envelope text-xs text-[#DD8776]"></i> rmsgifthampers&#64;gmail.com
+                  <a href="mailto:supportrmsgifthampers@gmail.com" class="font-semibold text-[#FFFDFC] hover:text-[#DD8776] transition-colors break-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-envelope text-xs text-[#DD8776]"></i> Email: supportrmsgifthampers&#64;gmail.com
                   </a>
                 </li>
                 <li class="pt-1">
@@ -380,7 +360,7 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
                     class="group inline-flex items-center gap-1.5 font-bold text-emerald-400 hover:text-white transition-colors"
                   >
                     <i class="fa-brands fa-whatsapp text-sm"></i>
-                    <span>WhatsApp Concierge</span>
+                    <span>Chat on WhatsApp</span>
                   </a>
                 </li>
                 <li class="pt-2 border-t border-white/10">
@@ -519,7 +499,7 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
 
           <!-- Unsubscribe Content -->
           <div *ngIf="legalModalType === 'unsubscribe'" class="space-y-3 text-xs leading-relaxed text-[#4A3C31] dark:text-[#C5A393]">
-            <p>You can opt out of receiving promotional emails, catalog updates, or concierge notifications at any time.</p>
+            <p>You can opt out of receiving promotional emails, catalog updates, or marketing notifications at any time.</p>
             <div class="p-3 bg-[#F7F6F3] dark:bg-[#251F1C] rounded-xl border border-[#D9C3B9]/30 space-y-2">
               <label class="block font-bold text-[#57251C] dark:text-[#F4F1ED]">Enter your registered email address:</label>
               <input type="email" [(ngModel)]="unsubscribeEmail" placeholder="name@example.com" class="w-full px-3 py-2 rounded-xl bg-white dark:bg-[#1C1917] border border-[#D9C3B9] text-xs outline-none" />
@@ -573,6 +553,7 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
 })
 export class SiteLayoutComponent {
   @Input() title = '';
+  @Input() hideFooter = false;
 
   public readonly themeService = inject(ThemeService);
   public readonly checkoutService = inject(CheckoutService);

@@ -418,3 +418,54 @@
   .border-taupe { border-color: #C5A393; }
   .border-terracotta { border-color: #C56D5B; }
 }
+
+/* ==========================================================================
+   MINIMAL TRAIL CUSTOM SCROLLBAR & NO-SCROLLBAR UTILITIES
+   ========================================================================== */
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(87, 37, 28, 0.18) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3.5px;
+  height: 3.5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(87, 37, 28, 0.15);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(87, 37, 28, 0.4);
+}
+
+.dark .custom-scrollbar {
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Zero-footprint scroll for pill rows */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+

@@ -39,7 +39,7 @@ type OrderFilter = 'all' | 'active' | 'delivered' | 'cancelled';
     <app-site-layout>
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-20">
         
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <main class=" mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
           
           <!-- Sleek Compact Page Header -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
@@ -387,9 +387,9 @@ export class MyOrdersPageComponent implements OnInit {
         this.orders = dbOrders.map((o: any) => {
           const rawStatus = (o.purchase_order_status || 'confirmed').toLowerCase();
           const formattedStatus = rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1);
-          
+
           const localMatch = localOrders.find(lo => lo.orderNo === o.purchase_order_no);
-          
+
           const nameMatch = (o.shipping_remark || '').match(/Customer:\s*([^|]+)/);
           const customerName = nameMatch ? nameMatch[1].trim() : (localMatch?.customerName || user?.name || 'Valued Customer');
 
@@ -474,15 +474,15 @@ export class MyOrdersPageComponent implements OnInit {
   getStatusDescription(status: string): string {
     switch (status) {
       case 'pending':
-        return 'Order received. Verifying your items with our gifting team.';
+        return 'Order received! We are checking your items.';
       case 'confirmed':
-        return 'Order verified! Preparing your handcrafted gift hampers.';
+        return 'Order confirmed! We are preparing your gift hamper.';
       case 'accepted':
-        return 'Order accepted and queued for artisanal packaging.';
+        return 'Order accepted! Your hamper is being packed with care.';
       case 'packed':
-        return 'Hamper is styled, ribbon-wrapped, and sealed for courier transit.';
+        return 'Packed nicely with ribbons & message card, ready for dispatch.';
       case 'shipped':
-        return 'Dispatched! Courier tracking is active and on the way.';
+        return 'Dispatched! Your parcel is on the way to your address.';
       case 'delivered':
         return 'Delivered safely! Thank you for choosing RMS Creations.';
       case 'cancelled':

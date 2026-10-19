@@ -11,7 +11,7 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
   standalone: true,
   imports: [CommonModule, FormsModule, CardComponent, ModalComponent, TableComponent],
   template: `
-    <div class="space-y-5 max-w-7xl mx-auto pb-12 transition-colors duration-300">
+    <div class="space-y-5  mx-auto pb-12 transition-colors duration-300">
       
       <!-- Top Action Bar -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -319,7 +319,7 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
 export class AdminUsersPageComponent implements OnInit {
   private supabase = inject(SupabaseService);
   private cdr = inject(ChangeDetectorRef);
-  
+
   users: any[] = [];
   filteredUsers: any[] = [];
   loading = true;
@@ -378,8 +378,8 @@ export class AdminUsersPageComponent implements OnInit {
   applyFilter() {
     this.filteredUsers = this.users.filter(u => {
       const q = this.searchQuery.toLowerCase().trim();
-      const matchSearch = !q || 
-        (u.name && u.name.toLowerCase().includes(q)) || 
+      const matchSearch = !q ||
+        (u.name && u.name.toLowerCase().includes(q)) ||
         (u.email && u.email.toLowerCase().includes(q));
       const matchRole = this.roleFilter === 'all' || u.role === this.roleFilter;
       return matchSearch && matchRole;
@@ -492,7 +492,7 @@ export class AdminUsersPageComponent implements OnInit {
 
     try {
       const { data: authData, error: authError } = await this.supabase.signUp(
-        this.newUser.email.trim(), 
+        this.newUser.email.trim(),
         this.newUser.password
       );
 

@@ -29,6 +29,7 @@ export class NotificationOutboxService {
   private readonly supabase = inject(SupabaseService);
 
   public readonly adminNotificationEmail = 'rmsgifthampers@gmail.com';
+  public readonly supportEmail = 'supportrmsgifthampers@gmail.com';
   public readonly supportPhone = '+91 9284905118';
   public readonly websiteUrl = 'https://rmscreations.netlify.app/';
 
@@ -255,7 +256,7 @@ export class NotificationOutboxService {
 
           <div style="border-top: 1px solid #EADFD2; pt: 16px; text-size: 12px; color: #7A6C5E; text-align: center;">
             <p style="margin-bottom: 4px;">Need help? Call or WhatsApp RMS Support: <strong>${this.supportPhone}</strong></p>
-            <p style="margin-top: 0;">Email: <strong>${this.adminNotificationEmail}</strong> | <a href="${this.websiteUrl}" style="color: #9C4738;">www.rmscreations.com</a></p>
+            <p style="margin-top: 0;">Email: <strong>${this.supportEmail}</strong> | <a href="${this.websiteUrl}" style="color: #9C4738;">www.rmscreations.com</a></p>
           </div>
         </div>
       </body>
@@ -294,7 +295,7 @@ export class NotificationOutboxService {
           </div>
 
           <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #7A6C5E;">
-            <p>Questions? Contact RMS Support: <strong>${this.supportPhone}</strong> or <strong>${this.adminNotificationEmail}</strong></p>
+            <p>Questions? Contact RMS Support: <strong>${this.supportPhone}</strong> or <strong>${this.supportEmail}</strong></p>
           </div>
         </div>
       </body>

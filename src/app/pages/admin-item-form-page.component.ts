@@ -4,13 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../services/supabase.service';
 import { FileUploadComponent } from '../shared/ui/file-upload.component';
+import { CustomHamperService } from '../services/custom-hamper.service';
+import { HamperMarkupConfig } from '../models/custom-hamper.model';
 
 @Component({
   selector: 'app-admin-item-form-page',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, FileUploadComponent],
   template: `
-    <div class="max-w-7xl mx-auto pb-12 space-y-4 transition-colors duration-300">
+    <div class=" mx-auto pb-12 space-y-4 transition-colors duration-300">
 
       <!-- Top Sticky Action Bar (Exact match to Product & Category Studio) -->
       <div class="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#FAF7F2]/95 dark:bg-[#1E1916]/95 backdrop-blur-md border-b border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-between gap-4">
@@ -168,7 +170,12 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
                     <input type="number" [(ngModel)]="item.price" placeholder="0" min="0" step="1"
                            class="w-full bg-white dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl pl-8 pr-3.5 py-2.5 text-sm font-serif font-bold text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738]">
                   </div>
-                  <p class="text-[10px] text-[#A89F91] mt-1">Cost of this item when added into gift boxes</p>
+                  <div class="mt-1 flex flex-col sm:flex-row sm:items-center justify-between text-[10px] gap-1">
+                    <span class="text-[#A89F91]">Base price in database</span>
+                    <span class="font-bold text-amber-700 dark:text-amber-400">
+                      Customer Price in Hamper: ₹{{ getCustomerHamperPrice(item.price) }} ({{ getCustomerHamperMarkupExplanation(item.price) }})
+                    </span>
+                  </div>
                 </div>
 
                 <!-- Stock Quantity -->
@@ -402,9 +409,14 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
 })
 export class AdminItemFormPageComponent implements OnInit {
   private supabase = inject(SupabaseService);
+  private customHamperService = inject(CustomHamperService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
+
+  readonly Number = Number;
+  hamperMarkupConfig: HamperMarkupConfig = { percent: 0, fixedAmount: 0 };
+  hamperMarkup = 0;
 
   isEdit = false;
   saving = false;
@@ -522,12 +534,36 @@ export class AdminItemFormPageComponent implements OnInit {
     return `https://dir.indiamart.com/search.mp?ss=${q}`;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    try {
+      this.hamperMarkupConfig = await this.customHamperService.getHamperMarkupConfig();
+      this.hamperMarkup = this.hamperMarkupConfig.fixedAmount;
+    } catch {
+      this.hamperMarkupConfig = { percent: 0, fixedAmount: 0 };
+      this.hamperMarkup = 0;
+    }
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEdit = true;
       this.loadItem(id);
     }
+    this.cdr.markForCheck();
+  }
+
+  getCustomerHamperPrice(price: any): number {
+    return this.customHamperService.calculateCustomerItemPrice(Number(price) || 0, this.hamperMarkupConfig);
+  }
+
+  getCustomerHamperMarkupExplanation(price: any): string {
+    const base = Number(price) || 0;
+    const pct = Math.round((base * (this.hamperMarkupConfig.percent || 0)) / 100);
+    if (this.hamperMarkupConfig.percent > 0 && this.hamperMarkupConfig.fixedAmount > 0) {
+      return `+${this.hamperMarkupConfig.percent}% [₹${pct}] + ₹${this.hamperMarkupConfig.fixedAmount}`;
+    }
+    if (this.hamperMarkupConfig.percent > 0) {
+      return `+${this.hamperMarkupConfig.percent}% [+₹${pct}]`;
+    }
+    return `+₹${this.hamperMarkupConfig.fixedAmount}`;
   }
 
   async loadItem(id: string) {

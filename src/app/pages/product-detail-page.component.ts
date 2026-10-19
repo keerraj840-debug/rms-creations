@@ -30,7 +30,7 @@ export interface ProductDetail {
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-28">
         
         <!-- BREADCRUMBS BAR -->
-        <nav aria-label="Breadcrumb" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 text-xs text-[#7A6C5E] dark:text-[#C5A393] flex items-center gap-2">
+        <nav aria-label="Breadcrumb" class=" mx-auto px-4 sm:px-6 lg:px-8 py-3.5 text-xs text-[#7A6C5E] dark:text-[#C5A393] flex items-center gap-2">
           <a routerLink="/" class="hover:text-[#9C4738] transition">Home</a>
           <span>/</span>
           <a routerLink="/shop" class="hover:text-[#9C4738] transition">Shop</a>
@@ -57,7 +57,7 @@ export interface ProductDetail {
         </div>
 
         <!-- PRODUCT DETAILS CONTAINER -->
-        <main *ngIf="!loading && product" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
+        <main *ngIf="!loading && product" class=" mx-auto px-4 sm:px-6 lg:px-8 pt-2">
           
           <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-5 sm:p-8 lg:p-10 shadow-xs">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
@@ -120,13 +120,13 @@ export interface ProductDetail {
                       Save ₹{{ product.originalPrice - product.price }}
                     </span>
                   </div>
-                  <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-1">Inclusive of all taxes. Free doorstep shipping on orders ₹499+.</p>
+                  <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-1">Inclusive of all taxes. Free delivery on orders ₹499+. Cash on Delivery available.</p>
 
                   <!-- Inclusions & Description -->
                   <div class="mt-5 pt-5 border-t border-[#EADFD2]/60 dark:border-white/10 space-y-2.5">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-[#7A6C5E] dark:text-[#C5A393]">Hamper Highlights &amp; Inclusions</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-[#7A6C5E] dark:text-[#C5A393]">What's Inside This Hamper</h3>
                     <p class="text-xs sm:text-sm text-[#4A3C31] dark:text-[#D9C3B9] leading-relaxed whitespace-pre-line">
-                      {{ product.description || 'Each hamper is individually handcrafted with premium finishes, luxury satin ribbon wrapping, and protective transit packing.' }}
+                      {{ product.description || 'Each hamper is carefully hand-packed with premium festive packaging, satin ribbons, and protective bubble wrap for safe delivery.' }}
                     </p>
                   </div>
 
@@ -134,7 +134,7 @@ export interface ProductDetail {
                   <div class="mt-5 p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 space-y-2">
                     <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">
                       <i class="fa-solid fa-location-dot text-[#9C4738] mr-1"></i>
-                      Check Delivery to Your PIN Code:
+                      Check Delivery to Your Pincode:
                     </label>
                     <div class="flex gap-2">
                       <input 
@@ -143,7 +143,7 @@ export interface ProductDetail {
                         maxlength="6"
                         [(ngModel)]="pincodeQuery" 
                         (keyup.enter)="checkPincode()"
-                        placeholder="e.g. 411038"
+                        placeholder="e.g. 400001"
                         class="flex-1 px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs font-mono font-bold text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]"
                       />
                       <button 
@@ -153,7 +153,7 @@ export interface ProductDetail {
                         class="min-h-[40px] px-4 py-2 rounded-xl bg-[#57251C] dark:bg-[#C56D5B] text-white text-xs font-bold hover:bg-[#9C4738] transition disabled:opacity-50 cursor-pointer shrink-0"
                       >
                         <i *ngIf="checkingPincode" class="fa-solid fa-spinner fa-spin mr-1"></i>
-                        <span>Check</span>
+                        <span>Check Pincode</span>
                       </button>
                     </div>
                     <div *ngIf="pincodeResult" class="text-[11px] font-medium pt-1" [ngClass]="pincodeResult.isServiceable ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-600'">
@@ -166,12 +166,12 @@ export interface ProductDetail {
                   <div class="mt-5 p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 space-y-2">
                     <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">
                       <i class="fa-solid fa-pen-nib text-[#9C4738] mr-1"></i>
-                      Complimentary Greeting Message (Optional):
+                      Free Gift Message Card (Optional):
                     </label>
                     <textarea 
                       [(ngModel)]="personalizationNote" 
                       rows="2" 
-                      placeholder="Add a personalized message to be handwritten on an elegant gift card..."
+                      placeholder="Write your wishes here (e.g. Happy Birthday / Happy Diwali from Rahul)..."
                       class="w-full p-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] text-xs outline-none focus:border-[#9C4738]"
                     ></textarea>
                   </div>
@@ -232,19 +232,19 @@ export interface ProductDetail {
                 <!-- ASSURANCE BADGES -->
                 <div class="grid grid-cols-3 gap-2.5 sm:gap-3 pt-6 border-t border-[#EADFD2]/60 dark:border-white/10 text-center text-xs">
                   <div class="p-2.5 sm:p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-xl border border-[#EADFD2]/50 dark:border-white/10">
-                    <i class="fa-solid fa-shield-heart text-base text-[#9C4738] dark:text-[#EB9D8E] mb-1 block"></i>
+                    <i class="fa-solid fa-gift text-base text-[#9C4738] dark:text-[#EB9D8E] mb-1 block"></i>
                     <span class="font-bold text-[10px] sm:text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">100% Handcrafted</span>
-                    <span class="text-[9px] sm:text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Pristine Finish</span>
+                    <span class="text-[9px] sm:text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Premium Gift Box</span>
                   </div>
                   <div class="p-2.5 sm:p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-xl border border-[#EADFD2]/50 dark:border-white/10">
                     <i class="fa-solid fa-truck-fast text-base text-[#9C4738] dark:text-[#EB9D8E] mb-1 block"></i>
-                    <span class="font-bold text-[10px] sm:text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">Secure Transit</span>
-                    <span class="text-[9px] sm:text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Damage-free Packing</span>
+                    <span class="font-bold text-[10px] sm:text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">Safe Delivery</span>
+                    <span class="text-[9px] sm:text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">No-Damage Packing</span>
                   </div>
                   <div class="p-2.5 sm:p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-xl border border-[#EADFD2]/50 dark:border-white/10">
                     <i class="fa-solid fa-wallet text-base text-[#9C4738] dark:text-[#EB9D8E] mb-1 block"></i>
-                    <span class="font-bold text-[10px] sm:text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">COD / Free UPI</span>
-                    <span class="text-[9px] sm:text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Direct &amp; Safe</span>
+                    <span class="font-bold text-[10px] sm:text-[11px] text-[#2E2825] dark:text-[#F4F1ED] block">Cash on Delivery</span>
+                    <span class="text-[9px] sm:text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Pay at Doorstep</span>
                   </div>
                 </div>
 
@@ -263,7 +263,7 @@ export interface ProductDetail {
         >
           <div>
             <span class="font-serif font-bold text-lg text-[#9C4738] dark:text-[#EB9D8E]">₹{{ product.price * quantity }}</span>
-            <span class="block text-[10px] text-emerald-600 font-bold">In Stock &bull; Free UPI / COD</span>
+            <span class="block text-[10px] text-emerald-600 font-bold">In Stock &bull; Cash on Delivery</span>
           </div>
           <button 
             type="button"
@@ -342,15 +342,24 @@ export class ProductDetailPageComponent implements OnInit, OnDestroy {
         }
 
         const extractedPrice = parseInt(p.name.match(/₹(\d+)/)?.[1] || '199', 10);
-        const price = Number(p.selling_price || p.price || (isNaN(extractedPrice) || extractedPrice <= 0 ? 199 : extractedPrice));
+        const rawPrice = Number(p.price || 0);
+        const rawSellingPrice = Number(p.selling_price || 0);
+        let finalPrice = rawSellingPrice || rawPrice || (isNaN(extractedPrice) || extractedPrice <= 0 ? 199 : extractedPrice);
+        let originalPrice: number | undefined = undefined;
+
+        if (rawPrice > 0 && rawSellingPrice > 0 && rawPrice > rawSellingPrice) {
+          finalPrice = rawSellingPrice;
+          originalPrice = rawPrice;
+        }
+
         const images = p.images && p.images.length > 0 ? p.images : ['assets/banners/banner.png'];
 
         this.product = {
           id: p.id,
           name: p.name,
           description: p.description || 'Thoughtfully curated handcrafted gift creation with premium packaging.',
-          price: price,
-          originalPrice: price < 300 ? price + 50 : Math.round(price * 1.25),
+          price: Number(finalPrice),
+          originalPrice: originalPrice || Number(finalPrice),
           category: catName,
           categoryId: p.category_id,
           image: images[0],
@@ -412,7 +421,9 @@ export class ProductDetailPageComponent implements OnInit, OnDestroy {
     this.checkingPincode = true;
     try {
       const subtotal = (this.product?.price || 0) * this.quantity;
-      this.pincodeResult = await this.pinService.checkDelivery(this.pincodeQuery.trim(), subtotal, 0.5);
+      const weight = ((this.product as any)?.weight_kg || 0.5) * this.quantity;
+      const isHamper = this.product?.category?.toLowerCase().includes('hamper') || this.product?.name?.toLowerCase().includes('hamper');
+      this.pincodeResult = await this.pinService.checkDelivery(this.pincodeQuery.trim(), subtotal, weight, !!isHamper);
     } finally {
       this.checkingPincode = false;
       this.cdr.markForCheck();

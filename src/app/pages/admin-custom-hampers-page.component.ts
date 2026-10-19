@@ -10,7 +10,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
   standalone: true,
   imports: [CommonModule, FormsModule, ModalComponent],
   template: `
-    <div class="max-w-7xl mx-auto space-y-6 pb-20">
+    <div class=" mx-auto space-y-6 pb-20">
 
       <!-- Top Action Bar / Header -->
       <div class="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-[#EADFD2]/80 dark:border-white/10">

@@ -100,7 +100,8 @@ export const routes: Routes = [
   },
   { 
     path: 'checkout', 
-    loadComponent: () => import('./pages/checkout-page.component').then(m => m.CheckoutPageComponent) 
+    redirectTo: '/cart',
+    pathMatch: 'full'
   },
   { 
     path: 'order-confirmation/:orderNo', 

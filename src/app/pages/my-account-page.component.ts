@@ -22,8 +22,8 @@ type AccountTab = 'profile' | 'addresses' | 'security';
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-20">
         
         <!-- HEADER OVERVIEW STRIP -->
-        <div class="bg-gradient-to-b from-[#F3E7DC]/80 via-[#FAF7F2] to-transparent dark:from-white/5 py-7 md:py-10 border-b border-[#EADFD2]/60 dark:border-white/10">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div class="via-[#FAF7F2] to-transparent dark:from-white/5 py-7 md:py-10 border-b border-[#EADFD2]/60 dark:border-white/10">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8 ">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
               
               <!-- Customer Identity Pill -->
@@ -84,7 +84,7 @@ type AccountTab = 'profile' | 'addresses' | 'security';
         </div>
 
         <!-- MAIN DASHBOARD CONTENT -->
-        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 max-w-7xl">
+        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 ">
 
           <!-- UN-AUTHENTICATED NOTICE -->
           <div *ngIf="!currentUser" class="py-16 text-center bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 max-w-lg mx-auto p-8 shadow-xs space-y-4">
@@ -246,7 +246,7 @@ type AccountTab = 'profile' | 'addresses' | 'security';
                   <span>Need Gifting Help?</span>
                 </div>
                 <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] leading-relaxed">
-                  Have special delivery requests or corporate hamper inquiries? Reach our concierge on WhatsApp.
+                  Have special delivery requests or corporate hamper inquiries? Chat with our team on WhatsApp.
                 </p>
                 <a
                   href="https://wa.me/919284905118?text=Hi%20RMS%20Creations!%20I%20have%20an%20inquiry%20regarding%20my%20account."

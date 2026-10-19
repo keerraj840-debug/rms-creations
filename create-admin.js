@@ -7,7 +7,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function setupAdmin() {
   console.log('Creating admin user in Supabase Auth...');
   const { data: authData, error: authError } = await supabase.auth.signUp({
-    email: 'admin@rms.com',
+    email: 'rmsgifthampers@gmail.com',
     password: 'Admin@12345!'
   });
 
@@ -18,8 +18,8 @@ async function setupAdmin() {
 
   console.log('Inserting admin role into public.users...');
   const { error: dbError } = await supabase.from('users').insert({
-    email: 'admin@rms.com',
-    name: 'Super Admin',
+    email: 'rmsgifthampers@gmail.com',
+    name: 'RMS Admin',
     role: 'admin',
     is_active: true
   });
@@ -28,7 +28,7 @@ async function setupAdmin() {
     console.error('DB Error:', dbError.message);
   } else {
     console.log('✅ Success! You can now log in with:');
-    console.log('Email: admin@rms.com');
+    console.log('Email: rmsgifthampers@gmail.com');
     console.log('Password: Admin@12345!');
   }
 }

@@ -39,7 +39,7 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-20">
 
         <!-- MAIN SHOP CONTENT -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <main class=" mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
 
           <!-- Sleek Compact Page Header -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
@@ -48,18 +48,18 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
                 Shop Gift Hampers
               </h1>
               <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
-                Handcrafted gift hampers with instant Cash on Delivery &amp; 0% Fee UPI
+                Handmade gift hampers with Cash on Delivery across India
               </p>
             </div>
             <div class="flex flex-wrap items-center gap-2 text-[11px] font-semibold text-[#7A6C5E] dark:text-[#C5A393]">
               <span class="inline-flex items-center gap-1 rounded-full bg-white dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 px-2.5 py-1 shadow-2xs">
-                <i class="fa-solid fa-truck-fast text-[#9C4738] dark:text-[#EB9D8E]"></i> Free Delivery ₹499+
+                <i class="fa-solid fa-truck-fast text-[#9C4738] dark:text-[#EB9D8E]"></i> Free Delivery on ₹499+
               </span>
               <span class="inline-flex items-center gap-1 rounded-full bg-white dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 px-2.5 py-1 shadow-2xs">
-                <i class="fa-solid fa-shield-halved text-emerald-600 dark:text-emerald-400"></i> Artisanal Quality
+                <i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400"></i> Quality Checked
               </span>
               <span class="inline-flex items-center gap-1 rounded-full bg-white dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 px-2.5 py-1 shadow-2xs">
-                <i class="fa-solid fa-bolt text-amber-600 dark:text-amber-400"></i> 24-48h Dispatch
+                <i class="fa-solid fa-shield-heart text-[#9C4738] dark:text-[#EB9D8E]"></i> Handcrafted with Care
               </span>
             </div>
           </div>
@@ -212,9 +212,7 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
                         ₹{{ product.originalPrice }}
                       </span>
                     </div>
-                    <span class="text-[9px] sm:text-[10px] font-bold text-emerald-600 flex items-center gap-1">
-                      <i class="fa-solid fa-check text-[8px]"></i> In Stock
-                    </span>
+                  
                   </div>
 
                   <!-- ADD TO CART BUTTON (Strict Ecommerce Standard: No Direct Order Bypass) -->
@@ -305,15 +303,15 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     const matched = this.availableCategories.find(c => {
       const lower = c.toLowerCase();
       return lower === clean ||
-             lower.includes(clean) ||
-             clean.includes(lower) ||
-             (clean.includes('ganpati') && lower.includes('ganpati')) ||
-             (clean.includes('return') && lower.includes('return')) ||
-             (clean.includes('girl') && lower.includes('girl')) ||
-             (clean.includes('boy') && lower.includes('boy')) ||
-             (clean.includes('chocolate') && lower.includes('chocolate')) ||
-             (clean.includes('friendship') && lower.includes('friendship')) ||
-             (clean.includes('raksha') && lower.includes('raksha'));
+        lower.includes(clean) ||
+        clean.includes(lower) ||
+        (clean.includes('ganpati') && lower.includes('ganpati')) ||
+        (clean.includes('return') && lower.includes('return')) ||
+        (clean.includes('girl') && lower.includes('girl')) ||
+        (clean.includes('boy') && lower.includes('boy')) ||
+        (clean.includes('chocolate') && lower.includes('chocolate')) ||
+        (clean.includes('friendship') && lower.includes('friendship')) ||
+        (clean.includes('raksha') && lower.includes('raksha'));
     });
     if (matched) {
       this.selectedCategory = matched;
@@ -359,15 +357,25 @@ export class ShopPageComponent implements OnInit, OnDestroy {
             const cat = catMap.get(Number(p.category_id));
             const catName = cat?.name || 'Gift Hamper';
             const extractedPrice = parseInt(p.name.match(/₹(\d+)/)?.[1] || String(cat?.price || 199), 10);
-            const price = p.selling_price || p.price || (isNaN(extractedPrice) || extractedPrice <= 0 ? 199 : extractedPrice);
+            const rawPrice = Number(p.price || 0);
+            const rawSellingPrice = Number(p.selling_price || 0);
+            let finalPrice = rawSellingPrice || rawPrice || (isNaN(extractedPrice) || extractedPrice <= 0 ? 199 : extractedPrice);
+            let originalPrice: number | undefined = undefined;
+
+            // Genuine pricing rule: only display originalPrice when database has a higher base price than the selling price
+            if (rawPrice > 0 && rawSellingPrice > 0 && rawPrice > rawSellingPrice) {
+              finalPrice = rawSellingPrice;
+              originalPrice = rawPrice;
+            }
+
             const image = (p.images && p.images[0]) || cat?.image || 'assets/banners/banner.png';
 
             return {
               id: Number(p.id),
               name: p.name,
               description: p.description || 'Thoughtfully curated handcrafted gift creation.',
-              price: Number(price),
-              originalPrice: price < 300 ? Number(price) + 50 : Math.round(Number(price) * 1.25),
+              price: Number(finalPrice),
+              originalPrice: originalPrice,
               category: catName,
               categoryId: Number(p.category_id),
               image: image,
@@ -399,8 +407,8 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         if (this.searchQuery.trim()) {
           const q = this.searchQuery.toLowerCase().trim();
           const matches = p.name.toLowerCase().includes(q) ||
-                          p.description.toLowerCase().includes(q) ||
-                          p.category.toLowerCase().includes(q);
+            p.description.toLowerCase().includes(q) ||
+            p.category.toLowerCase().includes(q);
           if (!matches) return false;
         }
 

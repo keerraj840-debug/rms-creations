@@ -24,8 +24,8 @@ export interface GalleryItem {
     <app-site-layout>
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-20">
 
-        <!-- MAIN GALLERY CONTAINER (FLUID MAX-W-7XL) -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <!-- MAIN GALLERY CONTAINER (FLUID ) -->
+        <main class=" mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
 
           <!-- Sleek Compact Page Header -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
@@ -299,8 +299,7 @@ export class GalleryPageComponent implements OnInit, OnDestroy {
           catSet.add(catName);
 
           const image = (p.images && p.images[0]) || cat?.image || 'assets/banners/banner.png';
-          const extractedPrice = parseInt(p.name.match(/₹(\d+)/)?.[1] || '199', 10);
-          const price = p.selling_price || p.price || extractedPrice;
+          const price = Number(p.selling_price || p.price || 0);
           return {
             id: p.id,
             title: p.name,

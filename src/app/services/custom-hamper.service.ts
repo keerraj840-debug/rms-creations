@@ -4,7 +4,8 @@ import { LocalStorageService } from './local-storage.service';
 import { 
   CustomHamperRequest, 
   CustomHamperRequestItem, 
-  CustomHamperStatus 
+  CustomHamperStatus,
+  HamperMarkupConfig
 } from '../models/custom-hamper.model';
 import { PurchaseOrder } from '../models/purchase-order.model';
 
@@ -471,5 +472,140 @@ export class CustomHamperService {
       list.unshift(record);
     }
     this.localStorage.setItem(this.STORAGE_KEY, list);
+  }
+
+  /**
+   * Parse hamper item markup config (% and fixed amount) from app_settings support_no text column
+   */
+  parseHamperMarkupConfig(supportNo: string | null | undefined): HamperMarkupConfig {
+    const defaultConfig: HamperMarkupConfig = { percent: 0, fixedAmount: 0 };
+    if (!supportNo) return defaultConfig;
+    try {
+      const parsed = JSON.parse(supportNo);
+      if (parsed && typeof parsed === 'object') {
+        const percent = typeof parsed['hamper_markup_percent'] === 'number'
+          ? Math.max(0, parsed['hamper_markup_percent'])
+          : 0;
+
+        let fixed = 0;
+        if (typeof parsed['hamper_markup_fixed'] === 'number') {
+          fixed = Math.max(0, parsed['hamper_markup_fixed']);
+        } else if (typeof parsed['hamper_item_markup'] === 'number') {
+          fixed = Math.max(0, parsed['hamper_item_markup']);
+        }
+
+        return { percent, fixedAmount: fixed };
+      }
+    } catch { }
+
+    const num = Number(supportNo);
+    if (!isNaN(num) && num >= 0) {
+      return { percent: 0, fixedAmount: num };
+    }
+    return defaultConfig;
+  }
+
+  /**
+   * Calculate customer display price for an item:
+   * Base Price + (Base Price * percent / 100) + fixedAmount
+   */
+  calculateCustomerItemPrice(basePrice: number | null | undefined, config: HamperMarkupConfig): number {
+    const base = Math.max(0, Number(basePrice) || 0);
+    const percentExtra = Math.round((base * (config.percent || 0)) / 100);
+    const fixedExtra = Math.max(0, Number(config.fixedAmount) || 0);
+    return base + percentExtra + fixedExtra;
+  }
+
+  /**
+   * Parse fixed hamper item markup (for backward compatibility)
+   */
+  parseHamperItemMarkup(supportNo: string | null | undefined): number {
+    return this.parseHamperMarkupConfig(supportNo).fixedAmount;
+  }
+
+  /**
+   * Get active admin-configured markup config (% and fixed ₹)
+   */
+  async getHamperMarkupConfig(): Promise<HamperMarkupConfig> {
+    try {
+      const { data, error } = await this.supabase
+        .from('app_settings')
+        .select('support_no')
+        .limit(1)
+        .single();
+      if (!error && data) {
+        return this.parseHamperMarkupConfig(data.support_no);
+      }
+    } catch { }
+    return { percent: 0, fixedAmount: 0 };
+  }
+
+  /**
+   * Get active admin-configured fixed markup amount (backward compatibility)
+   */
+  async getHamperItemMarkup(): Promise<number> {
+    const config = await this.getHamperMarkupConfig();
+    return config.fixedAmount;
+  }
+
+  /**
+   * Update admin-configured markup config (percentage % + fixed ₹) in app_settings support_no
+   */
+  async updateHamperMarkupConfig(config: HamperMarkupConfig): Promise<{ success: boolean; error?: string }> {
+    try {
+      const cleanPercent = Math.max(0, Number(config.percent) || 0);
+      const cleanFixed = Math.max(0, Number(config.fixedAmount) || 0);
+
+      const { data: current } = await this.supabase
+        .from('app_settings')
+        .select('*')
+        .limit(1)
+        .single();
+
+      let existingObj: Record<string, any> = {};
+      if (current?.support_no) {
+        try {
+          existingObj = JSON.parse(current.support_no);
+          if (typeof existingObj !== 'object' || existingObj === null) {
+            existingObj = {};
+          }
+        } catch {
+          existingObj = {};
+        }
+      }
+
+      existingObj['hamper_markup_percent'] = cleanPercent;
+      existingObj['hamper_markup_fixed'] = cleanFixed;
+      existingObj['hamper_item_markup'] = cleanFixed; // backward compatibility
+      const payloadString = JSON.stringify(existingObj);
+
+      if (current?.id) {
+        const { error } = await this.supabase
+          .from('app_settings')
+          .update({ support_no: payloadString })
+          .eq('id', current.id);
+        if (error) return { success: false, error: error.message };
+      } else {
+        const { error } = await this.supabase
+          .from('app_settings')
+          .insert([{ support_no: payloadString, is_active: true }]);
+        if (error) return { success: false, error: error.message };
+      }
+
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err?.message || 'Failed to update markup config' };
+    }
+  }
+
+  /**
+   * Update fixed markup (for backward compatibility)
+   */
+  async updateHamperItemMarkup(markup: number): Promise<{ success: boolean; error?: string }> {
+    const existing = await this.getHamperMarkupConfig();
+    return this.updateHamperMarkupConfig({
+      percent: existing.percent,
+      fixedAmount: Math.max(0, Number(markup) || 0)
+    });
   }
 }

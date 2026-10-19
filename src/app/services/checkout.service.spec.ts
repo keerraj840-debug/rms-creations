@@ -116,7 +116,7 @@ describe('CheckoutService', () => {
       'Cash on Delivery (COD)',
       'Mumbai'
     );
-    expect(emailLink).toContain('mailto:keerraj840@gmail.com');
+    expect(emailLink).toContain('mailto:supportrmsgifthampers@gmail.com');
     expect(emailLink).toContain('RMS-999999');
   });
 });

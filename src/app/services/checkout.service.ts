@@ -49,7 +49,7 @@ export class CheckoutService {
   public readonly payeeName = 'RMS Creations';
   public readonly supportPhone = '+91 92849 05118';
   public readonly supportWhatsApp = '919284905118';
-  public readonly supportEmail = 'keerraj840@gmail.com';
+  public readonly supportEmail = 'supportrmsgifthampers@gmail.com';
 
   open(item: CheckoutItem) {
     this.activeItemSubject.next({
@@ -190,7 +190,7 @@ export class CheckoutService {
       `Payment Mode: ${paymentMode}\n` +
       `Delivery Address: ${address}\n\n` +
       `Please email tracking and invoice details to: ${customerEmail}.\n\n` +
-      `RMS Creations Customer Concierge`
+      `RMS Creations Customer Support`
     );
 
     return `mailto:${this.supportEmail}?cc=${encodeURIComponent(customerEmail)}&subject=${subject}&body=${body}`;

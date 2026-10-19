@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../services/supabase.service';
 import { NotificationOutboxService } from '../services/notification-outbox.service';
 
+import { CustomHamperService } from '../services/custom-hamper.service';
+
 @Component({
   selector: 'app-admin-settings-page',
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="max-w-7xl mx-auto pb-12 space-y-4 transition-colors duration-300">
+    <div class=" mx-auto pb-12 space-y-4 transition-colors duration-300">
 
       <!-- Top Sticky Action Bar -->
       <div class="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#FAF7F2]/95 dark:bg-[#1E1916]/95 backdrop-blur-md border-b border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-between gap-4">
@@ -130,7 +132,7 @@ import { NotificationOutboxService } from '../services/notification-outbox.servi
                   <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">
                     Contact / Inquiries Email
                   </label>
-                  <input type="email" [(ngModel)]="settings.contact_email" placeholder="contact@rmscreations.com"
+                  <input type="email" [(ngModel)]="settings.contact_email" placeholder="rmsgifthampers@gmail.com"
                          class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738] outline-none">
                 </div>
 
@@ -138,7 +140,7 @@ import { NotificationOutboxService } from '../services/notification-outbox.servi
                   <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">
                     Customer Support Email
                   </label>
-                  <input type="email" [(ngModel)]="settings.support_email" placeholder="support@rmscreations.com"
+                  <input type="email" [(ngModel)]="settings.support_email" placeholder="supportrmsgifthampers@gmail.com"
                          class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738] outline-none">
                 </div>
               </div>
@@ -270,6 +272,57 @@ import { NotificationOutboxService } from '../services/notification-outbox.servi
               </div>
             </div>
 
+            <!-- 6. Build Hamper Pricing Markup Config -->
+            <div class="space-y-4 pt-2">
+              <div class="border-b border-[#EADFD2]/60 dark:border-white/10 pb-2">
+                <h2 class="text-xs font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider flex items-center gap-2">
+                  <i class="fa-solid fa-gift text-[#9C4738]"></i>
+                  <span>Build Hamper Item Markup / Surcharge</span>
+                </h2>
+              </div>
+
+              <div class="p-4 bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 rounded-2xl space-y-3">
+                <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393] leading-relaxed">
+                  Enter the extra value/margin to add to each treat in the customer Build Hamper studio:
+                  <strong class="text-[#4A3C31] dark:text-[#F4F1ED]">Customer Price = Base Cost + Markup % + Fixed ₹</strong>.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-[11px] font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+                      Percentage Markup (%)
+                    </label>
+                    <div class="relative w-full">
+                      <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-[#7A6C5E]">%</span>
+                      <input type="number" [(ngModel)]="settings.hamper_markup_percent" min="0" step="1" placeholder="0"
+                             class="w-full bg-white dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl pl-3 pr-8 py-2 text-xs font-serif font-bold text-[#4A3C31] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+                      Fixed Surcharge per Item (₹)
+                    </label>
+                    <div class="relative w-full">
+                      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#7A6C5E] font-serif">₹</span>
+                      <input type="number" [(ngModel)]="settings.hamper_markup_fixed" min="0" step="1" placeholder="0"
+                             class="w-full bg-white dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl pl-8 pr-3 py-2 text-xs font-serif font-bold text-[#4A3C31] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Live Preview Pill -->
+                <div class="p-2.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-800/40 text-[11px] text-amber-900 dark:text-amber-200 flex items-center gap-2">
+                  <i class="fa-solid fa-calculator text-amber-600"></i>
+                  <span>
+                    Preview: A ₹100 treat will display to customers as 
+                    <strong>₹{{ calculatePreviewPrice(100) }}</strong> 
+                    (₹100 + {{ settings.hamper_markup_percent || 0 }}% [₹{{ getPercentPreview(100) }}] + ₹{{ settings.hamper_markup_fixed || 0 }}).
+                  </span>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           <!-- RIGHT COLUMN: Live Contact Preview & Concierge Simulation (5 Cols) -->
@@ -366,6 +419,7 @@ import { NotificationOutboxService } from '../services/notification-outbox.servi
 export class AdminSettingsPageComponent implements OnInit {
   private supabase = inject(SupabaseService);
   private outboxService = inject(NotificationOutboxService);
+  private customHamperService = inject(CustomHamperService);
   private cdr = inject(ChangeDetectorRef);
 
   settings: any = {
@@ -373,8 +427,11 @@ export class AdminSettingsPageComponent implements OnInit {
     under_maintenance: false,
     contact_no: '+91 92849 05118',
     support_no: null,
-    support_email: 'support@rmscreations.com',
-    contact_email: 'contact@rmscreations.com',
+    hamper_item_markup: 0,
+    hamper_markup_percent: 0,
+    hamper_markup_fixed: 0,
+    support_email: 'supportrmsgifthampers@gmail.com',
+    contact_email: 'rmsgifthampers@gmail.com',
     address: 'Maharashtra, India',
     whatsapp_no: '919284905118',
     instagram_user_id: '',
@@ -448,6 +505,10 @@ export class AdminSettingsPageComponent implements OnInit {
       const { data, error } = await this.supabase.from('app_settings').select('*').limit(1).single();
       if (data) {
         this.settings = { ...data };
+        const cfg = this.customHamperService.parseHamperMarkupConfig(data.support_no);
+        this.settings.hamper_markup_percent = cfg.percent;
+        this.settings.hamper_markup_fixed = cfg.fixedAmount;
+        this.settings.hamper_item_markup = cfg.fixedAmount;
       } else if (error) {
         console.warn('Could not load app_settings:', error.message);
       }
@@ -466,11 +527,26 @@ export class AdminSettingsPageComponent implements OnInit {
     this.cdr.markForCheck();
 
     try {
+      let existingSupportObj: Record<string, any> = {};
+      if (this.settings.support_no) {
+        try {
+          existingSupportObj = JSON.parse(this.settings.support_no);
+          if (typeof existingSupportObj !== 'object' || existingSupportObj === null) {
+            existingSupportObj = {};
+          }
+        } catch {
+          existingSupportObj = {};
+        }
+      }
+      existingSupportObj['hamper_markup_percent'] = Math.max(0, Number(this.settings.hamper_markup_percent) || 0);
+      existingSupportObj['hamper_markup_fixed'] = Math.max(0, Number(this.settings.hamper_markup_fixed) || 0);
+      existingSupportObj['hamper_item_markup'] = Math.max(0, Number(this.settings.hamper_markup_fixed) || 0);
+
       const payload: any = {
         is_app_live: Boolean(this.settings.is_app_live),
         under_maintenance: Boolean(this.settings.under_maintenance),
         contact_no: this.settings.contact_no?.trim() || null,
-        support_no: this.settings.support_no?.trim() || null,
+        support_no: JSON.stringify(existingSupportObj),
         support_email: this.settings.support_email?.trim() || null,
         contact_email: this.settings.contact_email?.trim() || null,
         address: this.settings.address?.trim() || null,
@@ -508,4 +584,16 @@ export class AdminSettingsPageComponent implements OnInit {
       this.cdr.markForCheck();
     }
   }
+
+  getPercentPreview(base: number): number {
+    return Math.round((base * (this.settings.hamper_markup_percent || 0)) / 100);
+  }
+
+  calculatePreviewPrice(base: number): number {
+    return this.customHamperService.calculateCustomerItemPrice(base, {
+      percent: this.settings.hamper_markup_percent || 0,
+      fixedAmount: this.settings.hamper_markup_fixed || 0
+    });
+  }
 }
+

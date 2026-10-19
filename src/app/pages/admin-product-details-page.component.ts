@@ -7,13 +7,14 @@ import { CardComponent } from '../shared/ui/card.component';
 import { ModalComponent } from '../shared/ui/modal.component';
 import { InputComponent } from '../shared/ui/input.component';
 import { TableComponent, TableColumn } from '../shared/ui/table.component';
+import { CustomHamperService } from '../services/custom-hamper.service';
 
 @Component({
   selector: 'app-admin-product-details-page',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, CardComponent, ModalComponent, InputComponent, TableComponent],
   template: `
-    <div class="space-y-5 max-w-7xl mx-auto pb-12 transition-colors duration-300">
+    <div class="space-y-5  mx-auto pb-12 transition-colors duration-300">
       
       <!-- Header with Summary and Actions -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -80,6 +81,62 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
             <p class="text-[10px] font-bold uppercase tracking-wider text-[#7A6C5E] dark:text-[#C5A393]">Average Item Price</p>
             <p class="text-lg font-serif font-bold text-[#3B2F2F] dark:text-[#F4F1ED]">₹{{ averageUnitCost }}</p>
           </div>
+        </div>
+      </div>
+
+      <!-- BUILD HAMPER MARKUP CONFIG BAR -->
+      <div class="bg-gradient-to-r from-amber-50 to-[#FAF7F2] dark:from-[#251F1C] dark:to-[#1E1916] border border-amber-200/80 dark:border-white/10 rounded-2xl p-4 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-white/10 text-amber-700 dark:text-amber-300 flex items-center justify-center text-base shrink-0 mt-0.5">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-bold text-xs sm:text-sm text-[#3B2F2F] dark:text-[#F4F1ED]">
+                Build Hamper Item Markup (% + Fixed ₹)
+              </h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200">
+                Live on Website
+              </span>
+            </div>
+            <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393] mt-0.5">
+              Configurable extra amount added to each treat inside Build Hamper: 
+              <span class="font-bold text-[#4A3C31] dark:text-[#F4F1ED]">
+                Customer Price = Base Cost + {{ hamperMarkupPercent }}% + ₹{{ hamperMarkupFixed }}
+              </span>
+            </p>
+            <p *ngIf="markupSavedToast" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1 animate-in fade-in">
+              <i class="fa-solid fa-circle-check"></i> <span>{{ markupSavedToast }}</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <div class="flex items-center gap-2">
+            <!-- Percent markup input -->
+            <div class="relative w-24">
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-500">%</span>
+              <input type="number" [(ngModel)]="hamperMarkupPercent" min="0" step="1"
+                     placeholder="0" title="Percentage markup"
+                     class="w-full bg-white dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl pl-3 pr-7 py-1.5 text-xs font-serif font-bold text-[#4A3C31] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]">
+            </div>
+
+            <span class="text-xs font-bold text-stone-400">+</span>
+
+            <!-- Fixed markup input -->
+            <div class="relative w-28">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-serif font-bold text-stone-500">₹</span>
+              <input type="number" [(ngModel)]="hamperMarkupFixed" min="0" step="1"
+                     placeholder="0" title="Fixed amount markup"
+                     class="w-full bg-white dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl pl-7 pr-3 py-1.5 text-xs font-serif font-bold text-[#4A3C31] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738]">
+            </div>
+          </div>
+
+          <button type="button" (click)="saveHamperMarkup()" [disabled]="savingMarkup"
+                  class="px-3.5 py-1.5 rounded-xl bg-[#57251C] hover:bg-[#3D1A13] text-white text-xs font-bold transition-all disabled:opacity-40 flex items-center gap-1.5 cursor-pointer shadow-2xs">
+            <span *ngIf="savingMarkup" class="animate-spin h-3 w-3 border-2 border-white border-t-transparent rounded-full"></span>
+            <span>{{ savingMarkup ? 'Saving...' : 'Save Markup' }}</span>
+          </button>
         </div>
       </div>
 
@@ -233,15 +290,24 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
               </a>
             </td>
 
-            <!-- Description / Notes -->
-            <td class="px-6 py-3.5 text-[#7A6C5E] dark:text-[#C5A393] text-xs truncate max-w-xs">
-              {{ d.description || '—' }}
+            <!-- Base Cost (₹) -->
+            <td class="px-6 py-3.5">
+              <span class="font-bold font-serif text-xs text-[#2E2825] dark:text-[#F4F1ED]">
+                ₹{{ d.price || 0 }}
+              </span>
             </td>
 
-            <!-- Unit Cost (₹) with in-place click to edit -->
+            <!-- Markup (% + ₹) -->
             <td class="px-6 py-3.5">
-              <span class="font-bold font-serif text-xs sm:text-sm text-[#2E2825] dark:text-[#F4F1ED]">
-                ₹{{ d.price || 0 }}
+              <span class="text-xs font-mono font-medium text-amber-700 dark:text-amber-400">
+                {{ getMarkupDisplay(d.price) }}
+              </span>
+            </td>
+
+            <!-- Customer Hamper Price (₹) -->
+            <td class="px-6 py-3.5">
+              <span class="px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-[#57251C] dark:text-amber-200 font-bold font-mono text-xs border border-stone-200 dark:border-stone-700 inline-flex items-center gap-1">
+                <span>₹{{ getCustomerPrice(d.price) }}</span>
               </span>
             </td>
 
@@ -461,7 +527,34 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
 })
 export class AdminProductDetailsPageComponent implements OnInit {
   private supabase = inject(SupabaseService);
+  private customHamperService = inject(CustomHamperService);
   private cdr = inject(ChangeDetectorRef);
+
+  readonly Number = Number;
+  hamperMarkupPercent = 0;
+  hamperMarkupFixed = 0;
+  hamperMarkup = 0;
+  savingMarkup = false;
+  markupSavedToast = '';
+
+  getMarkupDisplay(price: any): string {
+    const base = Number(price) || 0;
+    const pct = Math.round((base * (this.hamperMarkupPercent || 0)) / 100);
+    if (this.hamperMarkupPercent > 0 && this.hamperMarkupFixed > 0) {
+      return `+${this.hamperMarkupPercent}% (₹${pct}) + ₹${this.hamperMarkupFixed}`;
+    }
+    if (this.hamperMarkupPercent > 0) {
+      return `+${this.hamperMarkupPercent}% (+₹${pct})`;
+    }
+    return `+₹${this.hamperMarkupFixed}`;
+  }
+
+  getCustomerPrice(price: any): number {
+    return this.customHamperService.calculateCustomerItemPrice(Number(price) || 0, {
+      percent: this.hamperMarkupPercent,
+      fixedAmount: this.hamperMarkupFixed
+    });
+  }
 
   @ViewChild('quickNameInput') quickNameInput?: ElementRef<HTMLInputElement>;
 
@@ -513,12 +606,13 @@ export class AdminProductDetailsPageComponent implements OnInit {
   sortBy: 'name' | 'price_asc' | 'price_desc' | 'newest' = 'name';
 
   columns: TableColumn[] = [
-    { label: 'Component Name', width: '28%' },
-    { label: 'Description / Notes', width: '24%' },
-    { label: 'Unit Cost', width: '14%' },
-    { label: 'Stock Qty', width: '14%' },
+    { label: 'Component Name', width: '25%' },
+    { label: 'Base Cost', width: '12%' },
+    { label: 'Markup', width: '12%' },
+    { label: 'Customer Hamper Price', width: '17%' },
+    { label: 'Stock Qty', width: '12%' },
     { label: 'Status', width: '10%' },
-    { label: 'Actions', width: '10%', align: 'right' }
+    { label: 'Actions', width: '12%', align: 'right' }
   ];
 
   get activeDetailsCount(): number {
@@ -650,8 +744,51 @@ export class AdminProductDetailsPageComponent implements OnInit {
     return items;
   }
 
-  ngOnInit() {
-    this.fetchDetails();
+  async ngOnInit() {
+    await Promise.all([
+      this.loadHamperMarkup(),
+      this.fetchDetails()
+    ]);
+  }
+
+  async loadHamperMarkup() {
+    try {
+      const cfg = await this.customHamperService.getHamperMarkupConfig();
+      this.hamperMarkupPercent = cfg.percent;
+      this.hamperMarkupFixed = cfg.fixedAmount;
+      this.hamperMarkup = cfg.fixedAmount;
+    } catch {
+      this.hamperMarkupPercent = 0;
+      this.hamperMarkupFixed = 0;
+      this.hamperMarkup = 0;
+    } finally {
+      this.cdr.markForCheck();
+    }
+  }
+
+  async saveHamperMarkup() {
+    this.savingMarkup = true;
+    this.markupSavedToast = '';
+    this.cdr.markForCheck();
+    try {
+      const res = await this.customHamperService.updateHamperMarkupConfig({
+        percent: this.hamperMarkupPercent,
+        fixedAmount: this.hamperMarkupFixed
+      });
+      if (res.success) {
+        this.hamperMarkup = this.hamperMarkupFixed;
+        this.markupSavedToast = `Hamper markup updated! Customer Price = Base Cost + ${this.hamperMarkupPercent}% + ₹${this.hamperMarkupFixed}`;
+        setTimeout(() => {
+          this.markupSavedToast = '';
+          this.cdr.markForCheck();
+        }, 4000);
+      }
+    } catch {
+      // Error handled
+    } finally {
+      this.savingMarkup = false;
+      this.cdr.markForCheck();
+    }
   }
 
   async fetchDetails() {

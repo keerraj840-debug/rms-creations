@@ -227,4 +227,33 @@ describe('CustomHamperService (Build Your Own Hamper & Consultation Flow)', () =
     expect(updated?.converted_order_no).toBeUndefined();
     expect(updated?.customer_notes).toContain('[Customer Declined: Over budget]');
   });
+
+  it('correctly parses hamper item markup from JSON string or raw number string', () => {
+    expect(service.parseHamperItemMarkup(null)).toBe(0);
+    expect(service.parseHamperItemMarkup('')).toBe(0);
+    expect(service.parseHamperItemMarkup('15')).toBe(15);
+    expect(service.parseHamperItemMarkup('{"hamper_item_markup":25}')).toBe(25);
+    expect(service.parseHamperItemMarkup('{"other_prop":10}')).toBe(0);
+    expect(service.parseHamperItemMarkup('-5')).toBe(0);
+  });
+
+  it('correctly parses percent and fixed amount markup config and calculates customer price', () => {
+    const config1 = service.parseHamperMarkupConfig('{"hamper_markup_percent":10,"hamper_markup_fixed":20}');
+    expect(config1.percent).toBe(10);
+    expect(config1.fixedAmount).toBe(20);
+
+    // ₹100 base + 10% (₹10) + ₹20 fixed = ₹130
+    expect(service.calculateCustomerItemPrice(100, config1)).toBe(130);
+
+    // ₹250 base + 10% (₹25) + ₹20 fixed = ₹295
+    expect(service.calculateCustomerItemPrice(250, config1)).toBe(295);
+
+    // Only percent: 15% and ₹0 fixed
+    const configPercentOnly = { percent: 15, fixedAmount: 0 };
+    expect(service.calculateCustomerItemPrice(200, configPercentOnly)).toBe(230);
+
+    // Only fixed: 0% and ₹50 fixed
+    const configFixedOnly = { percent: 0, fixedAmount: 50 };
+    expect(service.calculateCustomerItemPrice(200, configFixedOnly)).toBe(250);
+  });
 });
