@@ -234,4 +234,12 @@ describe('BuildHamperPageComponent (Simulation Studio & AI Stylist)', () => {
     expect(component.showSuccessModal).toBe(true);
     expect(component.createdRequestNo).toBe('CST-2026-TEST');
   });
+
+  it('should support switching between catalogue and box views on mobile', () => {
+    expect(component.mobileTab).toBe('catalogue');
+    component.mobileTab = 'box';
+    expect(component.mobileTab).toBe('box');
+    component.mobileTab = 'catalogue';
+    expect(component.mobileTab).toBe('catalogue');
+  });
 });

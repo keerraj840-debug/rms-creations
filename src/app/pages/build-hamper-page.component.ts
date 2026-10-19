@@ -32,17 +32,18 @@ interface ItemVisualMeta {
       <div class="h-full flex-1 flex flex-col min-h-0 bg-[#FAF7F2] dark:bg-[#14100E] text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-200 font-sans pb-24 lg:pb-0 overflow-x-hidden lg:overflow-hidden">
 
         <!-- COMPACT STUDIO HEADER: Occasions, Quick Mixes & Included Perks in 1 Slim Bar -->
-        <header class="shrink-0 bg-white dark:bg-[#1A1614] border-b border-[#EADFD2] dark:border-stone-800 shadow-2xs z-20 px-4 sm:px-6 py-2.5">
-          <div class=" mx-auto flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+        <header class="shrink-0 bg-white dark:bg-[#1A1614] border-b border-[#EADFD2] dark:border-stone-800 shadow-2xs z-20 px-3 sm:px-6 py-2">
+          <div class="mx-auto flex flex-col md:flex-row md:items-center justify-between gap-2">
 
             <!-- Title & Occasions -->
-            <div class="flex items-center gap-3 overflow-hidden">
+            <div class="flex items-center gap-2 overflow-hidden w-full md:w-auto justify-between md:justify-start">
               <div class="shrink-0 hidden sm:flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#57251C] dark:text-[#D9C3B9]">
                 <i class="fa-solid fa-gift"></i>
                 <span class="font-bold text-xs sm:text-sm text-stone-900 dark:text-stone-100 normal-case">Occasion:</span>
               </div>
 
-              <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 custom-scrollbar max-w-full">
+              <!-- Occasion Pills Scroll -->
+              <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 custom-scrollbar min-w-0 flex-1 md:flex-none">
                 <button
                   type="button"
                   *ngFor="let occ of occasions"
@@ -53,10 +54,24 @@ interface ItemVisualMeta {
                   {{ occ }}
                 </button>
               </div>
+
+              <!-- Mobile Quick Mixes Pill Toggle -->
+              <button
+                type="button"
+                (click)="isMobileCombosOpen = !isMobileCombosOpen"
+                class="md:hidden shrink-0 px-2.5 py-1 rounded-full text-xs font-bold border border-amber-600/40 bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 transition cursor-pointer flex items-center gap-1 whitespace-nowrap"
+                [attr.aria-expanded]="isMobileCombosOpen"
+              >
+                <span>✨ Mixes</span>
+                <i class="fa-solid text-[9px]" [ngClass]="isMobileCombosOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+              </button>
             </div>
 
-            <!-- 1-Click Starter Combos & Quick Mixes -->
-            <div class="flex items-center gap-2 shrink-0 overflow-x-auto py-0.5 custom-scrollbar justify-between md:justify-end">
+            <!-- Combos Row: Always visible on desktop (md:), collapsible on mobile -->
+            <div
+              class="items-center gap-2 shrink-0 overflow-x-auto py-0.5 custom-scrollbar justify-between md:justify-end"
+              [ngClass]="isMobileCombosOpen ? 'flex' : 'hidden md:flex'"
+            >
               <div class="flex items-center gap-1.5 shrink-0">
                 <span class="text-[11px] font-bold text-stone-500 uppercase tracking-wider hidden xl:inline">Popular Combos:</span>
                 <button
@@ -82,21 +97,55 @@ interface ItemVisualMeta {
 
           </div>
 
-          <div *ngIf="aiCurationActiveMessage" class=" mx-auto mt-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 animate-fade-in flex items-center gap-1.5">
+          <div *ngIf="aiCurationActiveMessage" class="mx-auto mt-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 animate-fade-in flex items-center gap-1.5">
             <i class="fa-solid fa-circle-check"></i>
             <span>{{ aiCurationActiveMessage }}</span>
           </div>
         </header>
 
+        <!-- MOBILE VIEW SWITCHER TABS (1. Choose Items vs. 2. Hamper Box) -->
+        <div class="lg:hidden shrink-0 px-3 pt-2 pb-1.5 bg-[#FAF7F2] dark:bg-[#14100E] border-b border-[#EADFD2] dark:border-stone-800">
+          <div class="flex items-center p-1 bg-stone-200/70 dark:bg-stone-900 rounded-2xl border border-stone-300/60 dark:border-stone-800 shadow-2xs">
+            <button
+              type="button"
+              (click)="mobileTab = 'catalogue'"
+              class="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+              [ngClass]="mobileTab === 'catalogue' ? 'bg-[#57251C] text-white shadow-xs' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'"
+            >
+              <i class="fa-solid fa-cookie-bite text-[11px]"></i>
+              <span>1. Choose Items</span>
+            </button>
+            <button
+              type="button"
+              (click)="mobileTab = 'box'"
+              class="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer relative"
+              [ngClass]="mobileTab === 'box' ? 'bg-[#57251C] text-white shadow-xs' : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'"
+            >
+              <i class="fa-solid fa-gift text-[11px]"></i>
+              <span>2. My Hamper Box</span>
+              <span
+                *ngIf="totalItemsCount > 0"
+                class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-extrabold leading-tight"
+                [ngClass]="mobileTab === 'box' ? 'bg-white text-[#57251C]' : 'bg-[#57251C] text-white'"
+              >
+                {{ totalItemsCount }}
+              </span>
+            </button>
+          </div>
+        </div>
+
         <!-- MAIN WORKSPACE: Fits 100% on desktop screen without page scrolling -->
-        <main class="flex-1 min-h-0 w-full mx-auto px-3 sm:px-6 py-3 overflow-hidden">
+        <main class="flex-1 min-h-0 w-full mx-auto px-3 sm:px-6 py-2 sm:py-3 overflow-hidden">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 h-full items-stretch">
 
-            <!-- LEFT: ITEMS CATALOGUE (7 COLS ON DESKTOP) -->
-            <section class="lg:col-span-7 h-full flex flex-col min-h-0 overflow-hidden">
+            <!-- LEFT: ITEMS CATALOGUE (7 COLS ON DESKTOP, TOGGLED ON MOBILE) -->
+            <section
+              class="lg:col-span-7 h-full flex-col min-h-0 overflow-hidden"
+              [ngClass]="mobileTab === 'catalogue' ? 'flex' : 'hidden lg:flex'"
+            >
 
               <!-- Filter Tabs & Search Bar -->
-              <div class="shrink-0 pb-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="shrink-0 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                 <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 custom-scrollbar">
                   <button
                     type="button"
@@ -114,9 +163,18 @@ interface ItemVisualMeta {
                   <input
                     type="text"
                     [(ngModel)]="catalogueSearchQuery"
-                    placeholder="Search sweets, nuts, snacks, diyas..."
-                    class="w-full pl-8 pr-3 py-1 text-xs rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 focus:outline-hidden focus:border-[#57251C] dark:text-[#F4F1ED]"
+                    placeholder="Search sweets, nuts, snacks..."
+                    class="w-full pl-8 pr-7 py-1 text-xs rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 focus:outline-hidden focus:border-[#57251C] dark:text-[#F4F1ED]"
                   >
+                  <button
+                    *ngIf="catalogueSearchQuery"
+                    type="button"
+                    (click)="catalogueSearchQuery = ''"
+                    class="absolute right-2.5 top-2 text-xs text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 cursor-pointer"
+                    aria-label="Clear search"
+                  >
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
                 </div>
               </div>
 
@@ -136,20 +194,20 @@ interface ItemVisualMeta {
               </div>
 
               <!-- Scrollable Items Grid: Responsive cards with dedicated smooth scroll -->
-              <div *ngIf="!isLoadingItems && filteredCatalogueProducts.length > 0" class="flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar space-y-3 pb-4">
+              <div *ngIf="!isLoadingItems && filteredCatalogueProducts.length > 0" class="flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar space-y-3 pb-36 sm:pb-40 lg:pb-4">
                 <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-2">
                   <div
                     *ngFor="let item of filteredCatalogueProducts"
-                    class="p-2 rounded-2xl border bg-white dark:bg-[#1E1916] transition-all flex flex-col justify-between gap-2.5 group"
-                    [ngClass]="isItemInHamper(item.uid) ? 'border-[#57251C] ring-1 ring-[#57251C]/20 bg-stone-50/50 dark:bg-stone-900/50' : 'border-stone-200 dark:border-stone-800 hover:border-stone-400'"
+                    class="p-2.5 rounded-2xl border bg-white dark:bg-[#1E1916] transition-all flex flex-col justify-between gap-2.5 group shadow-2xs hover:shadow-xs"
+                    [ngClass]="isItemInHamper(item.uid) ? 'border-[#57251C] ring-1 ring-[#57251C]/25 bg-amber-50/20 dark:bg-stone-900/60' : 'border-stone-200 dark:border-stone-800 hover:border-stone-400'"
                   >
                     <!-- Visual & Title -->
                     <div class="flex items-start gap-2 min-w-0">
-                      <div class="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm bg-stone-100 dark:bg-stone-800 text-[#57251C] dark:text-[#D9C3B9] group-hover:scale-105 transition-transform">
+                      <div class="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm bg-[#FAF7F2] dark:bg-stone-800 text-[#57251C] dark:text-[#EB9D8E] group-hover:scale-105 transition-transform">
                         <i [class]="getItemVisual(item.name).icon"></i>
                       </div>
                       <div class="min-w-0 flex-1">
-                        <h3 class="text-xs font-semibold text-stone-900 dark:text-stone-100 truncate" [title]="item.name">
+                        <h3 class="text-xs font-bold text-stone-900 dark:text-stone-100 truncate" [title]="item.name">
                           {{ item.name }}
                         </h3>
                         <span class="text-[10px] text-stone-500 dark:text-stone-400 block truncate font-medium">
@@ -160,7 +218,7 @@ interface ItemVisualMeta {
 
                     <!-- Price & Action -->
                     <div class="flex items-center justify-between pt-1.5 border-t border-stone-100 dark:border-stone-800">
-                      <span class="text-xs font-mono font-bold text-stone-900 dark:text-stone-100">
+                      <span class="text-xs font-mono font-bold text-[#57251C] dark:text-[#EB9D8E]">
                         ₹{{ item.price }}
                       </span>
 
@@ -170,29 +228,29 @@ interface ItemVisualMeta {
                           *ngIf="!isItemInHamper(item.uid)"
                           type="button"
                           (click)="addCatalogueItemToHamper(item)"
-                          class="px-2.5 py-1 rounded-xl border border-[#57251C] hover:bg-[#57251C] hover:text-white text-[#57251C] dark:text-[#D9C3B9] text-xs font-bold transition cursor-pointer active:scale-95 flex items-center gap-1 shadow-2xs"
+                          class="px-2.5 py-1 rounded-xl border border-[#57251C] bg-[#57251C]/5 hover:bg-[#57251C] hover:text-white text-[#57251C] dark:text-[#EB9D8E] dark:hover:text-white text-xs font-bold transition cursor-pointer active:scale-95 flex items-center gap-1 shadow-2xs"
                         >
                           <i class="fa-solid fa-plus text-[9px]"></i>
                           <span>Add</span>
                         </button>
 
                         <!-- Micro Stepper -->
-                        <div *ngIf="isItemInHamper(item.uid)" class="flex items-center gap-1 bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 rounded-xl p-0.5">
+                        <div *ngIf="isItemInHamper(item.uid)" class="flex items-center gap-0.5 bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 rounded-xl p-0.5 shadow-2xs">
                           <button
                             type="button"
                             (click)="decreaseHamperQuantity(item.uid)"
-                            class="w-5 h-5 rounded-lg bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-rose-600 flex items-center justify-center cursor-pointer active:scale-90"
+                            class="w-6 h-6 rounded-lg bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-rose-600 flex items-center justify-center cursor-pointer active:scale-90"
                             aria-label="Decrease quantity"
                           >
                             -
                           </button>
-                          <span class="text-xs font-bold text-stone-900 dark:text-stone-100 px-1 font-mono min-w-3 text-center">
+                          <span class="text-xs font-bold text-stone-900 dark:text-stone-100 px-1 font-mono min-w-[18px] text-center">
                             {{ getHamperItemQuantity(item.uid) }}
                           </span>
                           <button
                             type="button"
                             (click)="increaseHamperQuantity(item.uid)"
-                            class="w-5 h-5 rounded-lg bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-emerald-600 flex items-center justify-center cursor-pointer active:scale-90"
+                            class="w-6 h-6 rounded-lg bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-emerald-600 flex items-center justify-center cursor-pointer active:scale-90"
                             aria-label="Increase quantity"
                           >
                             +
@@ -252,9 +310,27 @@ interface ItemVisualMeta {
 
             </section>
 
-            <!-- RIGHT: GIFT BOX TRAY (5 COLS ON DESKTOP - FITS 100% WITHIN SCREEN) -->
-            <aside class="hidden lg:flex lg:col-span-5 h-full flex-col min-h-0 overflow-hidden">
-              <ng-container *ngTemplateOutlet="giftBoxSimulationTemplate"></ng-container>
+            <!-- RIGHT: GIFT BOX TRAY (5 COLS ON DESKTOP, TOGGLED ON MOBILE) -->
+            <aside
+              class="lg:col-span-5 h-full flex-col min-h-0 overflow-hidden"
+              [ngClass]="mobileTab === 'box' ? 'flex' : 'hidden lg:flex'"
+            >
+              <!-- Back to items banner on mobile -->
+              <div class="lg:hidden shrink-0 pb-2 flex items-center justify-between">
+                <button
+                  type="button"
+                  (click)="mobileTab = 'catalogue'"
+                  class="text-xs font-bold text-[#57251C] dark:text-[#EB9D8E] flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-2xs active:scale-95 cursor-pointer"
+                >
+                  <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                  <span>Add More Treats</span>
+                </button>
+                <span class="text-[11px] text-stone-500 font-medium">Step 2: Review Inclusions</span>
+              </div>
+
+              <div class="flex-1 min-h-0 overflow-hidden">
+                <ng-container *ngTemplateOutlet="giftBoxSimulationTemplate"></ng-container>
+              </div>
             </aside>
 
           </div>
@@ -294,7 +370,7 @@ interface ItemVisualMeta {
             <div class="flex-1 min-h-0 overflow-y-auto custom-scrollbar my-2 p-2 rounded-2xl border border-stone-200 dark:border-stone-800 bg-[#FAF7F2] dark:bg-stone-900/60">
 
               <!-- Empty State -->
-              <div *ngIf="hamperItems.length === 0" class="h-full flex flex-col items-center justify-center py-6 text-center space-y-1.5">
+              <div *ngIf="hamperItems.length === 0" class="h-full flex flex-col items-center justify-center py-6 text-center space-y-2">
                 <div class="w-10 h-10 rounded-xl bg-white dark:bg-stone-800 text-stone-300 dark:text-stone-600 flex items-center justify-center text-lg shadow-2xs">
                   <i class="fa-solid fa-basket-shopping"></i>
                 </div>
@@ -302,6 +378,14 @@ interface ItemVisualMeta {
                 <p class="text-[10px] text-stone-500 max-w-xs">
                   Click "+ Add" on items to create your custom gift box.
                 </p>
+                <button
+                  type="button"
+                  (click)="mobileTab = 'catalogue'"
+                  class="mt-1.5 px-3.5 py-1.5 rounded-xl bg-[#57251C] text-white text-xs font-bold hover:bg-[#3D1A13] transition cursor-pointer shadow-xs active:scale-95 flex items-center gap-1.5"
+                >
+                  <i class="fa-solid fa-cookie-bite text-[10px]"></i>
+                  <span>Browse Treats to Add &rarr;</span>
+                </button>
               </div>
 
               <!-- Filled Items Rows -->
@@ -421,35 +505,28 @@ interface ItemVisualMeta {
           </div>
         </ng-template>
 
-        <!-- MOBILE STICKY FLOATING BOTTOM BAR -->
+        <!-- MOBILE STICKY FLOATING BOTTOM BAR: Floats smoothly ABOVE the sticky mobile bottom navigation bar -->
         <aside
-          *ngIf="hamperItems.length > 0"
-          class="lg:hidden fixed bottom-4 inset-x-3 z-40 bg-[#57251C] text-white p-3 rounded-2xl shadow-xl flex items-center justify-between gap-3 animate-fade-in"
+          *ngIf="hamperItems.length > 0 && mobileTab === 'catalogue'"
+          class="lg:hidden fixed bottom-[68px] sm:bottom-20 inset-x-3 z-40 bg-[#57251C] dark:bg-[#1E1916] text-white p-3 rounded-2xl shadow-2xl border border-white/15 dark:border-white/10 flex items-center justify-between gap-3 animate-fade-in backdrop-blur-md"
         >
           <div class="min-w-0">
-            <span class="text-[10px] text-stone-300 font-medium block">
+            <span class="text-[10px] text-stone-300 font-medium block leading-tight">
               {{ totalItemsCount }} item(s) selected
             </span>
-            <span class="text-sm font-mono font-bold text-white">
+            <span class="text-sm font-mono font-bold text-white leading-none">
               ₹{{ estimatedCatalogueSubtotal }}
             </span>
           </div>
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 shrink-0">
             <button
               type="button"
-              (click)="isMobileDrawerOpen = true"
-              class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-medium transition cursor-pointer"
+              (click)="mobileTab = 'box'"
+              class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-stone-100 active:scale-95 text-[#57251C] text-xs font-bold transition shadow-xs cursor-pointer flex items-center gap-1.5"
             >
-              View Box
-            </button>
-            <button
-              type="button"
-              (click)="openReviewModal()"
-              class="px-3.5 py-1.5 rounded-xl bg-white text-[#57251C] text-xs font-bold transition shadow-xs cursor-pointer flex items-center gap-1"
-            >
-              <i class="fa-solid fa-paper-plane text-[10px]"></i>
-              <span>Send Request</span>
+              <i class="fa-solid fa-gift text-[11px]"></i>
+              <span>View Box ({{ totalItemsCount }}) &rarr;</span>
             </button>
           </div>
         </aside>
@@ -611,6 +688,7 @@ export class BuildHamperPageComponent implements OnInit {
   selectedOccasion = 'Diwali Festive';
   personalMessage = '';
   selectedRecipient = 'Family & Friends';
+  mobileTab: 'catalogue' | 'box' = 'catalogue';
 
   catalogueSearchQuery = '';
   selectedCategoryFilter = 'All Items';
@@ -644,6 +722,7 @@ export class BuildHamperPageComponent implements OnInit {
   ];
 
   aiCurationActiveMessage = '';
+  isMobileCombosOpen = false;
 
   hamperMarkupConfig: HamperMarkupConfig = { percent: 0, fixedAmount: 0 };
   hamperMarkup = 0;
@@ -770,7 +849,8 @@ export class BuildHamperPageComponent implements OnInit {
 
   private formatItemName(name: string): string {
     if (!name) return 'Artisanal Treat';
-    return name.replace(/^\d+\s+/, '').trim();
+    const cleaned = name.replace(/^\d+\s+/, '').trim();
+    return cleaned.replace(/\b([a-z])/g, (_, char) => char.toUpperCase());
   }
 
   private loadFallbackItems() {
@@ -1027,6 +1107,7 @@ export class BuildHamperPageComponent implements OnInit {
   }
 
   openReviewModal() {
+    this.isMobileDrawerOpen = false;
     if (this.hamperItems.length === 0) return;
     this.submitErrorMessage = '';
 

@@ -412,6 +412,7 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
 
       <!-- APP-LIKE STICKY MOBILE BOTTOM NAVIGATION BAR -->
       <nav
+        *ngIf="!hideBottomNav"
         aria-label="Mobile Bottom Navigation"
         class="fixed bottom-0 inset-x-0 z-40 bg-[#FFFDFC]/95 dark:bg-[#1C1816]/95 backdrop-blur-xl border-t border-[#D9C3B9]/45 dark:border-[#3D302A] px-2 py-1.5 md:hidden flex items-center justify-around shadow-lg"
       >
@@ -554,6 +555,7 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
 export class SiteLayoutComponent {
   @Input() title = '';
   @Input() hideFooter = false;
+  @Input() hideBottomNav = false;
 
   public readonly themeService = inject(ThemeService);
   public readonly checkoutService = inject(CheckoutService);
