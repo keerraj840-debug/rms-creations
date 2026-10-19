@@ -152,6 +152,18 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() {
     this.returnUrl = sanitizeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl'));
+
+    const errorDesc = this.route.snapshot.queryParamMap.get('error_description');
+    const errorCode = this.route.snapshot.queryParamMap.get('error_code');
+    const errorParam = this.route.snapshot.queryParamMap.get('error');
+
+    if (errorDesc || errorCode || errorParam) {
+      if (errorDesc?.includes('Unable to exchange external code')) {
+        this.errorMessage.set('Google sign-in verification failed (Client Secret or OAuth config mismatch). Please verify your Google Client Secret in Supabase Auth Providers.');
+      } else {
+        this.errorMessage.set(errorDesc || errorParam || 'Google sign-in could not be completed. Please try again.');
+      }
+    }
   }
 
   togglePasswordVisibility(): void {
