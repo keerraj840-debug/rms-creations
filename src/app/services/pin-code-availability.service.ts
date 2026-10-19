@@ -39,6 +39,24 @@ export class PinCodeAvailabilityService {
   // Free delivery threshold across store for standard catalog items
   public readonly freeDeliveryThreshold = 499;
 
+  // Ratnagiri Taluka postal PIN codes list (H.O, Kutchery, Shirgaon, Pawas, Hatkhamba, Jaigad/Ganpatipule, Malgund, Tiware, Ranpar)
+  public readonly ratnagiriTalukaPinCodes = new Set([
+    '415612', // Ratnagiri H.O, City, Nachane, Kuwarbav, Shivaji Nagar, Rahatagar
+    '415613', // Shirgaon, Mirya, Kasarveli
+    '415615', // Hatkhamba, Pali, Tarval
+    '415616', // Pawas, Bhatye, Golap
+    '415617', // Ganpatipule, Jaigad, Chafe
+    '415620', // Kotawade, Malgund
+    '415629', // Tiware, Kondye
+    '415639', // Ratnagiri Kutchery, Zadgaon, Mirjole MIDC
+    '415640'  // Ranpar, Finolex Power Plant
+  ]);
+
+  isRatnagiriTaluka(pinCode: string): boolean {
+    const clean = (pinCode || '').trim().replace(/\D/g, '');
+    return this.ratnagiriTalukaPinCodes.has(clean);
+  }
+
   async checkDelivery(
     pinCode: string,
     subtotal: number = 0,
@@ -102,11 +120,19 @@ export class PinCodeAvailabilityService {
         };
       }
 
-      const baseCharge = data ? (Number(data.pca_delivery_charges) || 49) : 49;
-      const above1kgCharge = data ? (Number(data.pca_delivery_charges_above_1kg) || 29) : 29;
-      const state = data?.pca_state || 'Maharashtra / India';
-      const district = data?.pca_district || 'Express Zone';
-      const courierService = data?.courier_service || 'Pan-India Express Courier';
+      const isRtnTaluka = this.isRatnagiriTaluka(cleanPin);
+      const defaultBase = isRtnTaluka ? 30 : 49;
+      const defaultAbove1kg = isRtnTaluka ? 20 : 29;
+
+      const baseCharge = data && data.pca_delivery_charges !== null && data.pca_delivery_charges !== undefined
+        ? Number(data.pca_delivery_charges)
+        : defaultBase;
+      const above1kgCharge = data && data.pca_delivery_charges_above_1kg !== null && data.pca_delivery_charges_above_1kg !== undefined
+        ? Number(data.pca_delivery_charges_above_1kg)
+        : defaultAbove1kg;
+      const state = data?.pca_state || 'Maharashtra';
+      const district = data?.pca_district || (isRtnTaluka ? 'Ratnagiri (Taluka)' : 'Express Zone');
+      const courierService = data?.courier_service || (isRtnTaluka ? 'Local Express Delivery' : 'Pan-India Express Courier');
 
       // Weight-based charge calculation rule:
       // Base charge covers up to 1.0 kg. Additional kg is charged per kg.
@@ -292,6 +318,52 @@ export class PinCodeAvailabilityService {
       return !error;
     } catch {
       return false;
+    }
+  }
+
+  /**
+   * Batch setups all 9 Ratnagiri Taluka postal PIN codes with ₹30 delivery charge
+   */
+  async setupRatnagiriTalukaPinCodes(): Promise<{ count: number; error?: string }> {
+    const list = [
+      { pin: '415612', name: 'Ratnagiri (City / H.O / Kuwarbav)' },
+      { pin: '415613', name: 'Ratnagiri (Shirgaon / Mirya)' },
+      { pin: '415615', name: 'Ratnagiri (Hatkhamba / Pali)' },
+      { pin: '415616', name: 'Ratnagiri (Pawas / Bhatye / Golap)' },
+      { pin: '415617', name: 'Ratnagiri (Jaigad / Ganpatipule)' },
+      { pin: '415620', name: 'Ratnagiri (Kotawade / Malgund)' },
+      { pin: '415629', name: 'Ratnagiri (Tiware / Kondye)' },
+      { pin: '415639', name: 'Ratnagiri (Kutchery / Zadgaon / MIDC)' },
+      { pin: '415640', name: 'Ratnagiri (Ranpar / Finolex)' }
+    ];
+
+    try {
+      let count = 0;
+      for (const item of list) {
+        // Check if existing record
+        const { data: existing } = await this.supabase
+          .from('pin_code_availability')
+          .select('pca_id')
+          .eq('pca_pin_code', item.pin)
+          .maybeSingle();
+
+        const res = await this.savePinCode({
+          pca_id: existing?.pca_id,
+          pca_pin_code: item.pin,
+          pca_delivery_charges: 30,
+          pca_delivery_charges_above_1kg: 20,
+          pca_is_available: true,
+          pca_state: 'Maharashtra',
+          pca_district: item.name,
+          courier_service: 'Local Express Delivery'
+        });
+
+        if (res.data) count++;
+      }
+
+      return { count };
+    } catch (err: any) {
+      return { count: 0, error: err?.message || 'Error configuring Ratnagiri Taluka PIN codes' };
     }
   }
 }

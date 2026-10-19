@@ -95,4 +95,20 @@ describe('PinCodeAvailabilityService', () => {
     expect(res.isHamperDelivery).toBe(true);
     expect(res.message).toContain('Hamper parcel PIN-code shipping');
   });
+
+  it('correctly identifies Ratnagiri Taluka postal PIN codes', () => {
+    expect(service.isRatnagiriTaluka('415612')).toBe(true);
+    expect(service.isRatnagiriTaluka('415639')).toBe(true);
+    expect(service.isRatnagiriTaluka('415616')).toBe(true);
+    expect(service.isRatnagiriTaluka('411038')).toBe(false);
+  });
+
+  it('charges special ₹30 base delivery fee for Ratnagiri Taluka PIN codes', async () => {
+    // 415612 is Ratnagiri City H.O: parcel under 1kg => base fee 30
+    const res = await service.checkDelivery('415612', 200, 0.8, false);
+    expect(res.isServiceable).toBe(true);
+    expect(res.baseCharge).toBe(30);
+    expect(res.calculatedDeliveryFee).toBe(30);
+    expect(res.district).toContain('Ratnagiri');
+  });
 });

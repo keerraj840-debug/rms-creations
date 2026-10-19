@@ -372,6 +372,13 @@ export class AdminPincodeFormPageComponent implements OnInit {
   onPinChange(val: string) {
     if (val) {
       this.item.pca_pin_code = val.replace(/\D/g, '').slice(0, 6);
+      if (!this.isEdit && this.pinService.isRatnagiriTaluka(this.item.pca_pin_code)) {
+        this.item.pca_delivery_charges = 30;
+        this.item.pca_delivery_charges_above_1kg = 20;
+        this.item.pca_district = 'Ratnagiri (Taluka)';
+        this.item.pca_state = 'Maharashtra';
+        this.item.courier_service = 'Local Express Delivery';
+      }
     }
   }
 

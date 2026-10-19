@@ -27,7 +27,18 @@ import { PinCodeAvailabilityService, PinCodeAvailability } from '../services/pin
           </p>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
+          <button 
+            type="button"
+            (click)="setupRatnagiriPinCodes()"
+            [disabled]="loading"
+            class="px-3.5 py-2.5 rounded-xl border border-amber-600/40 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 text-amber-900 dark:text-amber-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 disabled:opacity-50 shadow-2xs"
+            title="Quickly configure all Ratnagiri Taluka postal PIN codes at ₹30 delivery charge"
+          >
+            <i class="fa-solid fa-bolt text-amber-600 dark:text-amber-400"></i>
+            <span>Set Ratnagiri Taluka PINs (₹30)</span>
+          </button>
+
           <a 
             routerLink="/admin/pincodes/new"
             class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#9C4738] to-[#DD8776] hover:from-[#883B2D] text-white text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer active:scale-95"
@@ -270,6 +281,26 @@ export class AdminPincodesPageComponent implements OnInit {
       this.applyFilter();
     } catch (err: any) {
       this.errorMessage = err?.message || 'Error loading PIN codes.';
+    } finally {
+      this.loading = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  async setupRatnagiriPinCodes() {
+    try {
+      this.loading = true;
+      this.errorMessage = '';
+      this.successMessage = '';
+      const res = await this.pcaService.setupRatnagiriTalukaPinCodes();
+      if (res.error) {
+        this.errorMessage = res.error;
+      } else {
+        this.successMessage = `Successfully configured ${res.count} Ratnagiri Taluka PIN codes at ₹30 delivery charge!`;
+        await this.loadPinCodes();
+      }
+    } catch (err: any) {
+      this.errorMessage = err?.message || 'Error configuring Ratnagiri PIN codes.';
     } finally {
       this.loading = false;
       this.cdr.markForCheck();
