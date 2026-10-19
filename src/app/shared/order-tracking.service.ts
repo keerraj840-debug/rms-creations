@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { SupabaseService } from '../services/supabase.service';
 
 export interface OrderEntry {
   id: string;
@@ -7,11 +8,14 @@ export interface OrderEntry {
   page: string;
   link: string;
   timestamp: string;
+  price?: number;
+  skipDbSync?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
 export class OrderTrackingService {
   private readonly storageKey = 'rms-order-tracker';
+  private supabase = inject(SupabaseService);
 
   recordOrder(entry: Omit<OrderEntry, 'id' | 'timestamp'>): OrderEntry {
     const orders = this.getOrders();
@@ -23,6 +27,28 @@ export class OrderTrackingService {
 
     orders.push(newEntry);
     this.saveOrders(orders);
+
+    // Sync live order to Supabase purchase_order table only if not skipped and not a general website action
+    if (!entry.skipDbSync && entry.category !== 'Website' && entry.category !== 'General') {
+      try {
+        const orderNum = `ORD-${Date.now().toString().slice(-5)}`;
+        const price = entry.price || 199;
+        this.supabase.from('purchase_order').insert({
+          purchase_order_no: orderNum,
+          purchase_order_date: new Date().toISOString(),
+          purchase_order_status: 'confirmed',
+          payable_amount: price,
+          total_amount: price,
+          shipping_remark: entry.title ? `${entry.title} (${entry.category || 'General'})` : entry.category,
+          is_active: true
+        }).then(({ error }) => {
+          if (error) console.warn('Supabase purchase_order sync note:', error.message);
+        });
+      } catch (err) {
+        console.warn('Failed to dispatch order to Supabase:', err);
+      }
+    }
+
     return newEntry;
   }
 
