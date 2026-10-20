@@ -7,11 +7,13 @@ import { CheckoutService } from '../services/checkout.service';
 import { CartService } from '../services/cart.service';
 import { AuthService } from '../services/auth.service';
 import { CheckoutModalComponent } from './ui/checkout-modal.component';
+import { PwaService } from '../services/pwa.service';
+import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
 
 @Component({
   selector: 'app-site-layout',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, AsyncPipe, NgClass, NgIf, FormsModule, CheckoutModalComponent],
+  imports: [RouterLink, RouterLinkActive, AsyncPipe, NgClass, NgIf, FormsModule, CheckoutModalComponent, PwaInstallBannerComponent],
   template: `
     <!-- Main Shell -->
     <div
@@ -95,6 +97,19 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
 
             <!-- Header Action Controls -->
             <div class="flex items-center gap-2.5 sm:gap-4">
+              <!-- Desktop PWA Install Button -->
+              <button
+                *ngIf="!pwaService.isInstalled()"
+                type="button"
+                (click)="pwaService.promptInstall()"
+                class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#9C4738]/30 bg-[#9C4738]/10 hover:bg-[#9C4738] text-[#9C4738] hover:text-white dark:border-[#EB9D8E]/30 dark:bg-[#EB9D8E]/10 dark:hover:bg-[#EB9D8E] dark:text-[#EB9D8E] dark:hover:text-[#1C1816] text-xs font-semibold shadow-xs transition cursor-pointer"
+                title="Install RMS App"
+                aria-label="Install App on Device"
+              >
+                <i class="fa-solid fa-download text-xs"></i>
+                <span>Install App</span>
+              </button>
+
               <!-- Dark / Light Theme Switcher Button -->
               <button
                 type="button"
@@ -222,6 +237,21 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
           [ngClass]="isMobileMenuOpen ? 'max-h-[650px] opacity-100' : 'max-h-0 opacity-0'"
         >
           <nav class="flex flex-col space-y-1 px-4 pb-6 pt-3 sm:px-6">
+
+            <!-- Mobile PWA Quick Install Banner -->
+            <div *ngIf="!pwaService.isInstalled()" class="p-1 mb-2">
+              <button
+                type="button"
+                (click)="pwaService.promptInstall(); closeMenu()"
+                class="w-full flex items-center justify-between px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#9C4738] to-[#BA5E4E] text-white shadow-md text-xs font-bold cursor-pointer transition active:scale-98"
+              >
+                <span class="flex items-center gap-2">
+                  <i class="fa-solid fa-download"></i>
+                  <span>Install RMS Creations App</span>
+                </span>
+                <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full uppercase font-mono tracking-wider">Free PWA</span>
+              </button>
+            </div>
 
             <!-- Customer Identity Banner on Mobile -->
             <div *ngIf="authService.currentUser$ | async as user" class="p-3 mb-2 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 flex items-center justify-between">
@@ -392,6 +422,18 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
               <a routerLink="/refund-policy" class="hover:text-white transition-colors">Refunds</a>
               <span>&bull;</span>
               <a routerLink="/grievance" class="hover:text-white transition-colors">Grievance</a>
+              <span>&bull;</span>
+              <button
+                *ngIf="!pwaService.isInstalled()"
+                type="button"
+                (click)="pwaService.promptInstall()"
+                class="hover:text-white transition-colors inline-flex items-center gap-1.5 text-xs text-[#EB9D8E] font-bold cursor-pointer"
+              >
+                <i class="fa-solid fa-download text-xs text-[#EB9D8E]"></i>
+                <span>Install App</span>
+              </button>
+              <span *ngIf="!pwaService.isInstalled()">&bull;</span>
+              <span class="text-[10px] text-[#D9C3B9]/60 font-mono">v{{ pwaService.currentVersion() }}</span>
             </div>
           </div>
         </div>
@@ -478,6 +520,28 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
         </a>
       </nav>
 
+      <!-- FLOATING LUXURY Chat with Us BUTTON -->
+      <aside
+        class="fixed z-30 transition-all duration-300"
+        [ngClass]="hideBottomNav ? 'bottom-5 right-5' : 'bottom-16 md:bottom-6 right-4 sm:right-6'"
+      >
+        <a
+          href="https://wa.me/919284905118?text=Hello%20RMS%20Creations!%20I%20would%20like%20to%20inquire%20about%20gift%20hampers."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex items-center gap-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2.5 sm:px-4 sm:py-3 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border border-white/20 ring-4 ring-emerald-500/20"
+          aria-label="Direct Chat with Us"
+          title="Direct Chat with Us"
+        >
+          <i class="fa-brands fa-whatsapp text-lg sm:text-xl text-white"></i>
+          <span class="hidden sm:inline text-xs font-bold tracking-wide">Chat with Us</span>
+          <span class="relative flex h-2 w-2 sm:hidden">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-200 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+          </span>
+        </a>
+      </aside>
+
       <!-- LEGAL & COMPLIANCE MODAL -->
       <div
         *ngIf="showLegalModal"
@@ -549,6 +613,9 @@ import { CheckoutModalComponent } from './ui/checkout-modal.component';
       <!-- Global Customer Checkout & Free UPI / COD Modal -->
       <app-checkout-modal></app-checkout-modal>
 
+      <!-- PWA Installation & Smart Update Notification System -->
+      <app-pwa-install-banner></app-pwa-install-banner>
+
     </div>
   `
 })
@@ -561,6 +628,7 @@ export class SiteLayoutComponent {
   public readonly checkoutService = inject(CheckoutService);
   public readonly cartService = inject(CartService);
   public readonly authService = inject(AuthService);
+  public readonly pwaService = inject(PwaService);
   private readonly router = inject(Router);
 
   newsletterEmail = '';

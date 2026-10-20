@@ -153,7 +153,7 @@ describe('AdminOrdersPageComponent (Smart Order Processing Dashboard)', () => {
     expect(component.getNextSafeStatus({ purchase_order_status: 'cancelled' } as any)).toBeNull();
   });
 
-  it('generates WhatsApp concierge link with prefilled order details', () => {
+  it('generates Chat with Us link with prefilled order details', () => {
     const order: PurchaseOrder = {
       purchase_order_id: 99,
       purchase_order_no: 'ORD-999',

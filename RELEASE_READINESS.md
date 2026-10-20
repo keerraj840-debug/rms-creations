@@ -17,7 +17,7 @@ All identified **P0 Critical Release Blockers** and **P1 High Priority Weaknesse
 3. **Guest & Authenticated Instant Checkout (P0 Fixed)**: Resolved 401 RLS insertion errors on `purchase_order` and `purchase_order_details`. Customers can smoothly place orders via the 1-Page Instant Checkout with interactive Swipe-to-Order.
 4. **Zero Cost Transactional Architecture (P1 Fixed)**:
    - Resend API key configured with RFC 2046 anti-spam MIME templates and idempotency deduplication.
-   - 1-Click WhatsApp Concierge integrated (`+91 9284905118`) for real-time customer dispatch alerts at ₹0 overhead.
+   - 1-Click Chat with Us integrated (`+91 9284905118`) for real-time customer dispatch alerts at ₹0 overhead.
 5. **Data Accuracy & Fair Pricing (P1 Fixed)**: Removed artificial markdown logic (`* 1.25` or `+ 50`). Displayed prices and discounts reflect real database figures (`price` vs `selling_price`), complying with Indian Consumer Protection (E-Commerce) Rules.
 6. **Robust Quality Gate**: 120/120 Vitest unit tests passing across 23 test suites. Zero Angular production build errors; initial bundle transfer size is just **196.58 kB**.
 

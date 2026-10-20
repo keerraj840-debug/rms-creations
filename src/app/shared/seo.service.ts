@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
+import { serializeSafeJsonLd } from '../utils/security.utils';
 
 export interface SeoMetadataParams {
   title: string;
@@ -201,7 +202,7 @@ export class SeoService {
         script.type = 'application/ld+json';
         this.document.head.appendChild(script);
       }
-      script.text = JSON.stringify(schema, null, 2);
+      script.text = serializeSafeJsonLd(schema);
     }
   }
 

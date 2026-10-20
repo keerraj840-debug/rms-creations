@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../services/supabase.service';
 import { FileUploadComponent } from '../shared/ui/file-upload.component';
+import { sanitizeReturnUrl } from '../utils/security.utils';
 
 @Component({
   selector: 'app-admin-banner-form-page',
@@ -400,7 +401,7 @@ export class AdminBannerFormPageComponent implements OnInit {
       const payload = {
         name: this.banner.name.trim(),
         image: this.banner.image.trim(),
-        navigate_to_url_on_click: this.banner.navigate_to_url_on_click.trim() || '/shop',
+        navigate_to_url_on_click: sanitizeReturnUrl(this.banner.navigate_to_url_on_click.trim(), '/shop'),
         is_active: this.banner.is_active,
         updation_date: new Date().toISOString()
       };

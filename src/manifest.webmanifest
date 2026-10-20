@@ -1,0 +1,49 @@
+{
+  "name": "RMS Creations — Luxury Gift Hampers",
+  "short_name": "RMS Gifts",
+  "description": "Handcrafted luxury gift hampers, festive specials, and custom gift boxes in Navi Mumbai & Mumbai.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FFFDFC",
+  "theme_color": "#9C4738",
+  "categories": ["shopping", "lifestyle"],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Shop Hampers",
+      "short_name": "Shop",
+      "description": "Browse curated luxury gift hampers",
+      "url": "/shop",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Custom Hamper Studio",
+      "short_name": "Build",
+      "description": "Build your bespoke gift hamper",
+      "url": "/build-hamper",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Track Orders",
+      "short_name": "Orders",
+      "description": "Track your gift deliveries in real time",
+      "url": "/my-orders",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

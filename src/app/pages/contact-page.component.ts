@@ -403,9 +403,9 @@ export class ContactPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.seo.setPageMetadata({
-      title: 'Contact RMS Creations | WhatsApp Concierge & Support',
+      title: 'Contact RMS Creations | Chat with Us & Support',
       description: 'Get in touch with RMS Creations studio in Vashi, Navi Mumbai for bespoke hamper inquiries, bulk orders, and delivery assistance.',
-      keywords: 'contact rms creations, custom hamper enquiry, whatsapp concierge, vashi navi mumbai, bulk hampers Mumbai',
+      keywords: 'contact rms creations, custom hamper enquiry, Chat with Us, vashi navi mumbai, bulk hampers Mumbai',
       slug: 'contact'
     });
 
@@ -444,12 +444,17 @@ export class ContactPageComponent implements OnInit, OnDestroy {
   sendInquiry() {
     if (!this.inquiryName.trim() || !this.inquiryPhone.trim() || !this.inquiryMessage.trim()) return;
 
-    const formattedText = `Hello RMS Creations! My name is ${encodeURIComponent(this.inquiryName)} (${encodeURIComponent(this.inquiryPhone)}). Regarding: ${encodeURIComponent(this.inquiryCategory)}. Inquiry: ${encodeURIComponent(this.inquiryMessage)}`;
-    const url = `https://wa.me/${this.settings.whatsapp_no}?text=${formattedText}`;
+    const rawPhone = this.settings.whatsapp_no || '919284905118';
+    const cleanPhone = rawPhone.replace(/\D/g, '') || '919284905118';
+    const formattedText = `Hello RMS Creations! My name is ${encodeURIComponent(this.inquiryName.trim())} (${encodeURIComponent(this.inquiryPhone.trim())}). Regarding: ${encodeURIComponent(this.inquiryCategory)}. Inquiry: ${encodeURIComponent(this.inquiryMessage.trim())}`;
+    const url = `https://wa.me/${cleanPhone}?text=${formattedText}`;
 
     this.inquirySent = true;
     if (typeof window !== 'undefined') {
-      window.open(url, '_blank');
+      const win = window.open(url, '_blank');
+      if (!win) {
+        window.location.href = url;
+      }
     }
   }
 

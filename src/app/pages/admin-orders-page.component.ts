@@ -8,6 +8,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
 import { TableComponent, TableColumn } from '../shared/ui/table.component';
 import { PurchaseOrder, PurchaseOrderDetail } from '../models/purchase-order.model';
 import { NotificationOutboxService } from '../services/notification-outbox.service';
+import { sanitizeCsvCell } from '../utils/security.utils';
 
 export interface OrderAuditEntry {
   id: string;
@@ -404,7 +405,7 @@ export interface OrderAuditEntry {
                   <i class="fa-solid fa-eye text-xs"></i>
                 </button>
 
-                <!-- Open WhatsApp Concierge -->
+                <!-- Open Chat with Us -->
                 <a [href]="getWhatsAppLink(order)" target="_blank"
                    class="p-1.5 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 rounded-lg transition-all cursor-pointer"
                    title="Open WhatsApp chat for this order">
@@ -1940,7 +1941,7 @@ export class AdminOrdersPageComponent implements OnInit {
       ])
     ];
 
-    const csvContent = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const csvContent = rows.map(r => r.map(v => sanitizeCsvCell(v)).join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');

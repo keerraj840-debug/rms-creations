@@ -7,6 +7,7 @@ import { SupabaseService } from '../services/supabase.service';
 import { CheckoutService } from '../services/checkout.service';
 import { CartService } from '../services/cart.service';
 import { isWithinDateWindow } from './shop-page.component';
+import { sanitizeReturnUrl } from '../utils/security.utils';
 
 @Component({
   selector: 'app-home-page',
@@ -840,7 +841,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
             title: b.name,
             description: b.description || 'Thoughtfully styled gift hampers for celebrations and treasured moments.',
             image: b.image || 'assets/banners/banner.png',
-            route: b.navigate_to_url_on_click || '/shop'
+            route: sanitizeReturnUrl(b.navigate_to_url_on_click, '/shop')
           }));
           this.activeSlideIndex = 0;
         } else {

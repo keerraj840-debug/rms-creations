@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
+import { sanitizeCsvCell } from '../utils/security.utils';
 
 export interface OrderEntry {
   id: string;
@@ -73,7 +74,7 @@ export class OrderTrackingService {
     ];
 
     const csvContent = csvRows
-      .map((row) => row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(','))
+      .map((row) => row.map((value) => sanitizeCsvCell(value)).join(','))
       .join('\n');
 
     if (typeof window === 'undefined') {
