@@ -145,36 +145,71 @@ interface ItemVisualMeta {
               [ngClass]="mobileTab === 'catalogue' ? 'flex' : 'hidden lg:flex'"
             >
 
-              <!-- Filter Tabs & Search Bar -->
-              <div class="shrink-0 pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+              <!-- Filter Tabs, Search Bar & View Mode Switcher -->
+              <div class="shrink-0 pb-2.5 space-y-2">
+                <!-- Search and View Toggle Row -->
+                <div class="flex items-center justify-between gap-2">
+                  <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-stone-400"></i>
+                    <input
+                      type="text"
+                      [(ngModel)]="catalogueSearchQuery"
+                      placeholder="Search sweets, nuts, snacks..."
+                      class="w-full pl-8 pr-7 py-1.5 text-xs rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 focus:outline-hidden focus:border-[#57251C] dark:text-[#F4F1ED] transition shadow-2xs"
+                    >
+                    <button
+                      *ngIf="catalogueSearchQuery"
+                      type="button"
+                      (click)="catalogueSearchQuery = ''"
+                      class="absolute right-2.5 top-2 text-xs text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 cursor-pointer"
+                      aria-label="Clear search"
+                    >
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+
+                  <!-- View Switcher (List vs Compact Grid) -->
+                  <div class="flex items-center p-0.5 bg-stone-200/80 dark:bg-stone-900 rounded-xl border border-stone-300/60 dark:border-stone-800 shrink-0">
+                    <button
+                      type="button"
+                      (click)="catalogViewMode = 'list'"
+                      class="px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                      [ngClass]="catalogViewMode === 'list' ? 'bg-white dark:bg-stone-800 text-[#57251C] dark:text-[#EB9D8E] shadow-2xs' : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-300'"
+                      title="Compact List View (Recommended for easy browsing)"
+                    >
+                      <i class="fa-solid fa-list-ul text-[11px]"></i>
+                      <span class="hidden sm:inline text-[11px]">List</span>
+                    </button>
+                    <button
+                      type="button"
+                      (click)="catalogViewMode = 'grid'"
+                      class="px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                      [ngClass]="catalogViewMode === 'grid' ? 'bg-white dark:bg-stone-800 text-[#57251C] dark:text-[#EB9D8E] shadow-2xs' : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-300'"
+                      title="Compact Grid View"
+                    >
+                      <i class="fa-solid fa-grip text-[11px]"></i>
+                      <span class="hidden sm:inline text-[11px]">Grid</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Category Pills with Item Counts -->
                 <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 custom-scrollbar">
                   <button
                     type="button"
                     *ngFor="let cat of catalogueCategories"
                     (click)="selectedCategoryFilter = cat"
-                    class="px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border transition cursor-pointer"
-                    [ngClass]="selectedCategoryFilter === cat ? 'bg-[#57251C] text-white border-[#57251C]' : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 hover:border-stone-400'"
+                    class="px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border transition cursor-pointer flex items-center gap-1.5"
+                    [ngClass]="selectedCategoryFilter === cat ? 'bg-[#57251C] text-white border-[#57251C] shadow-2xs' : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 hover:border-stone-400'"
                   >
-                    {{ cat }}
-                  </button>
-                </div>
-
-                <div class="relative w-full sm:w-56 shrink-0">
-                  <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-stone-400"></i>
-                  <input
-                    type="text"
-                    [(ngModel)]="catalogueSearchQuery"
-                    placeholder="Search sweets, nuts, snacks..."
-                    class="w-full pl-8 pr-7 py-1 text-xs rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 focus:outline-hidden focus:border-[#57251C] dark:text-[#F4F1ED]"
-                  >
-                  <button
-                    *ngIf="catalogueSearchQuery"
-                    type="button"
-                    (click)="catalogueSearchQuery = ''"
-                    class="absolute right-2.5 top-2 text-xs text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 cursor-pointer"
-                    aria-label="Clear search"
-                  >
-                    <i class="fa-solid fa-xmark"></i>
+                    <i [class]="getCategoryIcon(cat) + ' text-[10px]'"></i>
+                    <span>{{ cat }}</span>
+                    <span
+                      class="px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold"
+                      [ngClass]="selectedCategoryFilter === cat ? 'bg-white/20 text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400'"
+                    >
+                      {{ getCategoryCount(cat) }}
+                    </span>
                   </button>
                 </div>
               </div>
@@ -182,7 +217,7 @@ interface ItemVisualMeta {
               <!-- Loading Skeleton -->
               <div *ngIf="isLoadingItems" class="p-12 text-center text-xs text-stone-500 bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800">
                 <i class="fa-solid fa-spinner fa-spin text-xl text-[#57251C] mb-2"></i>
-                <p class="font-semibold">Loading items...</p>
+                <p class="font-semibold">Loading treats and snacks...</p>
               </div>
 
               <!-- Empty State -->
@@ -195,17 +230,108 @@ interface ItemVisualMeta {
               </div>
 
               <!-- Scrollable Items Grid: Responsive cards with dedicated smooth scroll -->
-              <div *ngIf="!isLoadingItems && filteredCatalogueProducts.length > 0" class="flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar space-y-3 pb-36 sm:pb-40 lg:pb-4">
-                <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-2">
+              <div *ngIf="!isLoadingItems && filteredCatalogueProducts.length > 0" class="flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar space-y-2 pb-36 sm:pb-40 lg:pb-4">
+
+                <!-- 1. COMPACT LIST VIEW (DEFAULT: Ideal for short names, fast multi-item adding) -->
+                <div *ngIf="catalogViewMode === 'list'" class="space-y-1.5">
                   <div
                     *ngFor="let item of filteredCatalogueProducts"
-                    class="p-2.5 rounded-2xl border bg-white dark:bg-[#1E1916] transition-all flex flex-col justify-between gap-2.5 group shadow-2xs hover:shadow-xs"
-                    [ngClass]="isItemInHamper(item.uid) ? 'border-[#57251C] ring-1 ring-[#57251C]/25 bg-amber-50/20 dark:bg-stone-900/60' : 'border-stone-200 dark:border-stone-800 hover:border-stone-400'"
+                    class="group p-2 sm:p-2.5 rounded-2xl border transition-all duration-150 flex items-center justify-between gap-3 shadow-2xs hover:shadow-xs"
+                    [ngClass]="isItemInHamper(item.uid)
+                      ? 'border-[#57251C] dark:border-[#EB9D8E]/50 bg-amber-50/40 dark:bg-stone-900/90 ring-1 ring-[#57251C]/20'
+                      : 'border-stone-200/80 dark:border-stone-800 bg-white dark:bg-[#1E1916] hover:border-stone-300 dark:hover:border-stone-700'"
                   >
-                    <!-- Visual & Title -->
-                    <div class="flex items-start gap-2 min-w-0">
-                      <div class="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm bg-[#FAF7F2] dark:bg-stone-800 text-[#57251C] dark:text-[#EB9D8E] group-hover:scale-105 transition-transform overflow-hidden">
-                        <img *ngIf="item.imageUrl" [src]="item.imageUrl" class="w-full h-full object-cover">
+                    <!-- Left: Thumbnail & Name -->
+                    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                      <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl shrink-0 flex items-center justify-center bg-[#FAF7F2] dark:bg-stone-800 text-[#57251C] dark:text-[#EB9D8E] overflow-hidden border border-stone-100 dark:border-stone-700/50 group-hover:scale-105 transition-transform">
+                        <img *ngIf="item.imageUrl" [src]="item.imageUrl" [alt]="item.name" class="w-full h-full object-cover">
+                        <i *ngIf="!item.imageUrl" [class]="getItemVisual(item.name).icon + ' text-sm'"></i>
+                      </div>
+
+                      <div class="min-w-0 flex-1 pr-1">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                          <h3 class="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 leading-tight">
+                            {{ item.name }}
+                          </h3>
+                          <span
+                            *ngIf="isItemInHamper(item.uid)"
+                            class="px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-[#57251C] text-white"
+                          >
+                            {{ getHamperItemQuantity(item.uid) }} in box
+                          </span>
+                        </div>
+                        <div class="flex items-center gap-2 mt-0.5 text-[10px] text-stone-500 dark:text-stone-400 font-medium">
+                          <span class="inline-flex items-center gap-1">
+                            <i [class]="getItemVisual(item.name).icon + ' text-[9px] text-[#9C4738]'"></i>
+                            {{ item.category || getItemVisual(item.name).badge }}
+                          </span>
+                          <span *ngIf="item.description" class="hidden sm:inline text-stone-400 truncate max-w-xs">
+                            &bull; {{ item.description }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Right: Price & Stepper/Add -->
+                    <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                      <div class="text-right">
+                        <span class="text-xs sm:text-sm font-mono font-extrabold text-[#57251C] dark:text-[#EB9D8E]">
+                          ₹{{ item.price }}
+                        </span>
+                      </div>
+
+                      <div>
+                        <!-- Add Button -->
+                        <button
+                          *ngIf="!isItemInHamper(item.uid)"
+                          type="button"
+                          (click)="addCatalogueItemToHamper(item)"
+                          class="px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-xl border border-[#57251C] bg-[#57251C]/5 hover:bg-[#57251C] hover:text-white text-[#57251C] dark:text-[#EB9D8E] dark:hover:text-white text-xs font-bold transition cursor-pointer active:scale-95 flex items-center gap-1 shadow-2xs hover:shadow-xs"
+                        >
+                          <i class="fa-solid fa-plus text-[9px]"></i>
+                          <span>Add</span>
+                        </button>
+
+                        <!-- Micro Stepper -->
+                        <div *ngIf="isItemInHamper(item.uid)" class="flex items-center gap-0.5 bg-stone-100 dark:bg-stone-800 border border-[#57251C]/30 dark:border-stone-700 rounded-xl p-0.5 shadow-2xs">
+                          <button
+                            type="button"
+                            (click)="decreaseHamperQuantity(item.uid)"
+                            class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center cursor-pointer active:scale-90"
+                            aria-label="Decrease quantity"
+                          >
+                            -
+                          </button>
+                          <span class="text-xs font-bold text-stone-900 dark:text-stone-100 px-1 sm:px-1.5 font-mono min-w-[18px] sm:min-w-[20px] text-center">
+                            {{ getHamperItemQuantity(item.uid) }}
+                          </span>
+                          <button
+                            type="button"
+                            (click)="increaseHamperQuantity(item.uid)"
+                            class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-emerald-600 hover:bg-emerald-50 flex items-center justify-center cursor-pointer active:scale-90"
+                            aria-label="Increase quantity"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. COMPACT GRID VIEW (Modern high-density cards) -->
+                <div *ngIf="catalogViewMode === 'grid'" class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-2">
+                  <div
+                    *ngFor="let item of filteredCatalogueProducts"
+                    class="p-2 sm:p-2.5 rounded-2xl border transition-all flex flex-col justify-between gap-2 group shadow-2xs hover:shadow-xs"
+                    [ngClass]="isItemInHamper(item.uid)
+                      ? 'border-[#57251C] ring-1 ring-[#57251C]/25 bg-amber-50/30 dark:bg-stone-900/80'
+                      : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-[#1E1916] hover:border-stone-400'"
+                  >
+                    <!-- Visual & Info -->
+                    <div class="flex items-center gap-2 min-w-0">
+                      <div class="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-sm bg-[#FAF7F2] dark:bg-stone-800 text-[#57251C] dark:text-[#EB9D8E] group-hover:scale-105 transition-transform overflow-hidden border border-stone-100 dark:border-stone-700/50">
+                        <img *ngIf="item.imageUrl" [src]="item.imageUrl" [alt]="item.name" class="w-full h-full object-cover">
                         <i *ngIf="!item.imageUrl" [class]="getItemVisual(item.name).icon"></i>
                       </div>
                       <div class="min-w-0 flex-1">
@@ -219,7 +345,7 @@ interface ItemVisualMeta {
                     </div>
 
                     <!-- Price & Action -->
-                    <div class="flex items-center justify-between pt-1.5 border-t border-stone-100 dark:border-stone-800">
+                    <div class="flex items-center justify-between pt-1 border-t border-stone-100 dark:border-stone-800">
                       <span class="text-xs font-mono font-bold text-[#57251C] dark:text-[#EB9D8E]">
                         ₹{{ item.price }}
                       </span>
@@ -241,18 +367,18 @@ interface ItemVisualMeta {
                           <button
                             type="button"
                             (click)="decreaseHamperQuantity(item.uid)"
-                            class="w-6 h-6 rounded-lg bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-rose-600 flex items-center justify-center cursor-pointer active:scale-90"
+                            class="w-5 h-5 rounded-md bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-rose-600 flex items-center justify-center cursor-pointer active:scale-90"
                             aria-label="Decrease quantity"
                           >
                             -
                           </button>
-                          <span class="text-xs font-bold text-stone-900 dark:text-stone-100 px-1 font-mono min-w-[18px] text-center">
+                          <span class="text-xs font-bold text-stone-900 dark:text-stone-100 px-1 font-mono min-w-[16px] text-center">
                             {{ getHamperItemQuantity(item.uid) }}
                           </span>
                           <button
                             type="button"
                             (click)="increaseHamperQuantity(item.uid)"
-                            class="w-6 h-6 rounded-lg bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-emerald-600 flex items-center justify-center cursor-pointer active:scale-90"
+                            class="w-5 h-5 rounded-md bg-white dark:bg-stone-900 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-emerald-600 flex items-center justify-center cursor-pointer active:scale-90"
                             aria-label="Increase quantity"
                           >
                             +
@@ -264,39 +390,49 @@ interface ItemVisualMeta {
                 </div>
 
                 <!-- Custom Item Link -->
-                <div class="pt-1 text-center">
+                <div class="pt-2 text-center">
                   <button
                     type="button"
                     (click)="isCustomItemFormOpen = !isCustomItemFormOpen"
-                    class="text-[11px] font-medium text-stone-500 hover:text-[#57251C] transition cursor-pointer inline-flex items-center gap-1"
+                    class="text-[11px] font-semibold text-stone-500 hover:text-[#57251C] dark:hover:text-[#EB9D8E] transition cursor-pointer inline-flex items-center gap-1.5 py-1 px-3 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800"
                   >
-                    <i class="fa-solid fa-plus text-[8px]"></i>
-                    <span>Want to add an item not listed here? Click to add custom item</span>
+                    <i class="fa-solid fa-circle-plus text-[10px] text-[#9C4738]"></i>
+                    <span>Need something special? Add custom item</span>
                   </button>
                 </div>
 
                 <!-- Inline Custom Item Input -->
-                <div *ngIf="isCustomItemFormOpen" class="p-3 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 space-y-2 text-xs shadow-xs animate-fade-in">
+                <div *ngIf="isCustomItemFormOpen" class="p-3.5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 space-y-2.5 text-xs shadow-xs animate-fade-in">
                   <div class="flex items-center justify-between font-bold text-stone-800 dark:text-stone-200">
-                    <span>Add Custom Item</span>
-                    <button (click)="isCustomItemFormOpen = false" class="text-stone-400 hover:text-stone-600 text-sm cursor-pointer">&times;</button>
+                    <span class="flex items-center gap-1.5">
+                      <i class="fa-solid fa-pen-ruler text-[#9C4738]"></i>
+                      Add Custom Item to Hamper
+                    </span>
+                    <button (click)="isCustomItemFormOpen = false" class="text-stone-400 hover:text-stone-600 text-sm cursor-pointer" aria-label="Close custom item form">&times;</button>
                   </div>
                   <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
                     <input
                       type="text"
                       [(ngModel)]="newCustomItemName"
                       placeholder="Item name (e.g. Kaju Katli 250g, Silver Coin)"
-                      class="sm:col-span-8 px-3 py-1.5 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs dark:text-stone-100"
+                      class="sm:col-span-8 px-3 py-1.5 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs dark:text-stone-100 focus:outline-hidden focus:border-[#57251C]"
                     >
                     <input
                       type="number"
                       [(ngModel)]="newCustomItemQuantity"
                       min="1"
                       placeholder="Qty"
-                      class="sm:col-span-4 px-3 py-1.5 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs dark:text-stone-100"
+                      class="sm:col-span-4 px-3 py-1.5 rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs dark:text-stone-100 focus:outline-hidden focus:border-[#57251C]"
                     >
                   </div>
-                  <div class="flex justify-end">
+                  <div class="flex justify-end gap-2">
+                    <button
+                      type="button"
+                      (click)="isCustomItemFormOpen = false"
+                      class="px-3 py-1.5 text-stone-500 text-xs font-semibold hover:text-stone-700 cursor-pointer"
+                    >
+                      Cancel
+                    </button>
                     <button
                       type="button"
                       (click)="addCustomItemToHamper()"
@@ -476,30 +612,42 @@ interface ItemVisualMeta {
                 </div>
               </div>
 
-              <!-- Action CTAs: Request & Inquiry First -->
+              <!-- Action CTAs: Direct Checkout & Bespoke Request -->
               <div class="space-y-1.5">
                 <button
                   type="button"
-                  (click)="openReviewModal()"
+                  (click)="addCustomHamperToCartAndCheckout()"
                   [disabled]="hamperItems.length === 0"
                   class="w-full py-2.5 px-3 rounded-xl bg-[#57251C] hover:bg-[#3D1A13] text-white text-xs font-bold uppercase tracking-wider transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-1.5 shadow-sm active:scale-98"
                 >
-                  <i class="fa-solid fa-paper-plane text-xs"></i>
-                  <span>Submit Hamper Request (Est. ₹{{ estimatedCatalogueSubtotal }})</span>
+                  <i class="fa-solid fa-cart-shopping text-xs"></i>
+                  <span>Add Hamper to Cart &amp; Checkout (₹{{ estimatedCatalogueSubtotal }})</span>
                 </button>
 
-                <button
-                  type="button"
-                  (click)="orderViaWhatsApp()"
-                  [disabled]="hamperItems.length === 0"
-                  class="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition disabled:opacity-40 cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-98"
-                >
-                  <i class="fa-brands fa-whatsapp text-sm"></i>
-                  <span>Inquire / Request on WhatsApp</span>
-                </button>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button
+                    type="button"
+                    (click)="openReviewModal()"
+                    [disabled]="hamperItems.length === 0"
+                    class="py-2 px-2 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-[#57251C] dark:text-[#D9C3B9] text-[11px] font-bold transition disabled:opacity-40 cursor-pointer flex items-center justify-center gap-1"
+                  >
+                    <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                    <span>Quote Request</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="orderViaWhatsApp()"
+                    [disabled]="hamperItems.length === 0"
+                    class="py-2 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold transition disabled:opacity-40 cursor-pointer flex items-center justify-center gap-1"
+                  >
+                    <i class="fa-brands fa-whatsapp text-xs"></i>
+                    <span>WhatsApp</span>
+                  </button>
+                </div>
 
                 <p class="text-[10px] text-stone-500 text-center leading-tight pt-1">
-                  <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>Custom hampers are reviewed by our team to check availability &amp; calculate PIN delivery charges before order placement.
+                  <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>Packaging, ribbon &amp; personalized card included. Delivery calculated at checkout.
                 </p>
               </div>
 
@@ -692,6 +840,25 @@ export class BuildHamperPageComponent implements OnInit {
   personalMessage = '';
   selectedRecipient = 'Family & Friends';
   mobileTab: 'catalogue' | 'box' = 'catalogue';
+  catalogViewMode: 'list' | 'grid' = 'list';
+
+  getCategoryCount(cat: string): number {
+    if (cat === 'All Items') return this.allCatalogueProducts.length;
+    if (cat === 'Other / Uncategorized') {
+      return this.allCatalogueProducts.filter(i => !i.category || !i.category.trim()).length;
+    }
+    return this.allCatalogueProducts.filter(i => i.category === cat).length;
+  }
+
+  getCategoryIcon(cat: string): string {
+    const c = (cat || '').toLowerCase();
+    if (c.includes('all')) return 'fa-solid fa-border-all';
+    if (c.includes('sweet') || c.includes('snack')) return 'fa-solid fa-cookie-bite';
+    if (c.includes('dry') || c.includes('nut')) return 'fa-solid fa-seedling';
+    if (c.includes('pooja') || c.includes('diya')) return 'fa-solid fa-fire-flame-curved';
+    if (c.includes('gift') || c.includes('packag')) return 'fa-solid fa-gift';
+    return 'fa-solid fa-tag';
+  }
 
   private itemSourcing = inject(ItemSourcingImageService);
 
@@ -818,6 +985,9 @@ export class BuildHamperPageComponent implements OnInit {
         if (parsed.selectedOccasion) this.selectedOccasion = parsed.selectedOccasion;
         if (parsed.personalMessage) this.personalMessage = parsed.personalMessage;
         if (parsed.selectedRecipient) this.selectedRecipient = parsed.selectedRecipient;
+        if (parsed.catalogViewMode === 'list' || parsed.catalogViewMode === 'grid') {
+          this.catalogViewMode = parsed.catalogViewMode;
+        }
       }
     } catch { }
   }
@@ -829,7 +999,8 @@ export class BuildHamperPageComponent implements OnInit {
         items: this.hamperItems,
         selectedOccasion: this.selectedOccasion,
         personalMessage: this.personalMessage,
-        selectedRecipient: this.selectedRecipient
+        selectedRecipient: this.selectedRecipient,
+        catalogViewMode: this.catalogViewMode
       }));
     } catch { }
   }

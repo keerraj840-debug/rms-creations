@@ -242,4 +242,22 @@ describe('BuildHamperPageComponent (Simulation Studio & AI Stylist)', () => {
     component.mobileTab = 'catalogue';
     expect(component.mobileTab).toBe('catalogue');
   });
+
+  it('should default to compact list view mode and allow switching to grid view', () => {
+    expect(component.catalogViewMode).toBe('list');
+    component.catalogViewMode = 'grid';
+    expect(component.catalogViewMode).toBe('grid');
+    component.catalogViewMode = 'list';
+    expect(component.catalogViewMode).toBe('list');
+  });
+
+  it('should compute category counts and icons correctly', () => {
+    expect(component.getCategoryCount('All Items')).toBe(component.allCatalogueProducts.length);
+    expect(component.getCategoryIcon('Sweets & Snacks')).toContain('fa-cookie-bite');
+    expect(component.getCategoryIcon('Dry Fruits & Nuts')).toContain('fa-seedling');
+    expect(component.getCategoryIcon('Pooja & Diyas')).toContain('fa-fire-flame-curved');
+    expect(component.getCategoryIcon('Gifts & Packaging')).toContain('fa-gift');
+    expect(component.getCategoryIcon('All Items')).toContain('fa-border-all');
+  });
 });
+
