@@ -81,27 +81,29 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
                 </span>
 
                 <div class="flex items-center gap-1.5">
-                  <!-- Mobile 1-Col (Full Width) vs 2-Col (Grid) Switcher -->
-                  <div class="flex items-center bg-[#FAF7F2] dark:bg-[#251F1C] p-0.5 rounded-xl border border-[#EADFD2] dark:border-white/10 sm:hidden">
-                    <button
-                      type="button"
-                      (click)="mobileViewMode = 'single'"
-                      [class]="mobileViewMode === 'single' ? 'bg-white dark:bg-[#1E1916] text-[#9C4738] dark:text-[#EB9D8E] shadow-2xs font-bold' : 'text-[#7A6C5E] dark:text-[#C5A393]'"
-                      class="px-2 py-1 rounded-lg text-xs transition cursor-pointer flex items-center gap-1"
-                      title="1 Product Per Row (Full Width)"
-                      aria-label="Full width 1 product per row"
-                    >
-                      <i class="fa-solid fa-bars text-[10px]"></i>
-                    </button>
+                  <!-- View Switcher (Compact Grid vs Detailed List) -->
+                  <div class="flex items-center bg-[#FAF7F2] dark:bg-[#251F1C] p-0.5 rounded-xl border border-[#EADFD2] dark:border-white/10">
                     <button
                       type="button"
                       (click)="mobileViewMode = 'grid'"
                       [class]="mobileViewMode === 'grid' ? 'bg-white dark:bg-[#1E1916] text-[#9C4738] dark:text-[#EB9D8E] shadow-2xs font-bold' : 'text-[#7A6C5E] dark:text-[#C5A393]'"
-                      class="px-2 py-1 rounded-lg text-xs transition cursor-pointer flex items-center gap-1"
-                      title="2 Products Per Row (Grid)"
-                      aria-label="2 products per row grid"
+                      class="px-2.5 py-1 rounded-lg text-xs transition cursor-pointer flex items-center gap-1.5"
+                      title="Compact Grid View (2 to 5 per row)"
+                      aria-label="Compact grid view"
                     >
-                      <i class="fa-solid fa-table-cells-large text-[10px]"></i>
+                      <i class="fa-solid fa-table-cells-large text-[11px]"></i>
+                      <span class="hidden sm:inline text-[11px]">Grid</span>
+                    </button>
+                    <button
+                      type="button"
+                      (click)="mobileViewMode = 'single'"
+                      [class]="mobileViewMode === 'single' ? 'bg-white dark:bg-[#1E1916] text-[#9C4738] dark:text-[#EB9D8E] shadow-2xs font-bold' : 'text-[#7A6C5E] dark:text-[#C5A393]'"
+                      class="px-2.5 py-1 rounded-lg text-xs transition cursor-pointer flex items-center gap-1.5"
+                      title="Detailed List View"
+                      aria-label="Detailed list view"
+                    >
+                      <i class="fa-solid fa-list-ul text-[11px]"></i>
+                      <span class="hidden sm:inline text-[11px]">List</span>
                     </button>
                   </div>
 
@@ -183,36 +185,35 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
             </button>
           </div>
 
-          <!-- RESPONSIVE PRODUCT GRID (Default: 1 Full-Width Card per Row on Mobile) -->
-          <!-- RESPONSIVE PRODUCT GRID (Default: High-Density 2-Column Grid on Mobile) -->
+          <!-- RESPONSIVE PRODUCT CATALOG (Compact, Customer-Friendly Grid & List) -->
           <div
             *ngIf="!loading && filteredProducts.length > 0"
             [ngClass]="mobileViewMode === 'single'
-              ? 'flex flex-col gap-2.5 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-4 lg:gap-5'
-              : 'grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-5'"
-            class="mt-3.5 sm:mt-6"
+              ? 'grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3.5'
+              : 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-3.5 lg:gap-4'"
+            class="mt-3.5 sm:mt-5"
           >
             <ng-container *ngFor="let product of filteredProducts">
 
-              <!-- VIEW MODE 1: COMPACT 2-COLUMN GRID (HIGH-DENSITY, LOW-BULK) -->
+              <!-- VIEW MODE 1: COMPACT BOUTIQUE GRID (BALANCED, NON-BULKY) -->
               <div
                 *ngIf="mobileViewMode === 'grid'"
-                class="group bg-white dark:bg-[#1E1916] rounded-2xl border border-[#EADFD2]/80 dark:border-white/10 overflow-hidden shadow-2xs hover:shadow-md hover:border-[#9C4738]/40 transition-all duration-200 flex flex-col justify-between"
+                class="group bg-white dark:bg-[#1E1916] rounded-2xl border border-[#EADFD2]/80 dark:border-white/10 overflow-hidden shadow-2xs hover:shadow-md hover:border-[#9C4738]/50 transition-all duration-200 flex flex-col justify-between"
               >
-                <!-- Card Media & Badges -->
+                <!-- Card Media & Badges (Controlled Aspect Ratio & Framing) -->
                 <div
-                  class="relative aspect-square overflow-hidden bg-[#FAF7F2] dark:bg-[#251F1C] cursor-pointer"
+                  class="relative aspect-[4/3] overflow-hidden bg-[#FAF7F2] dark:bg-[#251F1C] cursor-pointer"
                   [routerLink]="['/product', product.id]"
                 >
                   <img
                     [src]="product.image"
                     [alt]="product.name"
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                   />
 
                   <!-- Category badge -->
-                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-bold bg-white/95 dark:bg-[#1E1916]/95 text-[#9C4738] dark:text-[#EB9D8E] backdrop-blur-xs shadow-2xs border border-[#EADFD2]/60 dark:border-white/10 truncate max-w-[95px] sm:max-w-[130px]">
+                  <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md text-[9px] font-bold bg-white/95 dark:bg-[#1E1916]/95 text-[#9C4738] dark:text-[#EB9D8E] backdrop-blur-xs shadow-2xs border border-[#EADFD2]/60 dark:border-white/10 truncate max-w-[100px] sm:max-w-[120px]">
                     {{ product.category }}
                   </span>
 
@@ -223,22 +224,22 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
                 </div>
 
                 <!-- Compact Card Content -->
-                <div class="p-2.5 sm:p-3.5 flex-1 flex flex-col justify-between space-y-2">
+                <div class="p-2 sm:p-2.5 flex-1 flex flex-col justify-between space-y-1.5">
                   <div>
                     <h3
                       [routerLink]="['/product', product.id]"
-                      class="font-medium text-xs sm:text-sm text-[#2E2825] dark:text-[#F4F1ED] group-hover:text-[#9C4738] dark:group-hover:text-[#EB9D8E] transition-colors cursor-pointer line-clamp-2 leading-tight min-h-[2rem] sm:min-h-[2.5rem]"
+                      class="font-medium text-xs sm:text-[13px] text-[#2E2825] dark:text-[#F4F1ED] group-hover:text-[#9C4738] dark:group-hover:text-[#EB9D8E] transition-colors cursor-pointer line-clamp-2 leading-tight min-h-[2rem]"
                       [title]="product.name"
                     >
                       {{ product.name }}
                     </h3>
                   </div>
 
-                  <!-- Price & Compact Stepper / Add Button (Side by side) -->
-                  <div class="pt-2 border-t border-[#EADFD2]/50 dark:border-white/5 flex items-center justify-between gap-1.5">
+                  <!-- Price & Compact Stepper / Add Button -->
+                  <div class="pt-1.5 border-t border-[#EADFD2]/50 dark:border-white/5 flex items-center justify-between gap-1">
                     <div class="min-w-0 pr-1">
                       <div class="flex items-baseline gap-1">
-                        <span class="font-serif font-bold text-xs sm:text-base text-[#9C4738] dark:text-[#EB9D8E]">₹{{ product.price }}</span>
+                        <span class="font-serif font-bold text-xs sm:text-sm text-[#9C4738] dark:text-[#EB9D8E]">₹{{ product.price }}</span>
                         <span *ngIf="product.originalPrice && product.originalPrice > product.price" class="text-[10px] text-[#7A6C5E] line-through">
                           ₹{{ product.originalPrice }}
                         </span>
@@ -278,7 +279,7 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
                         *ngIf="getCartQty(product.id) === 0"
                         type="button"
                         (click)="addToCart(product, 1, $event)"
-                        class="h-7 sm:h-8 px-2.5 sm:px-3 rounded-lg bg-[#57251C] dark:bg-[#C56D5B] hover:bg-[#9C4738] text-white text-[10px] sm:text-xs font-bold transition-all flex items-center gap-1 shadow-2xs active:scale-90 cursor-pointer whitespace-nowrap"
+                        class="h-7 sm:h-8 px-2 sm:px-2.5 rounded-lg bg-[#57251C] dark:bg-[#C56D5B] hover:bg-[#9C4738] text-white text-[10px] sm:text-xs font-bold transition-all flex items-center gap-1 shadow-2xs active:scale-90 cursor-pointer whitespace-nowrap"
                         [title]="'Add ' + product.name + ' to Cart'"
                       >
                         <i class="fa-solid fa-plus text-[8px]"></i>
@@ -289,20 +290,20 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
                 </div>
               </div>
 
-              <!-- VIEW MODE 2: HORIZONTAL LIST CARD (COMPACT MOBILE ROW) -->
+              <!-- VIEW MODE 2: HORIZONTAL LIST CARD (COMPACT ROW) -->
               <div
                 *ngIf="mobileViewMode === 'single'"
-                class="group bg-white dark:bg-[#1E1916] rounded-2xl border border-[#EADFD2]/80 dark:border-white/10 p-2.5 sm:p-3.5 shadow-2xs hover:shadow-md hover:border-[#9C4738]/40 transition-all duration-200 flex items-center gap-3 sm:gap-4"
+                class="group bg-white dark:bg-[#1E1916] rounded-2xl border border-[#EADFD2]/80 dark:border-white/10 p-2.5 sm:p-3 shadow-2xs hover:shadow-md hover:border-[#9C4738]/40 transition-all duration-200 flex items-center gap-3"
               >
                 <!-- Thumbnail -->
                 <div
-                  class="relative w-22 h-22 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-[#FAF7F2] dark:bg-[#251F1C] shrink-0 cursor-pointer"
+                  class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-[#FAF7F2] dark:bg-[#251F1C] shrink-0 cursor-pointer"
                   [routerLink]="['/product', product.id]"
                 >
                   <img
                     [src]="product.image"
                     [alt]="product.name"
-                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    class="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
                   />
                   <span *ngIf="product.originalPrice && product.originalPrice > product.price" class="absolute top-1 right-1 px-1 py-0.5 rounded text-[8px] font-bold bg-emerald-600 text-white">
@@ -318,11 +319,11 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
                     </span>
                     <h3
                       [routerLink]="['/product', product.id]"
-                      class="font-medium text-xs sm:text-sm text-[#2E2825] dark:text-[#F4F1ED] group-hover:text-[#9C4738] transition-colors cursor-pointer line-clamp-2 leading-tight"
+                      class="font-medium text-xs sm:text-sm text-[#2E2825] dark:text-[#F4F1ED] group-hover:text-[#9C4738] transition-colors cursor-pointer line-clamp-1 leading-tight"
                     >
                       {{ product.name }}
                     </h3>
-                    <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] line-clamp-1 mt-0.5 hidden sm:block">
+                    <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] line-clamp-1 mt-0.5">
                       {{ product.description }}
                     </p>
                   </div>

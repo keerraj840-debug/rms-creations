@@ -58,11 +58,40 @@
   <meta name="application-name" content="RMS Gifts">
   <meta name="msapplication-TileColor" content="#9C4738">
 
-  <!-- Google tag (gtag.js) - Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RMSCREATION"></script>
+  <!-- Google Consent Mode v2 Default Settings (DPDP Act 2023 Compliance) -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    // Default optional tracking to denied until explicit affirmative consent
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
+    // Restore saved user choice if present
+    try {
+      var storedConsent = localStorage.getItem('rms_cookie_consent_v1');
+      if (storedConsent) {
+        var parsed = JSON.parse(storedConsent);
+        if (parsed && parsed.analytics) {
+          gtag('consent', 'update', {
+            'analytics_storage': 'granted'
+          });
+        } else {
+          window['ga-disable-G-RMSCREATION'] = true;
+        }
+      } else {
+        window['ga-disable-G-RMSCREATION'] = true;
+      }
+    } catch(e) {
+      window['ga-disable-G-RMSCREATION'] = true;
+    }
+  </script>
+  <!-- Google tag (gtag.js) - Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RMSCREATION"></script>
+  <script>
     gtag('js', new Date());
     gtag('config', 'G-RMSCREATION', {
       anonymize_ip: true

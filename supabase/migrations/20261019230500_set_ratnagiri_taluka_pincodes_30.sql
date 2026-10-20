@@ -19,7 +19,7 @@ VALUES
   ('415617', 30, true, 'Maharashtra', 'Ratnagiri (Jaigad / Ganpatipule)', 20, 'Local Express Delivery', true),
   ('415620', 30, true, 'Maharashtra', 'Ratnagiri (Kotawade / Malgund)', 20, 'Local Express Delivery', true),
   ('415629', 30, true, 'Maharashtra', 'Ratnagiri (Tiware / Kondye)', 20, 'Local Express Delivery', true),
-  ('415639', 30, true, 'Maharashtra', 'Ratnagiri (Kutchery / Zadgaon / MIDC)', 20, 'Local Express Delivery', true),
+  ('415639', 30, true, 'Maharashtra', 'Ratnagiri (Zadgaon / MIDC)', 20, 'Local Express Delivery', true),
   ('415640', 30, true, 'Maharashtra', 'Ratnagiri (Ranpar / Finolex)', 20, 'Local Express Delivery', true)
 ON CONFLICT (pca_pin_code) DO UPDATE SET
   pca_delivery_charges = 30,

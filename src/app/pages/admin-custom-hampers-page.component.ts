@@ -10,7 +10,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
   standalone: true,
   imports: [CommonModule, FormsModule, ModalComponent],
   template: `
-    <div class=" mx-auto space-y-6 pb-20">
+    <div class="max-w-6xl mx-auto space-y-6 pb-20">
 
       <!-- Top Action Bar / Header -->
       <div class="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-[#EADFD2]/80 dark:border-white/10">
@@ -239,7 +239,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
 
                   <!-- Thumbnail & Title -->
                   <div class="flex items-start gap-3 min-w-0">
-                    <img [src]="it.reference_image_url || 'assets/logo.png'" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-black/10 dark:border-white/10 bg-white">
+                    <img [src]="it.reference_image_url || 'assets/logo.png'" [alt]="it.item_name || 'Customer reference image'" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-black/10 dark:border-white/10 bg-white">
                     <div class="min-w-0">
                       <div class="flex items-center gap-1.5 flex-wrap">
                         <span *ngIf="it.is_confirmed_catalogue" class="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">

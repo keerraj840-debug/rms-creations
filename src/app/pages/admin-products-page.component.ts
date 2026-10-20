@@ -110,7 +110,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
             <td class="px-6 py-3.5">
               <div class="flex items-center gap-3.5">
                 <div class="h-11 w-11 rounded-xl bg-[#F3E7DC] dark:bg-white/10 border border-[#EADFD2] dark:border-white/10 overflow-hidden flex items-center justify-center shrink-0 shadow-2xs">
-                   <img *ngIf="p.images && p.images.length > 0" [src]="p.images[0]" class="h-full w-full object-cover">
+                   <img *ngIf="p.images && p.images.length > 0" [src]="p.images[0]" [alt]="p.name + ' thumbnail'" class="h-full w-full object-cover">
                    <span *ngIf="!p.images || p.images.length === 0" class="text-sm text-[#7A6C5E] dark:text-[#C5A393]"><i class="fa-solid fa-gift"></i></span>
                 </div>
                 <div class="min-w-0">
@@ -254,7 +254,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
             <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">Cover Photo</label>
             <div class="flex items-center gap-3">
               <div *ngIf="quickProduct.image" class="w-14 h-14 rounded-xl overflow-hidden border border-[#EADFD2] dark:border-white/10 shrink-0 bg-stone-100 relative group">
-                <img [src]="quickProduct.image" class="w-full h-full object-cover">
+                <img [src]="quickProduct.image" [alt]="quickProduct.name || 'Product preview'" class="w-full h-full object-cover">
                 <button type="button" (click)="quickProduct.image = ''" class="absolute inset-0 bg-black/60 text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
                   <i class="fa-solid fa-trash-can text-xs"></i>
                   <span>Remove</span>

@@ -534,7 +534,7 @@ interface ItemVisualMeta {
                 >
                   <div class="flex items-center gap-2 min-w-0 flex-1">
                     <span class="w-5 h-5 rounded-md bg-stone-100 dark:bg-stone-900 flex items-center justify-center text-[9px] text-[#57251C] shrink-0 overflow-hidden">
-                      <img *ngIf="it.imageUrl" [src]="it.imageUrl" class="w-full h-full object-cover">
+                      <img *ngIf="it.imageUrl" [src]="it.imageUrl" [alt]="it.name || 'Selected hamper item'" class="w-full h-full object-cover">
                       <i *ngIf="!it.imageUrl" [class]="getItemVisual(it.name).icon"></i>
                     </span>
                     <div class="min-w-0 flex-1">

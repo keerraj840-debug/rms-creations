@@ -131,21 +131,18 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] mb-1.5">
-                Gender <span class="text-rose-500">*</span>
+                Gender <span class="text-[10px] text-stone-500 dark:text-stone-400 font-normal">(Optional)</span>
               </label>
               <select
                 formControlName="gender"
                 class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-3 py-2.5 text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738] focus:ring-1 focus:ring-[#9C4738]"
               >
-                <option value="">Select Gender</option>
+                <option value="">Select Gender (Optional)</option>
                 <option value="female">Female</option>
                 <option value="male">Male</option>
                 <option value="other">Other</option>
                 <option value="prefer_not_to_say">Prefer not to say</option>
               </select>
-              <p *ngIf="registerForm.get('gender')?.touched && registerForm.get('gender')?.invalid" class="text-[11px] text-rose-500 mt-1">
-                Gender is required
-              </p>
             </div>
 
             <div>
@@ -157,6 +154,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
                 formControlName="date_of_birth"
                 class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-3 py-2 text-xs text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:border-[#9C4738] focus:ring-1 focus:ring-[#9C4738]"
               />
+              <p class="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5">Required for age verification under the Indian Contract Act, 1872.</p>
               <p *ngIf="registerForm.get('date_of_birth')?.touched && registerForm.get('date_of_birth')?.invalid" class="text-[11px] text-rose-500 mt-1">
                 <span *ngIf="registerForm.get('date_of_birth')?.hasError('required')">Date of birth is required</span>
                 <span *ngIf="registerForm.get('date_of_birth')?.hasError('underAge')">You must be at least 18 years old to sign up</span>
@@ -221,8 +219,8 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
               />
               <label for="age_gate" class="text-xs text-[#4A3C31] dark:text-[#C5A393] leading-relaxed select-none">
                 I confirm that I am at least 18 years of age and agree to the 
-                <a routerLink="/terms" target="_blank" class="text-[#9C4738] dark:text-[#EB9D8E] font-bold underline hover:text-[#7A3326]">Terms of Service</a> and 
-                <a routerLink="/privacy" target="_blank" class="text-[#9C4738] dark:text-[#EB9D8E] font-bold underline hover:text-[#7A3326]">Privacy Policy</a>. <span class="text-rose-500">*</span>
+                <a routerLink="/terms" target="_blank" rel="noopener noreferrer" class="text-[#9C4738] dark:text-[#EB9D8E] font-bold underline hover:text-[#7A3326]">Terms of Service</a> and 
+                <a routerLink="/privacy" target="_blank" rel="noopener noreferrer" class="text-[#9C4738] dark:text-[#EB9D8E] font-bold underline hover:text-[#7A3326]">Privacy Policy</a>. <span class="text-rose-500">*</span>
               </label>
             </div>
             <p *ngIf="registerForm.get('age_gate')?.touched && registerForm.get('age_gate')?.invalid" class="text-[11px] text-rose-500 pl-6">
@@ -271,7 +269,7 @@ export class RegisterPageComponent implements OnInit {
     name: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     phone_no: ['', [Validators.pattern(/^[0-9]{10}$/)]],
-    gender: ['', [Validators.required]],
+    gender: [''],
     date_of_birth: ['', [Validators.required, minimumAgeValidator(18)]],
     age_gate: [false, [Validators.requiredTrue]],
     password: ['', [Validators.required, strongPasswordValidator()]],

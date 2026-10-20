@@ -95,7 +95,7 @@ import { TableComponent, TableColumn } from '../shared/ui/table.component';
             <td class="px-6 py-4">
               <div class="flex items-center gap-4">
                 <div class="h-12 w-16 rounded-xl bg-[#F3E7DC] dark:bg-white/10 border border-[#EADFD2] dark:border-white/10 overflow-hidden flex items-center justify-center shrink-0 shadow-sm">
-                   <img *ngIf="c.image" [src]="c.image" class="h-full w-full object-cover">
+                   <img *ngIf="c.image" [src]="c.image" [alt]="c.name + ' category image'" class="h-full w-full object-cover">
                    <span *ngIf="!c.image" class="text-lg text-[#7A6C5E] dark:text-[#C5A393]"><i class="fa-solid fa-folder"></i></span>
                 </div>
                 <div>

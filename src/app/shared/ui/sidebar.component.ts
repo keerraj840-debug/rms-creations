@@ -15,7 +15,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
 
       <!-- Brand Header -->
       <div class="px-3 mb-6 flex items-center justify-between shrink-0">
-        <a routerLink="/admin/dashboard" (click)="onNavClick()" class="flex items-center gap-3 group">
+        <a routerLink="/admin" (click)="onNavClick()" class="flex items-center gap-3 group">
           <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#DD8776] to-[#9C4738] p-0.5 shadow-sm group-hover:scale-105 transition-transform duration-200">
             <div class="w-full h-full bg-white dark:bg-[#2E2825] rounded-[14px] flex items-center justify-center">
               <span class="font-serif text-base font-bold text-[#9C4738] dark:text-[#DD8776]">R</span>

@@ -145,6 +145,15 @@ export const routes: Routes = [
     redirectTo: 'privacy'
   },
   {
+    path: 'cookies',
+    loadComponent: () => import('./pages/policy-page.component').then(m => m.PolicyPageComponent),
+    data: { section: 'cookies' }
+  },
+  {
+    path: 'cookie-policy',
+    redirectTo: 'cookies'
+  },
+  {
     path: 'shipping-policy',
     loadComponent: () => import('./pages/policy-page.component').then(m => m.PolicyPageComponent),
     data: { section: 'shipping' }
@@ -167,6 +176,10 @@ export const routes: Routes = [
     path: 'policies',
     redirectTo: 'terms'
   },
+  {
+    path: 'policy',
+    redirectTo: 'terms'
+  },
 
   // Admin Routes (Protected by Auth Guard)
   { 
@@ -178,6 +191,11 @@ export const routes: Routes = [
       { 
         path: '', 
         loadComponent: () => import('./pages/admin-dashboard-page.component').then(m => m.AdminDashboardPageComponent) 
+      },
+      { 
+        path: 'dashboard', 
+        redirectTo: '', 
+        pathMatch: 'full' 
       },
       { 
         path: 'users', 

@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SupabaseService } from '../../services/supabase.service';
 import { ThemeService } from '../../services/theme.service';
 import { LocalStorageService } from '../../services/local-storage.service';
@@ -8,7 +8,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   template: `
     <header class="h-16 sm:h-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 w-full
                    bg-[#FDFBF7]/90 dark:bg-[#1C1917]/90 backdrop-blur-md border-b border-[#EADFD2]/60 dark:border-white/10
@@ -29,6 +29,14 @@ import { LocalStorageService } from '../../services/local-storage.service';
 
       <!-- Right: Action Buttons & User Menu -->
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+
+        <!-- Quick View Storefront Link -->
+        <a routerLink="/" target="_blank"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-[#2E2825] border border-[#EADFD2] dark:border-white/10 text-xs font-semibold text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] dark:hover:text-[#EB9D8E] shadow-2xs hover:shadow-xs transition"
+           title="Preview Live Customer Store">
+          <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+          <span class="hidden sm:inline">View Store</span>
+        </a>
 
         <!-- Dark / Light Theme Toggle -->
         <button (click)="themeService.toggleTheme()"

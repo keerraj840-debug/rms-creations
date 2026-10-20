@@ -3,17 +3,18 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/ro
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ThemeService } from '../services/theme.service';
-import { CheckoutService } from '../services/checkout.service';
 import { CartService } from '../services/cart.service';
 import { AuthService } from '../services/auth.service';
-import { CheckoutModalComponent } from './ui/checkout-modal.component';
 import { PwaService } from '../services/pwa.service';
 import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
+import { ToastContainerComponent } from './ui/toast-container.component';
+import { CookieConsentComponent } from './ui/cookie-consent.component';
+import { CookieConsentService } from '../services/cookie-consent.service';
 
 @Component({
   selector: 'app-site-layout',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, AsyncPipe, NgClass, NgIf, FormsModule, CheckoutModalComponent, PwaInstallBannerComponent],
+  imports: [RouterLink, RouterLinkActive, AsyncPipe, NgClass, NgIf, FormsModule, PwaInstallBannerComponent, ToastContainerComponent, CookieConsentComponent],
   template: `
     <!-- Main Shell -->
     <div
@@ -36,7 +37,7 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
               <div class="relative">
                 <img
                   src="assets/logo.png"
-                  alt="RMS Logo"
+                  alt="RMS Gift Hampers brand logo"
                   class="h-10 w-10 rounded-full object-cover shadow-sm ring-2 ring-[#D9C3B9]/60 dark:ring-[#57251C] transition-all group-hover:ring-[#C56D5B] sm:h-12 sm:w-12"
                 />
                 <span class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-[#1B4D3E] ring-2 ring-[#FFFDFC] dark:ring-[#1C1816]" title="Online & Ready to assist"></span>
@@ -332,7 +333,7 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
             <!-- Brand Info Column (4 cols) -->
             <div class="flex flex-col lg:col-span-4">
               <a routerLink="/" class="flex items-center gap-3 mb-3 transition-transform hover:scale-102">
-                <img src="assets/logo.png" alt="RMS Logo" class="h-11 w-11 rounded-full object-cover shadow-xs ring-2 ring-[#D9C3B9]/40" />
+                <img src="assets/logo.png" alt="RMS Gift Hampers brand logo" class="h-11 w-11 rounded-full object-cover shadow-xs ring-2 ring-[#D9C3B9]/40" />
                 <span class="font-serif text-xl font-bold tracking-tight text-[#FFFDFC]">RMS Gift Hampers</span>
               </a>
               <p class="text-xs leading-relaxed text-[#D9C3B9]/90 max-w-sm">
@@ -425,6 +426,16 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
               <span>&bull;</span>
               <a routerLink="/privacy" class="hover:text-white transition-colors">Privacy</a>
               <span>&bull;</span>
+              <a routerLink="/cookies" class="hover:text-white transition-colors">Cookies</a>
+              <span>&bull;</span>
+              <button
+                type="button"
+                (click)="cookieConsentService.openPreferences()"
+                class="hover:text-white transition-colors cursor-pointer text-xs focus:outline-none focus:ring-1 focus:ring-amber-400 rounded px-1"
+              >
+                Cookie Settings
+              </button>
+              <span>&bull;</span>
               <a routerLink="/shipping-policy" class="hover:text-white transition-colors">Shipping</a>
               <span>&bull;</span>
               <a routerLink="/refund-policy" class="hover:text-white transition-colors">Refunds</a>
@@ -447,18 +458,11 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
         </div>
       </footer>
 
-      <!-- FLOATING TOAST NOTIFICATION FOR CART -->
-      <aside
-        *ngIf="cartService.toastMessage$ | async as toastMsg"
-        aria-live="polite"
-        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-full bg-[#57251C] dark:bg-[#1E1916] text-[#FFFDFC] px-5 py-3 shadow-2xl border border-[#EB9D8E]/40 ring-2 ring-black/10 backdrop-blur-md"
-      >
-        <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
-        <span class="text-xs sm:text-sm font-medium">{{ toastMsg }}</span>
-        <a routerLink="/cart" class="rounded-full bg-[#C56D5B] px-3 py-1 text-xs font-bold text-white hover:bg-[#9C4738] transition ml-1">
-          Cart &rarr;
-        </a>
-      </aside>
+      <!-- COOKIE CONSENT & PREFERENCES BANNER (DPDP ACT 2023) -->
+      <app-cookie-consent></app-cookie-consent>
+
+      <!-- SMART SCREEN-MANAGED TOAST NOTIFICATIONS -->
+      <app-toast-container [hideBottomNav]="hideBottomNav"></app-toast-container>
 
       <!-- APP-LIKE STICKY MOBILE BOTTOM NAVIGATION BAR -->
       <nav
@@ -530,6 +534,7 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
 
       <!-- FLOATING LUXURY Chat with Us BUTTON -->
       <aside
+        *ngIf="!hideFloatingAction"
         class="fixed z-30 transition-all duration-300"
         [ngClass]="hideBottomNav ? 'bottom-5 right-5' : 'bottom-16 md:bottom-6 right-4 sm:right-6'"
       >
@@ -561,11 +566,11 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
           <div class="flex items-center justify-between border-b border-[#D9C3B9]/30 dark:border-[#3D302A] pb-3">
             <h3 class="text-lg font-bold text-[#57251C] dark:text-[#F4F1ED]">
               <span *ngIf="legalModalType === 'unsubscribe'">Unsubscribe from Marketing</span>
-              <span *ngIf="legalModalType === 'dmca'">DMCA Copyright Agent Notice</span>
+              <span *ngIf="legalModalType === 'dmca' || legalModalType === 'ip'">Intellectual Property & Copyright Notice</span>
               <span *ngIf="legalModalType === 'privacy'">Privacy Policy & Data Security</span>
               <span *ngIf="legalModalType === 'terms'">Terms of Service & Age Gate</span>
             </h3>
-            <button (click)="closeLegalModal()" class="rounded-full bg-[#F7F6F3] dark:bg-[#251F1C] p-2 text-[#9D7B6C] dark:text-[#D9C3B9] hover:text-[#57251C] dark:hover:text-[#FFFDFC] cursor-pointer">
+            <button (click)="closeLegalModal()" class="rounded-full bg-[#F7F6F3] dark:bg-[#251F1C] p-2 text-[#9D7B6C] dark:text-[#D9C3B9] hover:text-[#57251C] dark:hover:text-[#FFFDFC] cursor-pointer" aria-label="Close legal modal">
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
@@ -586,40 +591,37 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
             </p>
           </div>
 
-          <!-- DMCA Content -->
-          <div *ngIf="legalModalType === 'dmca'" class="space-y-3 text-xs leading-relaxed text-[#4A3C31] dark:text-[#C5A393]">
-            <p><strong>DMCA Copyright Designated Agent Disclosure</strong></p>
-            <p>RMS Creations respects intellectual property rights. If you believe your copyrighted material is appearing on this website without authorization, please notify our Designated Copyright Agent:</p>
+          <!-- Intellectual Property / Copyright Notice (Indian Jurisdiction) -->
+          <div *ngIf="legalModalType === 'dmca' || legalModalType === 'ip'" class="space-y-3 text-xs leading-relaxed text-[#4A3C31] dark:text-[#C5A393]">
+            <p><strong>Copyright & Intellectual Property Notice (India)</strong></p>
+            <p>RMS Creations respects intellectual property rights under the <strong>Indian Copyright Act, 1957</strong> (Section 52(1)(c)) and the <strong>Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021</strong>. If you believe your original creative work is displayed without authorization, please notify our Grievance / Copyright Officer:</p>
             <div class="p-3 bg-[#F7F6F3] dark:bg-[#251F1C] rounded-xl border border-[#D9C3B9]/30 space-y-1">
-              <p><strong>Designated Agent:</strong> Copyright Manager, Legal Dept.</p>
-              <p><strong>Postal Address:</strong> RMS Creations Studio, Plot 42, Sector 15, Vashi, Navi Mumbai, MH 400703, India</p>
+              <p><strong>Designated Officer:</strong> Legal & Grievance Officer, RMS Creations</p>
+              <p><strong>Registered Studio:</strong> Plot 42, Sector 15, Vashi, Navi Mumbai, Maharashtra 400703, India</p>
               <p><strong>Email:</strong> rmsgifthampers&#64;gmail.com</p>
-              <p><strong>Phone:</strong> +91 92849 05118</p>
+              <p><strong>Phone:</strong> +91 92849 05118 (Mon–Sat, 10:00 AM – 6:00 PM IST)</p>
             </div>
             <p class="text-[10px] opacity-80">
-              Notices must include your contact details, identification of copyrighted work, URL of infringing material, and a statement made under penalty of perjury.
+              Notices must state the specific copyrighted work, proof of ownership or authorization, exact product or page link, and contact details. Legitimate statutory complaints are acknowledged within 24 hours and addressed within statutory timelines.
             </p>
           </div>
 
           <!-- Privacy Policy Content -->
           <div *ngIf="legalModalType === 'privacy'" class="space-y-3 text-xs leading-relaxed text-[#4A3C31] dark:text-[#C5A393]">
             <p><strong>Privacy Policy & Data Security</strong></p>
-            <p>RMS Creations collects user information strictly for order processing, custom hamper consultations, and account management. We do not sell personal data to third parties.</p>
-            <p><strong>Fonts & Session Replay:</strong> Website fonts are self-hosted locally without transmitting IP data to third-party font servers. Session replay tracking is disabled or masked on all sensitive inputs.</p>
+            <p>RMS Creations processes customer data strictly for order fulfillment, custom hamper consultations, and account management under the Digital Personal Data Protection Act, 2023. We do not sell personal data to third parties.</p>
+            <p><strong>Fonts & Session Storage:</strong> Web fonts are self-hosted locally without transmitting IP data to third-party font servers. Payment credentials are handled directly via PCI-DSS certified gateways without touching or storing card/UPI secrets on our servers.</p>
           </div>
 
           <!-- Terms Content -->
           <div *ngIf="legalModalType === 'terms'" class="space-y-3 text-xs leading-relaxed text-[#4A3C31] dark:text-[#C5A393]">
             <p><strong>Terms of Service & Age Restrictions</strong></p>
-            <p>You must be at least 18 years of age to register an account or place orders on RMS Creations.</p>
-            <p>All hamper customizations, pricing tiers, and delivery terms are subject to availability and confirmation.</p>
+            <p>You must be at least 18 years of age or competent to contract under the Indian Contract Act, 1872 to register an account or place orders on RMS Creations.</p>
+            <p>All hamper customizations, pricing tiers, and delivery terms are subject to availability and formal order acceptance.</p>
           </div>
 
         </div>
       </div>
-
-      <!-- Global Customer Checkout & Order Modal -->
-      <app-checkout-modal></app-checkout-modal>
 
       <!-- PWA Installation & Smart Update Notification System -->
       <app-pwa-install-banner></app-pwa-install-banner>
@@ -631,23 +633,24 @@ export class SiteLayoutComponent {
   @Input() title = '';
   @Input() hideFooter = false;
   @Input() hideBottomNav = false;
+  @Input() hideFloatingAction = false;
 
   public readonly themeService = inject(ThemeService);
-  public readonly checkoutService = inject(CheckoutService);
   public readonly cartService = inject(CartService);
   public readonly authService = inject(AuthService);
   public readonly pwaService = inject(PwaService);
+  public readonly cookieConsentService = inject(CookieConsentService);
   private readonly router = inject(Router);
 
   newsletterEmail = '';
   newsletterSubscribed = false;
 
   showLegalModal = false;
-  legalModalType: 'unsubscribe' | 'dmca' | 'privacy' | 'terms' = 'privacy';
+  legalModalType: 'unsubscribe' | 'dmca' | 'ip' | 'privacy' | 'terms' = 'privacy';
   unsubscribeEmail = '';
   unsubscribeSuccess = false;
 
-  openLegalModal(type: 'unsubscribe' | 'dmca' | 'privacy' | 'terms') {
+  openLegalModal(type: 'unsubscribe' | 'dmca' | 'ip' | 'privacy' | 'terms') {
     this.legalModalType = type;
     this.showLegalModal = true;
     this.unsubscribeSuccess = false;
@@ -710,14 +713,6 @@ export class SiteLayoutComponent {
 
   closeMenu() {
     this.isMobileMenuOpen = false;
-  }
-
-  openQuickOrder() {
-    this.checkoutService.open({
-      title: 'RMS Festive Gift Hamper',
-      price: 999,
-      category: 'Festive Hampers'
-    });
   }
 
   openWhatsapp(sourcePage: string = 'General') {

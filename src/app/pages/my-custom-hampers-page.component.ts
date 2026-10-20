@@ -17,7 +17,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
     <app-site-layout>
       <div class="min-h-screen bg-[#FAF7F2] dark:bg-[#14100E] text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-28">
         
-        <main class=" mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
           
           <!-- Sleek Compact Page Header -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
@@ -108,7 +108,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
                   </h4>
                   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
                     <div *ngFor="let it of req.items" class="p-2.5 rounded-2xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2]/70 dark:border-white/10 flex items-center gap-2.5">
-                      <img [src]="it.reference_image_url || 'assets/logo.png'" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-stone-200 dark:border-stone-700">
+                      <img [src]="it.reference_image_url || 'assets/logo.png'" [alt]="it.item_name || 'Custom hamper item reference'" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-stone-200 dark:border-stone-700">
                       <div class="min-w-0">
                         <p class="text-xs font-bold text-[#2E2825] dark:text-[#F4F1ED] truncate">{{ it.item_name }}</p>
                         <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">

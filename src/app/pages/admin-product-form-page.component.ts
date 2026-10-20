@@ -12,7 +12,7 @@ import { ImageProcessorService } from '../shared/ui/image-processor.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, ModalComponent, FileUploadComponent],
   template: `
-    <div class=" mx-auto pb-12 space-y-4 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto pb-12 space-y-4 transition-colors duration-300">
 
       <!-- Top Action Bar (Header with Live Readiness Score & Fast Actions) -->
       <div class="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#FAF7F2]/95 dark:bg-[#1E1916]/95 backdrop-blur-md border-b border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-between gap-4">
@@ -315,7 +315,7 @@ import { ImageProcessorService } from '../shared/ui/image-processor.service';
 
                   <div *ngFor="let img of product.images; let idx = index"
                        class="relative group w-20 h-20 rounded-xl overflow-hidden border border-[#EADFD2] dark:border-white/10 shrink-0 bg-stone-100 shadow-2xs">
-                    <img [src]="img" class="w-full h-full object-cover">
+                    <img [src]="img" [alt]="product.name ? (product.name + ' image ' + (idx + 1)) : ('Product photo ' + (idx + 1))" class="w-full h-full object-cover">
 
                     <span *ngIf="idx === 0" class="absolute bottom-1 left-1 bg-black/80 text-white text-[8px] font-bold px-1.5 py-0.5 rounded">
                       COVER

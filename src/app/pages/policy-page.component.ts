@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SiteLayoutComponent } from '../shared/site-layout.component';
 import { SeoService } from '../shared/seo.service';
+import { CookieConsentService } from '../services/cookie-consent.service';
 
-export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grievance';
+export type PolicySection = 'terms' | 'privacy' | 'cookies' | 'shipping' | 'refunds' | 'grievance';
 
 @Component({
   selector: 'app-policy-page',
@@ -15,7 +16,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-24">
 
         <!-- MAIN CONTENT WITH SMART FLUID 2-COLUMN LAYOUT -->
-        <main class=" mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
 
           <!-- Sleek Header Row with Instant Grievance Support CTA -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
@@ -23,9 +24,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
               <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#2E2825] dark:text-[#F4F1ED]">
                 Customer Policies &amp; Help
               </h1>
-              <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
-                Terms &bull; Shipping &bull; Returns &bull; Navi Mumbai, India
-              </p>
+              
             </div>
             <a
               routerLink="/contact"
@@ -234,6 +233,100 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
               </section>
 
               <!-- ========================================== -->
+              <!-- 2B. COOKIE & TRACKING POLICY               -->
+              <!-- ========================================== -->
+              <section *ngIf="activeTab === 'cookies'" class="space-y-6">
+                <div>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EADFD2]/70 dark:bg-white/10 text-[#9C4738] dark:text-[#EB9D8E] uppercase tracking-wider">
+                    Browser Storage &amp; Transparency
+                  </span>
+                  <h2 class="mt-2 font-serif text-2xl sm:text-3xl font-bold text-[#2E2825] dark:text-[#F4F1ED]">
+                    Cookie &amp; Local Storage Policy
+                  </h2>
+                  <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393] mt-1">
+                    Transparent disclosure of cookies and browser storage technologies under India's DPDP Act, 2023.
+                  </p>
+                </div>
+
+                <div class="space-y-4 text-xs sm:text-sm text-[#4A3C31] dark:text-[#D9C3B9] leading-relaxed">
+                  <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base">1. What Technologies We Use</h3>
+                  <p>
+                    RMS Creations uses browser storage (localStorage and sessionStorage) and limited cookies to deliver a fast, secure, and personalized gift hamper shopping journey. We do not sell tracking profiles or partner with cross-app behavioural data brokers.
+                  </p>
+
+                  <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">2. Verified Storage &amp; Cookie Inventory</h3>
+                  <div class="overflow-x-auto rounded-2xl border border-[#EADFD2] dark:border-white/10">
+                    <table class="w-full text-left text-xs border-collapse">
+                      <thead class="bg-[#FAF7F2] dark:bg-white/5 border-b border-[#EADFD2] dark:border-white/10 text-[#2E2825] dark:text-[#F4F1ED] font-bold">
+                        <tr>
+                          <th class="p-3">Key / Cookie</th>
+                          <th class="p-3">Provider / Type</th>
+                          <th class="p-3">Category</th>
+                          <th class="p-3">Purpose</th>
+                          <th class="p-3">Duration</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-[#EADFD2]/60 dark:divide-white/10 text-[#4A3C31] dark:text-[#D9C3B9]">
+                        <tr>
+                          <td class="p-3 font-mono font-semibold">sb-*-auth-token</td>
+                          <td class="p-3">Supabase Auth</td>
+                          <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-semibold">Strictly Essential</span></td>
+                          <td class="p-3">Authenticates customer logins and protects order history</td>
+                          <td class="p-3">Session / Refresh Token</td>
+                        </tr>
+                        <tr>
+                          <td class="p-3 font-mono font-semibold">rms_shopping_cart</td>
+                          <td class="p-3">RMS Creations</td>
+                          <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-semibold">Strictly Essential</span></td>
+                          <td class="p-3">Persists cart contents so items are not lost while browsing</td>
+                          <td class="p-3">Persistent LocalStorage</td>
+                        </tr>
+                        <tr>
+                          <td class="p-3 font-mono font-semibold">rms_theme_mode</td>
+                          <td class="p-3">RMS Creations</td>
+                          <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-semibold">Strictly Essential</span></td>
+                          <td class="p-3">Remembers your light or dark mode display preference</td>
+                          <td class="p-3">Persistent LocalStorage</td>
+                        </tr>
+                        <tr>
+                          <td class="p-3 font-mono font-semibold">rms_cookie_consent_v1</td>
+                          <td class="p-3">RMS Creations</td>
+                          <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-semibold">Strictly Essential</span></td>
+                          <td class="p-3">Stores your affirmative consent and preferences</td>
+                          <td class="p-3">Persistent LocalStorage</td>
+                        </tr>
+                        <tr>
+                          <td class="p-3 font-mono font-semibold">_ga, _ga_*</td>
+                          <td class="p-3">Google Analytics 4</td>
+                          <td class="p-3"><span class="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-semibold">Optional Analytics</span></td>
+                          <td class="p-3">Measures aggregate visits and popular hamper interactions</td>
+                          <td class="p-3">Up to 2 years (Disabled by default without consent)</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">3. Managing Your Preferences</h3>
+                  <p>
+                    Under India's Digital Personal Data Protection Act, 2023, you can grant or withdraw consent for non-essential analytics tracking at any time:
+                  </p>
+                  <div class="pt-2">
+                    <button
+                      type="button"
+                      (click)="cookieConsentService.openPreferences()"
+                      class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#9C4738] hover:bg-[#7E3528] text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer"
+                    >
+                      <i class="fa-solid fa-sliders"></i>
+                      <span>Open Cookie Preferences</span>
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] pt-1">
+                    You can also block or clear cookies directly in your browser settings (Chrome, Safari, Firefox, Edge). Note that blocking essential storage will prevent signing into your account or adding hampers to your bag.
+                  </p>
+                </div>
+              </section>
+
+              <!-- ========================================== -->
               <!-- 3. SHIPPING & DELIVERY POLICY              -->
               <!-- ========================================== -->
               <section *ngIf="activeTab === 'shipping'" class="space-y-6">
@@ -423,12 +516,14 @@ export class PolicyPageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly seo = inject(SeoService);
   private readonly cdr = inject(ChangeDetectorRef);
+  public readonly cookieConsentService = inject(CookieConsentService);
 
   activeTab: PolicySection = 'terms';
 
   readonly tabs: { id: PolicySection; label: string; sub: string; icon: string }[] = [
     { id: 'terms', label: 'Terms & Conditions', sub: 'Contract of sale, age gate, usage', icon: 'fa-solid fa-file-contract' },
     { id: 'privacy', label: 'Privacy Policy', sub: 'DPDP Act 2023, data security, rights', icon: 'fa-solid fa-user-shield' },
+    { id: 'cookies', label: 'Cookie Policy', sub: 'Storage, analytics, and consent choices', icon: 'fa-solid fa-cookie-bite' },
     { id: 'shipping', label: 'Shipping & Delivery', sub: 'Pan-India transit, local timelines, fees', icon: 'fa-solid fa-truck-fast' },
     { id: 'refunds', label: 'Cancellation & Refunds', sub: 'Returns, transit damage, refund timeline', icon: 'fa-solid fa-arrow-rotate-left' },
     { id: 'grievance', label: 'Grievance Officer', sub: 'E-commerce rules 2020 compliance', icon: 'fa-solid fa-scale-balanced' }
@@ -462,7 +557,7 @@ export class PolicyPageComponent implements OnInit {
   }
 
   private isValidTab(tab: string): tab is PolicySection {
-    return ['terms', 'privacy', 'shipping', 'refunds', 'grievance'].includes(tab);
+    return ['terms', 'privacy', 'cookies', 'shipping', 'refunds', 'grievance'].includes(tab);
   }
 
   private updateSeo() {
@@ -474,6 +569,10 @@ export class PolicyPageComponent implements OnInit {
       privacy: {
         title: 'Privacy Policy | RMS Gift Hampers',
         desc: 'Learn how RMS Creations Studio protects your personal data in accordance with India DPDP Act 2023 and IT Act 2000.'
+      },
+      cookies: {
+        title: 'Cookie & Tracking Policy | RMS Gift Hampers',
+        desc: 'Understand how RMS Creations uses local storage, session storage, and analytics cookies, and manage your preferences.'
       },
       shipping: {
         title: 'Shipping & Delivery Policy | RMS Gift Hampers',

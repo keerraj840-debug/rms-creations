@@ -10,7 +10,7 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, FileUploadComponent],
   template: `
-    <div class=" mx-auto pb-12 space-y-4 transition-colors duration-300">
+    <div class="max-w-4xl mx-auto pb-12 space-y-4 transition-colors duration-300">
 
       <!-- Top Sticky Header Bar (Exact match to Product Studio) -->
       <div class="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#FAF7F2]/95 dark:bg-[#1E1916]/95 backdrop-blur-md border-b border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-between gap-4">
@@ -264,7 +264,7 @@ import { FileUploadComponent } from '../shared/ui/file-upload.component';
               <div class="border border-[#EADFD2] dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-[#1E1916] shadow-sm">
                 <!-- Cover Image or Placeholder -->
                 <div class="relative h-44 bg-gradient-to-br from-[#F3E7DC] to-[#EADFD2] flex items-center justify-center overflow-hidden">
-                  <img *ngIf="category.image" [src]="category.image" class="w-full h-full object-cover">
+                  <img *ngIf="category.image" [src]="category.image" [alt]="category.name || 'Category cover image'" class="w-full h-full object-cover">
                   <div *ngIf="!category.image" class="flex flex-col items-center justify-center text-[#7A6C5E] gap-1 p-4 text-center">
                     <i class="fa-regular fa-image text-2xl text-[#BA5E4E]"></i>
                     <span class="text-xs font-bold">No cover uploaded yet</span>

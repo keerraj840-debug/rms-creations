@@ -18,7 +18,7 @@ import { SupabaseService } from '../../services/supabase.service';
            class="relative group rounded-2xl overflow-hidden border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-white/5 p-3 flex items-center justify-between gap-3 shadow-2xs">
         <div class="flex items-center gap-3 min-w-0">
           <div class="w-16 h-16 rounded-xl overflow-hidden bg-stone-100 dark:bg-stone-800 border border-[#EADFD2] dark:border-white/10 shrink-0 flex items-center justify-center">
-            <img [src]="existingImageUrl" class="w-full h-full object-cover">
+            <img [src]="existingImageUrl" alt="Current active image preview" class="w-full h-full object-cover">
           </div>
           <div class="min-w-0">
             <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block">
@@ -81,7 +81,7 @@ import { SupabaseService } from '../../services/supabase.service';
           <div class="flex items-center gap-3 min-w-0">
             <!-- Thumbnail -->
             <div class="w-14 h-14 rounded-xl overflow-hidden bg-stone-100 dark:bg-stone-800 border border-[#EADFD2] dark:border-white/10 shrink-0">
-              <img [src]="lastProcessedResult.dataUrl" class="w-full h-full object-cover">
+              <img [src]="lastProcessedResult.dataUrl" alt="Optimized processed image preview" class="w-full h-full object-cover">
             </div>
             
             <div class="min-w-0">

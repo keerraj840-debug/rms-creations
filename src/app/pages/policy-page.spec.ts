@@ -81,4 +81,15 @@ describe('PolicyPageComponent', () => {
       })
     );
   });
+
+  it('should switch tabs to cookies policy and update SEO metadata', () => {
+    component.selectTab('cookies');
+    expect(component.activeTab).toBe('cookies');
+    expect(mockSeoService.setPageMetadata).toHaveBeenCalledWith(
+      expect.objectContaining({
+        slug: 'cookies',
+        title: expect.stringContaining('Cookie & Tracking Policy')
+      })
+    );
+  });
 });

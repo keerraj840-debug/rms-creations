@@ -4,7 +4,6 @@ import { Router, RouterLink } from '@angular/router';
 import { SiteLayoutComponent } from '../shared/site-layout.component';
 import { SeoService } from '../shared/seo.service';
 import { SupabaseService } from '../services/supabase.service';
-import { CheckoutService } from '../services/checkout.service';
 import { CartService } from '../services/cart.service';
 import { isWithinDateWindow } from './shop-page.component';
 import { sanitizeReturnUrl } from '../utils/security.utils';
@@ -23,7 +22,7 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
           <div class="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-[#EB9D8E]/20 dark:bg-[#EB9D8E]/10 blur-3xl"></div>
           <div class="pointer-events-none absolute top-1/2 -right-24 h-96 w-96 rounded-full bg-[#DD8776]/15 dark:bg-[#DD8776]/5 blur-3xl"></div>
 
-          <div class=" mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             <!-- Hero Top Row: Headline + Live 16:9 Showcase Banner -->
             <div class="grid items-center gap-6 lg:grid-cols-12 lg:gap-8">
@@ -253,25 +252,9 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
           </div>
         </section>
 
-        <!-- CART CONFIRMATION TOAST -->
-        <div
-          *ngIf="addedCartToast"
-          class="fixed bottom-5 right-5 z-50 bg-[#57251C] text-white px-4 py-3 rounded-2xl shadow-xl border border-amber-300/30 flex items-center gap-3 animate-fade-in"
-        >
-          <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-check"></i>
-          </div>
-          <div>
-            <div class="text-xs font-bold">Added to Cart!</div>
-            <div class="text-[11px] text-stone-300 truncate max-w-xs">{{ addedCartToast }}</div>
-          </div>
-          <a routerLink="/cart" class="ml-2 px-3 py-1 bg-[#C56D5B] hover:bg-[#9C4738] rounded-xl text-xs font-bold transition">
-            View Cart &rarr;
-          </a>
-        </div>
 
         <!-- 2. SMART BESTSELLERS & CURATED MATCHES SECTION -->
-        <section class=" mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-6">
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-6">
 
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-[#EADFD2]/70 dark:border-white/10 pb-3">
             <div>
@@ -285,7 +268,7 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
                 Trending Hampers &amp; Quick Gifts
               </h2>
               <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
-                Instant 1-tap add to cart with verified pricing and guaranteed safe packaging.
+                Instant 1-tap add to cart with verified pricing and protective multi-layer packaging.
               </p>
             </div>
 
@@ -407,7 +390,7 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
 
         <!-- 3. BUILD YOUR OWN HAMPER SPOTLIGHT -->
         <section class="bg-[#57251C] text-white py-10 sm:py-12 my-6">
-          <div class=" mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid items-center gap-6 lg:grid-cols-12">
 
               <div class="lg:col-span-8 space-y-3">
@@ -471,7 +454,7 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
         </section>
 
         <!-- 4. CATEGORIES BROWSER -->
-        <section class=" mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-5">
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-5">
           <div class="flex items-center justify-between border-b border-[#EADFD2]/70 dark:border-white/10 pb-3">
             <div>
               <span class="text-xs font-bold uppercase tracking-wider text-[#9C4738] dark:text-[#EB9D8E]">
@@ -515,7 +498,7 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
         </section>
 
         <!-- 5. DIRECT CONCIERGE & BULK ORDERS CALLOUT -->
-        <section class=" mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div class="rounded-3xl border border-[#EADFD2] dark:border-white/10 bg-gradient-to-r from-[#FAF7F2] via-white to-[#FAF7F2] dark:from-[#1E1916] dark:via-[#251F1C] dark:to-[#1E1916] p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="space-y-2 text-center md:text-left">
               <span class="inline-block px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
@@ -561,7 +544,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
   private readonly seo = inject(SeoService);
   private readonly supabase = inject(SupabaseService);
   private readonly router = inject(Router);
-  public readonly checkoutService = inject(CheckoutService);
   public readonly cartService = inject(CartService);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -575,7 +557,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
   bestsellers: any[] = [];
   filteredBestsellers: any[] = [];
   displayCategories: any[] = [];
-  addedCartToast: string = '';
 
   topOfferSlides: {
     title: string;
@@ -798,14 +779,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
       image: prod.image,
       category: prod.category
     }, 1);
-
-    this.addedCartToast = prod.name;
-    setTimeout(() => {
-      if (this.addedCartToast === prod.name) {
-        this.addedCartToast = '';
-        this.cdr.markForCheck();
-      }
-    }, 3000);
     this.cdr.markForCheck();
   }
 

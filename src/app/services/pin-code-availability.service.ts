@@ -36,7 +36,7 @@ export interface DeliveryCheckResult {
 export class PinCodeAvailabilityService {
   private readonly supabase = inject(SupabaseService);
 
-  // Ratnagiri Taluka postal PIN codes list (H.O, Kutchery, Shirgaon, Pawas, Hatkhamba, Jaigad/Ganpatipule, Malgund, Tiware, Ranpar)
+  // Ratnagiri Taluka postal PIN codes list (H.O, Shirgaon, Pawas, Hatkhamba, Jaigad/Ganpatipule, Malgund, Tiware, Ranpar)
   public readonly ratnagiriTalukaPinCodes = new Set([
     '415612', // Ratnagiri H.O, City, Nachane, Kuwarbav, Shivaji Nagar, Rahatagar
     '415613', // Shirgaon, Mirya, Kasarveli
@@ -327,7 +327,7 @@ export class PinCodeAvailabilityService {
       { pin: '415617', name: 'Ratnagiri (Jaigad / Ganpatipule)' },
       { pin: '415620', name: 'Ratnagiri (Kotawade / Malgund)' },
       { pin: '415629', name: 'Ratnagiri (Tiware / Kondye)' },
-      { pin: '415639', name: 'Ratnagiri (Kutchery / Zadgaon / MIDC)' },
+      { pin: '415639', name: 'Ratnagiri (Zadgaon / MIDC)' },
       { pin: '415640', name: 'Ratnagiri (Ranpar / Finolex)' }
     ];
 

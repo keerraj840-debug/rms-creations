@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
+import { ToastService } from './toast.service';
 
 export interface CartItem {
   id: string;
@@ -19,6 +20,7 @@ export interface CartItem {
 })
 export class CartService {
   private readonly localStorage = inject(LocalStorageService);
+  private readonly toastService = inject(ToastService);
   private readonly STORAGE_KEY = 'rms_shopping_cart';
 
   private itemsSubject = new BehaviorSubject<CartItem[]>([]);
@@ -102,6 +104,13 @@ export class CartService {
     }
 
     this.saveCart(current);
+    this.toastService.showCartToast({
+      title: item.title,
+      image: item.image,
+      price: item.price,
+      quantity,
+      category: item.category
+    });
     this.showToast(`Added "${item.title}" to your cart!`);
   }
 
@@ -122,13 +131,19 @@ export class CartService {
   }
 
   removeFromCart(itemId: string) {
+    const removedItem = this.items.find(item => item.id === itemId);
     const current = this.items.filter(item => item.id !== itemId);
     this.saveCart(current);
+    this.toastService.info(
+      removedItem ? `Removed "${removedItem.title}" from your bag` : 'Item removed from bag',
+      'Bag Updated'
+    );
     this.showToast('Item removed from cart');
   }
 
   clearCart() {
     this.saveCart([]);
+    this.toastService.info('Your shopping bag has been cleared', 'Bag Cleared');
   }
 
   private showToast(msg: string) {

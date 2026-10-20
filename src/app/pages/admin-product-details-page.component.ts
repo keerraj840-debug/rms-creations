@@ -290,7 +290,7 @@ import { ItemSourcingImageService, OnlineImageCandidate } from '../services/item
                 <button type="button" (click)="openQuickImageModal(d, $event)"
                         class="w-11 h-11 rounded-xl overflow-hidden bg-[#F3E7DC] dark:bg-white/10 border-2 border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-center shrink-0 group/img relative cursor-pointer shadow-2xs hover:border-[#9C4738] transition-all"
                         [title]="d._image ? (isStorageFile(d._image) ? '📁 Stored File in Supabase Storage — Click to change' : '🌐 Web Photo — Click to change') : 'Click to pick image online'">
-                  <img *ngIf="d._image" [src]="d._image" (error)="d._image = ''" class="w-full h-full object-cover">
+                  <img *ngIf="d._image" [src]="d._image" (error)="d._image = ''" [alt]="d.item_name || 'Component item photo'" class="w-full h-full object-cover">
                   <i *ngIf="!d._image" class="fa-solid fa-camera text-[#A89F91] text-sm"></i>
                   <!-- Cloud file badge if saved to Supabase -->
                   <div *ngIf="d._image && isStorageFile(d._image)" class="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[7px] shadow-xs" title="File stored in cloud bucket">

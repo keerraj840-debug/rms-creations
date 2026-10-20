@@ -513,7 +513,7 @@ import {
               <!-- Selected Image in Cloud Storage -->
               <div *ngIf="item.image" class="p-3 rounded-xl border bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/40 flex items-center justify-between text-xs">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <img [src]="item.image" (error)="item.image = ''" class="w-12 h-12 rounded-xl object-cover shrink-0 border border-emerald-300 shadow-2xs">
+                  <img [src]="item.image" (error)="item.image = ''" [alt]="item.name || 'Cloud storage item image'" class="w-12 h-12 rounded-xl object-cover shrink-0 border border-emerald-300 shadow-2xs">
                   <div class="min-w-0">
                     <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white flex items-center gap-1 w-max">
                       <i class="fa-solid fa-cloud-arrow-up text-[9px]"></i> Saved in Cloud Storage Bucket
@@ -629,7 +629,7 @@ import {
                 <div class="flex items-start justify-between gap-3">
                   <div class="flex items-center gap-2.5">
                     <div class="w-12 h-12 rounded-xl overflow-hidden bg-[#F3E7DC] dark:bg-white/10 text-[#9C4738] dark:text-[#DD8776] flex items-center justify-center text-sm font-bold shrink-0 border border-[#EADFD2]/70">
-                      <img *ngIf="item.image" [src]="item.image" class="w-full h-full object-cover">
+                      <img *ngIf="item.image" [src]="item.image" [alt]="item.name || 'Item preview image'" class="w-full h-full object-cover">
                       <i *ngIf="!item.image" class="fa-solid fa-box text-base"></i>
                     </div>
                     <div>

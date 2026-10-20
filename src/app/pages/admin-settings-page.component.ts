@@ -11,7 +11,7 @@ import { CustomHamperService } from '../services/custom-hamper.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class=" mx-auto pb-12 space-y-4 transition-colors duration-300">
+    <div class="max-w-5xl mx-auto pb-12 space-y-4 transition-colors duration-300">
 
       <!-- Top Sticky Action Bar -->
       <div class="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#FAF7F2]/95 dark:bg-[#1E1916]/95 backdrop-blur-md border-b border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-between gap-4">

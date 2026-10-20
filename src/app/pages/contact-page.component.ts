@@ -15,7 +15,7 @@ import { SupabaseService } from '../services/supabase.service';
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-20">
 
         <!-- MAIN SMART WORKSPACE (FLUID 2-COLUMN DESKTOP SPLIT) -->
-        <main class=" mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
 
           <!-- Sleek Compact Page Header -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-4 border-b border-[#EADFD2]/70 dark:border-white/10">
@@ -241,6 +241,11 @@ import { SupabaseService } from '../services/supabase.service';
                       Opens WhatsApp with your pre-filled inquiry.
                     </span>
                   </div>
+
+                  <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] pt-1 text-center sm:text-left leading-relaxed">
+                    By submitting, you agree to receive communications regarding your inquiry in accordance with our
+                    <a routerLink="/privacy" class="underline hover:text-[#9C4738] dark:hover:text-[#EB9D8E]">Privacy Policy</a>. We never share your phone number with marketing brokers.
+                  </p>
                 </form>
               </div>
 
