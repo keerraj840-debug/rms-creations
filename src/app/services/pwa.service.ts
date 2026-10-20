@@ -214,11 +214,13 @@ export class PwaService {
   /**
    * Dismiss the install prompt banner with an optional cooldown (in days).
    */
-  dismissInstallPrompt(cooldownDays = 3): void {
+  dismissInstallPrompt(cooldownDays = 30): void {
     this.canInstall.set(false);
     if (this.isBrowser) {
-      const cooldownMs = cooldownDays * 24 * 60 * 60 * 1000;
-      localStorage.setItem('rms_pwa_dismissed_until', String(Date.now() + cooldownMs));
+      try {
+        const cooldownMs = cooldownDays * 24 * 60 * 60 * 1000;
+        localStorage?.setItem('rms_pwa_dismissed_until', String(Date.now() + cooldownMs));
+      } catch {}
     }
   }
 

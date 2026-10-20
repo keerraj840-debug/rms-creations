@@ -1,6 +1,6 @@
 {
   "name": "rms-creations",
-  "version": "1.6.3",
+  "version": "1.6.5",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -25,6 +25,7 @@
     "@angular/platform-server": "^22.0.0",
     "@angular/router": "^22.0.0",
     "@angular/ssr": "^22.0.7",
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "@supabase/supabase-js": "^2.117.2",
     "express": "^5.1.0",
     "ngx-image-cropper": "^9.1.7",

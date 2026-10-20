@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PwaService } from '../../services/pwa.service';
 
@@ -7,42 +7,40 @@ import { PwaService } from '../../services/pwa.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <!-- 1. FLOATING NEW VERSION UPDATE BAR (HIGH PRIORITY) -->
+    <!-- 1. SLIM NEW VERSION UPDATE NOTIFICATION (TOP-RIGHT TOAST) -->
     <div
       *ngIf="pwaService.showUpdateBanner()"
-      class="fixed top-20 inset-x-4 sm:inset-x-auto sm:right-6 z-50 max-w-md animate-in slide-in-from-top-4 duration-300"
+      class="fixed top-4 right-4 left-4 sm:left-auto sm:max-w-sm z-50 animate-in slide-in-from-top-3 duration-300 pointer-events-auto"
+      role="alert"
     >
       <div
-        class="flex items-center gap-3.5 rounded-2xl bg-gradient-to-r from-[#2A1D1A] to-[#1E1412] text-white p-4 shadow-2xl border border-[#EB9D8E]/30 ring-1 ring-black/20 backdrop-blur-xl"
+        class="flex items-center gap-3 rounded-2xl bg-[#1C1816]/95 dark:bg-[#1C1816]/95 text-white p-1 shadow-xl border border-[#EB9D8E]/30 backdrop-blur-md"
       >
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#9C4738] text-white shadow-inner">
-          <i class="fa-solid fa-arrows-rotate text-base" [class.fa-spin]="pwaService.isUpdateInstalling()"></i>
+        <div class="flex h-6 w-9 shrink-0 items-center justify-center rounded-xl bg-[#9C4738] text-white">
+          <i class="fa-solid fa-arrows-rotate text-sm" [class.fa-spin]="pwaService.isUpdateInstalling()"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#EB9D8E]/20 text-[#EB9D8E] uppercase tracking-wide">
-              Update v{{ pwaService.updateVersion() }}
+          <div class="flex items-center gap-1">
+            <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-bold bg-[#EB9D8E]/20 text-[#EB9D8E]">
+              v{{ pwaService.updateVersion() }}
             </span>
-            <span class="text-[11px] text-[#D9C3B9]/70">Ready to install</span>
+            <span class="text-[11px] text-[#D9C3B9]/80 font-medium">Update Ready</span>
           </div>
-          <p class="text-xs font-medium text-[#F4F1ED] mt-0.5 line-clamp-1">
-            New improvements and speed enhancements are ready.
-          </p>
         </div>
-        <div class="flex items-center gap-2 shrink-0">
+        <div class="flex items-center gap-1.5 shrink-0">
           <button
             type="button"
             (click)="pwaService.applyUpdate()"
             [disabled]="pwaService.isUpdateInstalling()"
-            class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#9C4738] to-[#BA5E4E] hover:from-[#BA5E4E] hover:to-[#9C4738] text-white text-xs font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+            class="px-3 py-1.5 rounded-lg bg-[#9C4738] hover:bg-[#BA5E4E] text-white text-xs font-bold transition cursor-pointer disabled:opacity-50"
           >
             {{ pwaService.isUpdateInstalling() ? 'Updating...' : 'Update' }}
           </button>
           <button
             type="button"
             (click)="pwaService.dismissUpdateBanner()"
-            aria-label="Dismiss update banner"
-            class="p-1.5 text-[#D9C3B9]/60 hover:text-white transition-colors cursor-pointer"
+            aria-label="Dismiss update"
+            class="p-1.5 text-[#D9C3B9]/70 hover:text-white transition cursor-pointer"
           >
             <i class="fa-solid fa-xmark text-sm"></i>
           </button>
@@ -50,169 +48,138 @@ import { PwaService } from '../../services/pwa.service';
       </div>
     </div>
 
-    <!-- 2. SMART PWA INSTALLATION BANNER (BOTTOM DESKTOP/MOBILE) -->
+    <!-- 2. UNOBTRUSIVE DESKTOP-ONLY INSTALL TOAST (NEVER BLOCKS MOBILE SHOPPING) -->
     <div
       *ngIf="pwaService.canInstall() && !pwaService.isInstalled()"
-      class="fixed bottom-20 md:bottom-6 right-4 left-4 sm:left-auto sm:right-6 z-40 max-w-sm animate-in slide-in-from-bottom-4 duration-300"
+      class="hidden sm:block fixed bottom-6 right-6 z-40 max-w-xs animate-in slide-in-from-bottom-3 duration-300 pointer-events-auto"
     >
       <div
-        class="rounded-3xl bg-[#FFFDFC]/95 dark:bg-[#1E1916]/95 border border-[#EADFD2] dark:border-[#3D302A] p-4 shadow-2xl backdrop-blur-xl text-[#57251C] dark:text-[#F4F1ED]"
+        class="rounded-2xl bg-[#FFFDFC]/95 dark:bg-[#1E1916]/95 border border-[#EADFD2] dark:border-[#3D302A] p-3.5 shadow-xl backdrop-blur-md text-[#57251C] dark:text-[#F4F1ED]"
       >
-        <div class="flex items-start gap-3">
-          <div class="relative shrink-0">
-            <img
-              src="assets/icons/icon-192.png"
-              alt="RMS Gift Studio App"
-              class="h-12 w-12 rounded-2xl object-cover shadow-md ring-2 ring-[#9C4738]/20"
-            />
-            <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#1B4D3E] text-[8px] font-bold text-white">
-              <i class="fa-solid fa-check"></i>
-            </span>
-          </div>
-          <div class="flex-1 min-w-0 pr-1">
-            <h4 class="font-serif text-sm font-bold text-[#57251C] dark:text-[#F4F1ED] leading-tight">
-              Install RMS App
-            </h4>
-            <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-0.5 leading-snug">
-              Fast loading, quick orders, and offline access directly from your home screen.
-            </p>
+        <div class="flex items-center gap-3">
+          <img
+            src="assets/icons/icon-192.png"
+            alt="RMS App"
+            class="h-10 w-10 shrink-0 rounded-xl object-cover ring-1 ring-[#9C4738]/20 shadow-xs"
+          />
+          <div class="flex-1 min-w-0">
+            <h4 class="font-serif text-xs font-bold leading-tight">Install RMS App</h4>
+            <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] line-clamp-1 mt-0.5">Quick access from desktop</p>
           </div>
           <button
             type="button"
-            (click)="pwaService.dismissInstallPrompt(3)"
-            aria-label="Dismiss install prompt"
-            class="text-[#9D7B6C] hover:text-[#57251C] dark:hover:text-white transition p-1 cursor-pointer"
+            (click)="pwaService.dismissInstallPrompt(30)"
+            aria-label="Close install prompt"
+            class="text-[#9D7B6C] hover:text-[#57251C] dark:hover:text-white p-1 transition cursor-pointer"
+            title="Dismiss"
           >
             <i class="fa-solid fa-xmark text-xs"></i>
           </button>
         </div>
 
-        <div class="mt-3.5 flex items-center gap-2">
+        <div class="mt-2.5 flex items-center gap-2">
           <button
             type="button"
             (click)="pwaService.promptInstall()"
-            class="flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-gradient-to-r from-[#9C4738] to-[#BA5E4E] hover:from-[#BA5E4E] hover:to-[#9C4738] text-white text-xs font-bold shadow-md shadow-[#9C4738]/20 transition active:scale-98 cursor-pointer"
+            class="flex-1 py-1.5 px-3 rounded-lg bg-[#9C4738] hover:bg-[#BA5E4E] text-white text-[11px] font-bold shadow-xs transition cursor-pointer text-center"
           >
-            <i class="fa-solid fa-download text-xs"></i>
-            <span>Add to Home Screen</span>
+            <i class="fa-solid fa-download mr-1"></i> Install
           </button>
           <button
             type="button"
-            (click)="pwaService.dismissInstallPrompt(7)"
-            class="py-2 px-3 rounded-xl border border-[#D9C3B9]/50 dark:border-[#3D302A] text-xs font-medium text-[#7A6C5E] dark:text-[#C5A393] hover:bg-[#F7F6F3] dark:hover:bg-[#251F1C] transition cursor-pointer"
+            (click)="pwaService.dismissInstallPrompt(30)"
+            class="py-1.5 px-2.5 rounded-lg border border-[#D9C3B9]/60 dark:border-[#3D302A] text-[11px] text-[#7A6C5E] dark:text-[#C5A393] hover:bg-black/5 transition cursor-pointer"
           >
-            Later
+            Not now
           </button>
         </div>
       </div>
     </div>
 
-    <!-- 3. GUIDED INSTALLATION MODAL (FOR iOS & DESKTOP BROWSER GUIDANCE) -->
+    <!-- 3. COMPACT GUIDED INSTALLATION MODAL (EXPLICIT USER-TRIGGERED ONLY) -->
     <div
       *ngIf="pwaService.showInstallGuide()"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-200"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs animate-in fade-in duration-200"
       (click)="pwaService.toggleInstallGuide(false)"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="install-guide-title"
     >
       <div
-        class="w-full max-w-md rounded-3xl bg-[#FFFDFC] dark:bg-[#1E1916] p-6 shadow-2xl border border-[#D9C3B9]/50 dark:border-[#3D302A] text-[#57251C] dark:text-[#F4F1ED] space-y-4"
+        class="w-full max-w-sm rounded-2xl bg-[#FFFDFC] dark:bg-[#1E1916] p-5 shadow-2xl border border-[#D9C3B9]/60 dark:border-[#3D302A] text-[#57251C] dark:text-[#F4F1ED] space-y-3.5"
         (click)="$event.stopPropagation()"
       >
-        <div class="flex items-center justify-between border-b border-[#D9C3B9]/30 dark:border-[#3D302A] pb-3">
-          <div class="flex items-center gap-3">
-            <img src="assets/icons/icon-192.png" alt="RMS App" class="h-9 w-9 rounded-xl shadow-sm" />
+        <div class="flex items-center justify-between border-b border-[#D9C3B9]/30 dark:border-[#3D302A] pb-2.5">
+          <div class="flex items-center gap-2.5">
+            <img src="assets/icons/icon-192.png" alt="RMS App" class="h-8 w-8 rounded-lg shadow-xs" />
             <div>
-              <h3 class="font-serif text-base font-bold text-[#57251C] dark:text-[#F4F1ED]">Install RMS App</h3>
-              <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Add to your Home Screen in 3 steps</p>
+              <h3 id="install-guide-title" class="font-serif text-sm font-bold text-[#57251C] dark:text-[#F4F1ED]">
+                Install RMS Creations
+              </h3>
+              <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393]">Add to home screen or desktop</p>
             </div>
           </div>
           <button
             type="button"
             (click)="pwaService.toggleInstallGuide(false)"
-            class="rounded-full bg-[#F7F6F3] dark:bg-[#251F1C] p-2 text-[#9D7B6C] hover:text-[#57251C] dark:hover:text-white cursor-pointer transition"
+            aria-label="Close dialog"
+            class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-[#F7F6F3] dark:bg-[#251F1C] text-xs font-semibold text-[#9D7B6C] hover:text-[#57251C] dark:hover:text-white cursor-pointer transition"
           >
-            <i class="fa-solid fa-xmark text-sm"></i>
+            <i class="fa-solid fa-xmark text-xs"></i>
+            <span>Close</span>
           </button>
         </div>
 
         <!-- iOS Safari Instructions -->
-        <div *ngIf="pwaService.isIos()" class="space-y-3.5 py-1">
-          <div class="flex items-start gap-3 p-3 rounded-2xl bg-[#F7F6F3] dark:bg-[#251F1C] border border-[#D9C3B9]/30">
-            <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#9C4738] text-white font-bold text-xs">
-              1
-            </div>
-            <div class="text-xs">
-              <p class="font-bold text-[#57251C] dark:text-[#F4F1ED]">Tap the Share icon</p>
-              <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-0.5">
-                At the bottom or top of your Safari browser, tap the <i class="fa-solid fa-arrow-up-from-bracket text-blue-500 mx-1"></i> Share button.
-              </p>
-            </div>
+        <div *ngIf="pwaService.isIos()" class="space-y-2 py-1 text-xs">
+          <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#F7F6F3] dark:bg-[#251F1C]">
+            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#9C4738] text-white text-[10px] font-bold">1</span>
+            <p class="text-[#57251C] dark:text-[#F4F1ED] leading-snug">
+              Tap the <i class="fa-solid fa-arrow-up-from-bracket text-blue-500 mx-0.5"></i> <strong>Share</strong> button in Safari.
+            </p>
           </div>
-
-          <div class="flex items-start gap-3 p-3 rounded-2xl bg-[#F7F6F3] dark:bg-[#251F1C] border border-[#D9C3B9]/30">
-            <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#9C4738] text-white font-bold text-xs">
-              2
-            </div>
-            <div class="text-xs">
-              <p class="font-bold text-[#57251C] dark:text-[#F4F1ED]">Select "Add to Home Screen"</p>
-              <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-0.5">
-                Scroll down the share sheet and tap <span class="font-semibold text-[#9C4738] dark:text-[#EB9D8E]"><i class="fa-regular fa-square-plus mr-0.5"></i> Add to Home Screen</span>.
-              </p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3 p-3 rounded-2xl bg-[#F7F6F3] dark:bg-[#251F1C] border border-[#D9C3B9]/30">
-            <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#9C4738] text-white font-bold text-xs">
-              3
-            </div>
-            <div class="text-xs">
-              <p class="font-bold text-[#57251C] dark:text-[#F4F1ED]">Confirm Installation</p>
-              <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-0.5">
-                Tap <span class="font-bold text-[#9C4738] dark:text-[#EB9D8E]">Add</span> in the top-right corner. The RMS Creations app icon will now appear on your home screen!
-              </p>
-            </div>
+          <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#F7F6F3] dark:bg-[#251F1C]">
+            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#9C4738] text-white text-[10px] font-bold">2</span>
+            <p class="text-[#57251C] dark:text-[#F4F1ED] leading-snug">
+              Select <strong class="text-[#9C4738] dark:text-[#EB9D8E]">Add to Home Screen</strong>.
+            </p>
           </div>
         </div>
 
-        <!-- Android / Chrome / Edge Instructions -->
-        <div *ngIf="!pwaService.isIos()" class="space-y-3.5 py-1">
-          <div class="flex items-start gap-3 p-3 rounded-2xl bg-[#F7F6F3] dark:bg-[#251F1C] border border-[#D9C3B9]/30">
-            <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#9C4738] text-white font-bold text-xs">
-              1
-            </div>
-            <div class="text-xs">
-              <p class="font-bold text-[#57251C] dark:text-[#F4F1ED]">Browser Menu or Address Bar</p>
-              <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-0.5">
-                Click the <i class="fa-solid fa-download text-[#9C4738] dark:text-[#EB9D8E] mx-1"></i> install icon in your browser URL address bar, or open the browser menu <i class="fa-solid fa-ellipsis-vertical mx-1"></i>.
-              </p>
-            </div>
+        <!-- Desktop Chrome / Edge / Android Instructions -->
+        <div *ngIf="!pwaService.isIos()" class="space-y-2 py-1 text-xs">
+          <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#F7F6F3] dark:bg-[#251F1C]">
+            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#9C4738] text-white text-[10px] font-bold">1</span>
+            <p class="text-[#57251C] dark:text-[#F4F1ED] leading-snug">
+              Click the <i class="fa-solid fa-download text-[#9C4738] dark:text-[#EB9D8E] mx-0.5"></i> install icon in your browser's address bar.
+            </p>
           </div>
-
-          <div class="flex items-start gap-3 p-3 rounded-2xl bg-[#F7F6F3] dark:bg-[#251F1C] border border-[#D9C3B9]/30">
-            <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#9C4738] text-white font-bold text-xs">
-              2
-            </div>
-            <div class="text-xs">
-              <p class="font-bold text-[#57251C] dark:text-[#F4F1ED]">Click "Install RMS Creations"</p>
-              <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] mt-0.5">
-                Confirm install when prompted to launch RMS Creations as a standalone desktop or mobile application.
-              </p>
-            </div>
+          <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#F7F6F3] dark:bg-[#251F1C]">
+            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#9C4738] text-white text-[10px] font-bold">2</span>
+            <p class="text-[#57251C] dark:text-[#F4F1ED] leading-snug">
+              Confirm <strong>Install</strong> to add the shortcut.
+            </p>
           </div>
         </div>
 
-        <div class="pt-2">
-          <button
-            type="button"
-            (click)="pwaService.toggleInstallGuide(false)"
-            class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#9C4738] to-[#BA5E4E] text-white font-bold text-xs shadow hover:opacity-95 transition cursor-pointer"
-          >
-            Got It!
-          </button>
-        </div>
+        <button
+          type="button"
+          (click)="pwaService.toggleInstallGuide(false)"
+          class="w-full py-2 rounded-xl bg-[#9C4738] hover:bg-[#BA5E4E] text-white font-bold text-xs shadow-xs transition cursor-pointer"
+        >
+          Got it
+        </button>
       </div>
     </div>
   `
 })
 export class PwaInstallBannerComponent {
   public readonly pwaService = inject(PwaService);
+
+  @HostListener('window:keydown.escape')
+  handleEscape(): void {
+    if (this.pwaService.showInstallGuide()) {
+      this.pwaService.toggleInstallGuide(false);
+    }
+  }
 }

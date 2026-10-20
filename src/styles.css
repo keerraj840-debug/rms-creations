@@ -3,6 +3,7 @@
    ========================================================================== */
 
 @import './assets/fonts/fonts.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
 @import 'tailwindcss';
 
 /* Enable .dark class-based dark mode for Tailwind v4 */
