@@ -79,11 +79,12 @@ describe('PinCodeAvailabilityService', () => {
     expect(res.calculatedDeliveryFee).toBe(130);
   });
 
-  it('applies free delivery when subtotal meets freeDeliveryThreshold (₹499) for regular items', async () => {
+  it('always charges delivery fee based on PIN code and weight even when subtotal >= 499 (no free delivery)', async () => {
+    // 1.5 kg parcel: base 50 + ceil(1.5 - 1.0) * 40 = 50 + 40 = 90
     const res = await service.checkDelivery('411038', 599, 1.5, false);
     expect(res.isServiceable).toBe(true);
-    expect(res.calculatedDeliveryFee).toBe(0);
-    expect(res.freeDeliveryApplied).toBe(true);
+    expect(res.calculatedDeliveryFee).toBe(90);
+    expect(res.freeDeliveryApplied).toBe(false);
   });
 
   it('charges PIN-code delivery rates when order contains a hamper even if subtotal >= 499', async () => {
@@ -93,7 +94,7 @@ describe('PinCodeAvailabilityService', () => {
     expect(res.freeDeliveryApplied).toBe(false);
     expect(res.calculatedDeliveryFee).toBe(90);
     expect(res.isHamperDelivery).toBe(true);
-    expect(res.message).toContain('Hamper parcel PIN-code shipping');
+    expect(res.message).toContain('Hamper parcel shipping');
   });
 
   it('correctly identifies Ratnagiri Taluka postal PIN codes', () => {

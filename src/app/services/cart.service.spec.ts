@@ -46,7 +46,7 @@ describe('CartService', () => {
     expect(service.finalTotal).toBe(347);
   });
 
-  it('should qualify for free delivery when subtotal >= 499 on regular items', () => {
+  it('should always charge delivery fee even when subtotal >= 499 (no free delivery)', () => {
     service.addToCart({
       id: 'prod-2',
       title: 'Festive Brass Diya Set',
@@ -57,8 +57,8 @@ describe('CartService', () => {
 
     expect(service.hasHamper).toBe(false);
     expect(service.subtotal).toBe(999);
-    expect(service.deliveryFee).toBe(0);
-    expect(service.finalTotal).toBe(999);
+    expect(service.deliveryFee).toBe(49);
+    expect(service.finalTotal).toBe(1048);
   });
 
   it('should charge delivery fee for hampers even if subtotal >= 499 (PIN delivery logic)', () => {

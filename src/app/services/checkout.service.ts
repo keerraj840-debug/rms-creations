@@ -43,7 +43,7 @@ export class CheckoutService {
   private activeItemSubject = new BehaviorSubject<CheckoutItem | null>(null);
   public activeItem$ = this.activeItemSubject.asObservable();
 
-  // Store owner details for 100% Free UPI & updates
+  // Store owner details for UPI & updates
   public readonly upiNumber = '7350120467';
   public readonly upiId = '7350120467@upi';
   public readonly payeeName = 'RMS Creations';
@@ -93,7 +93,7 @@ export class CheckoutService {
         total_amount: payload.totalAmount,
         contact_no: payload.phone.trim(),
         payment_mode: modeLabel,
-        shipping_type: 'Standard Free Delivery',
+        shipping_type: 'Standard Courier Delivery',
         shipping_address: fullAddress,
         shipping_state: payload.state.trim(),
         shipping_country: 'India',

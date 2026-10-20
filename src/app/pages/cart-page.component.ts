@@ -418,10 +418,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
                         PIN-code courier rate (Hamper Parcel)
                       </span>
                     </div>
-                    <span *ngIf="cartService.deliveryFee === 0" class="font-bold text-emerald-600 uppercase text-[11px]">
-                      FREE
-                    </span>
-                    <span *ngIf="cartService.deliveryFee > 0" class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">
+                    <span class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">
                       ₹{{ cartService.deliveryFee }}
                     </span>
                   </div>

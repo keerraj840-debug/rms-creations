@@ -69,7 +69,7 @@ describe('Ecommerce Order Processing & PIN Delivery Calculations', () => {
       expect(res.message).toContain('not available for PIN code 499999');
     });
 
-    it('should apply Free Delivery when subtotal is >= 499 for serviceable PIN', async () => {
+    it('should charge delivery fee even when subtotal is >= 499 for serviceable PIN (no free delivery)', async () => {
       mockSupabase.from.mockReturnValue({
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockReturnValue({
@@ -93,8 +93,8 @@ describe('Ecommerce Order Processing & PIN Delivery Calculations', () => {
 
       const res = await pinService.checkDelivery('400001', 599, 0.5);
       expect(res.isServiceable).toBe(true);
-      expect(res.freeDeliveryApplied).toBe(true);
-      expect(res.calculatedDeliveryFee).toBe(0);
+      expect(res.freeDeliveryApplied).toBe(false);
+      expect(res.calculatedDeliveryFee).toBe(60);
       expect(res.district).toBe('Mumbai');
     });
 
@@ -200,11 +200,7 @@ describe('Ecommerce Order Processing & PIN Delivery Calculations', () => {
       expect(cartService.totalItemsCount).toBe(2);
       expect(cartService.totalWeightKg).toBe(2.4);
 
-      // Verified delivery fee applied (free delivery because 1998 >= 499)
-      cartService.setVerifiedDeliveryFee(0);
-      expect(cartService.finalTotal).toBe(1998);
-
-      // If delivery fee is 50
+      // Verified delivery fee applied based on PIN code (e.g. 50)
       cartService.setVerifiedDeliveryFee(50);
       expect(cartService.finalTotal).toBe(2048);
     });

@@ -316,7 +316,7 @@ import { PinCodeAvailabilityService, PinCodeAvailability } from '../services/pin
                 <span>Store Delivery Rules</span>
               </p>
               <ul class="text-[11px] leading-relaxed list-disc list-inside space-y-1">
-                <li>Free shipping is automatically applied if cart subtotal reaches ₹499.</li>
+                <li>Delivery fees apply to all orders based on verified PIN code base fee and weight.</li>
                 <li>Weight above 1 kg is calculated in 1 kg increments with extra charge.</li>
                 <li>Checkout blocks any unlisted or disabled PIN code with a helpful notice.</li>
               </ul>

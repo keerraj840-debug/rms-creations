@@ -385,7 +385,7 @@ export class ContactPageComponent implements OnInit, OnDestroy {
   faqs = [
     {
       question: 'How do I place an order for a gift hamper?',
-      answer: 'Browse any collection on our store and click "Order Online" or "Add to Cart" to checkout with Cash on Delivery (COD) or Free 0% UPI. For bespoke personalized styling, launch our online "Build Your Own Hamper" studio to customize your box.'
+      answer: 'Browse any collection on our store and click "Order Online" or "Add to Cart" to checkout with Cash on Delivery (COD) or Online UPI. For bespoke personalized styling, launch our online "Build Your Own Hamper" studio to customize your box.'
     },
     {
       question: 'Can I choose specific items to include in a hamper?',

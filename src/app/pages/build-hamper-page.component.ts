@@ -464,7 +464,7 @@ interface ItemVisualMeta {
               <div class="flex items-center justify-between py-0.5">
                 <div>
                   <span class="text-xs font-bold text-stone-600 dark:text-stone-300 block">Total Hamper Price:</span>
-                  <span class="text-[9px] text-stone-400">Box &amp; card free &bull; PIN delivery calculated at checkout</span>
+                  <span class="text-[9px] text-stone-400">Includes hamper box &amp; card &bull; PIN delivery calculated at checkout</span>
                 </div>
                 <div class="text-right">
                   <span class="text-xl font-mono font-extrabold text-[#57251C] dark:text-[#D9C3B9]">
@@ -575,7 +575,7 @@ interface ItemVisualMeta {
                 <span class="font-mono text-sm">₹{{ estimatedCatalogueSubtotal }}</span>
               </div>
               <div class="text-[11px] text-stone-500">
-                {{ totalItemsCount }} item(s) selected &bull; Satin ribbon &amp; gift box included free
+                {{ totalItemsCount }} item(s) selected &bull; Satin ribbon &amp; gift box included
               </div>
             </div>
 

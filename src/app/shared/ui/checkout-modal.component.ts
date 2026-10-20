@@ -27,7 +27,7 @@ import { CheckoutService, CheckoutItem, CustomerOrderPayload } from '../../servi
                 {{ isOrderPlaced ? 'Order Confirmed!' : 'Place Your Order' }}
               </h2>
               <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] leading-none mt-0.5">
-                {{ isOrderPlaced ? 'We will send updates on Email & WhatsApp' : 'Direct secure order with COD or 100% Free UPI' }}
+                {{ isOrderPlaced ? 'We will send updates on Email & WhatsApp' : 'Direct secure order with COD or UPI payment' }}
               </p>
             </div>
           </div>
@@ -164,17 +164,17 @@ import { CheckoutService, CheckoutItem, CustomerOrderPayload } from '../../servi
                     </p>
                   </div>
 
-                  <!-- ONLINE UPI Card (100% Free to 7350120467) -->
+                  <!-- ONLINE UPI Card (Direct to 7350120467) -->
                   <div (click)="paymentMode = 'ONLINE_UPI'"
                        [class]="paymentMode === 'ONLINE_UPI' ? 'border-emerald-600 bg-emerald-50/70 dark:bg-emerald-950/20 ring-2 ring-emerald-500/30' : 'border-[#EADFD2] dark:border-white/10 bg-[#FDFBF7] dark:bg-[#251F1C]'"
                        class="p-3.5 border rounded-2xl cursor-pointer transition-all flex flex-col justify-between">
                     <div class="flex items-start justify-between">
                       <div class="flex items-center gap-2">
                         <i class="fa-solid fa-qrcode text-sm text-emerald-600"></i>
-                        <span class="font-bold text-xs text-[#2E2825] dark:text-[#F4F1ED]">Online UPI (0% Fee)</span>
+                        <span class="font-bold text-xs text-[#2E2825] dark:text-[#F4F1ED]">Online UPI</span>
                       </div>
                       <span class="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-600 text-white uppercase tracking-wider">
-                        Free
+                        Direct
                       </span>
                     </div>
                     <p class="text-[11px] text-emerald-800 dark:text-emerald-300 mt-2">
@@ -195,7 +195,7 @@ import { CheckoutService, CheckoutItem, CustomerOrderPayload } from '../../servi
                         Transfer ₹{{ totalAmount }} directly to store account
                       </span>
                     </div>
-                    <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">100% Free UPI</span>
+                    <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">Direct UPI</span>
                   </div>
 
                   <!-- Phone / UPI ID Box -->

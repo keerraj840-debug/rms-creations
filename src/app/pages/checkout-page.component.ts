@@ -104,7 +104,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       [queryParams]="{ returnUrl: '/checkout' }"
                       class="w-full py-2.5 px-4 text-center rounded-xl bg-[#9C4738] text-white text-xs font-bold hover:bg-[#883B2D] transition shadow-xs cursor-pointer"
                     >
-                      Create Free Account
+                      Create Account
                     </a>
                   </div>
                 </div>
@@ -360,7 +360,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                       <div *ngIf="deliveryCheckResult.isServiceable" class="text-[11px] text-emerald-800 dark:text-emerald-300 flex flex-wrap items-center gap-x-3 gap-y-1">
                         <span>Courier: <strong>{{ deliveryCheckResult.courierService || 'Express DTDC' }}</strong></span>
                         <span>Estimated Weight: <strong>{{ cartService.totalWeightKg }} kg</strong></span>
-                        <span>Shipping Fee: <strong>{{ deliveryCheckResult.freeDeliveryApplied ? 'FREE' : '₹' + deliveryCheckResult.calculatedDeliveryFee }}</strong></span>
+                        <span>Shipping Fee: <strong>₹{{ deliveryCheckResult.calculatedDeliveryFee }}</strong></span>
                       </div>
                       <p *ngIf="!deliveryCheckResult.isServiceable" class="text-[11px] text-rose-700 dark:text-rose-300">
                         Orders can only be accepted for serviceable PIN codes configured in our delivery network.
@@ -404,7 +404,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                     </p>
                   </div>
 
-                  <!-- Free UPI Option (Payment Number: 7350120467) -->
+                  <!-- UPI Option (Payment Number: 7350120467) -->
                   <div
                     (click)="paymentMode = 'ONLINE_UPI'"
                     [class]="paymentMode === 'ONLINE_UPI' ? 'border-emerald-600 bg-emerald-50/70 dark:bg-emerald-950/20 ring-2 ring-emerald-500/30' : 'border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#251F1C]'"
@@ -413,10 +413,10 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-2.5">
                         <i class="fa-solid fa-qrcode text-base text-emerald-600"></i>
-                        <span class="font-bold text-xs text-[#2E2825] dark:text-[#F4F1ED]">Online UPI (0% Fee)</span>
+                        <span class="font-bold text-xs text-[#2E2825] dark:text-[#F4F1ED]">Online UPI</span>
                       </div>
                       <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-600 text-white uppercase">
-                        Free
+                        Direct
                       </span>
                     </div>
                     <p class="text-[11px] text-emerald-800 dark:text-emerald-300 mt-2.5">
@@ -532,8 +532,7 @@ import { OrderTrackingService } from '../shared/order-tracking.service';
                         PIN-code courier rate (Hamper Parcel)
                       </span>
                     </div>
-                    <span *ngIf="cartService.deliveryFee === 0" class="font-bold text-emerald-600">FREE</span>
-                    <span *ngIf="cartService.deliveryFee > 0" class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">₹{{ cartService.deliveryFee }}</span>
+                    <span class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">₹{{ cartService.deliveryFee }}</span>
                   </div>
                   <div class="pt-2 border-t border-[#EADFD2]/60 dark:border-white/10 flex justify-between items-baseline">
                     <span class="font-bold text-sm text-[#2E2825] dark:text-[#F4F1ED]">Total Payable:</span>

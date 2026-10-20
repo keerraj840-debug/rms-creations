@@ -143,11 +143,18 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
               </a>
 
               <!-- User Account / Profile Dropdown -->
-              <div class="relative" (mouseleave)="isUserMenuOpen = false">
+              <div class="relative">
+                <!-- Click-outside backdrop to cleanly close dropdown without mouseleave flickering -->
+                <div
+                  *ngIf="isUserMenuOpen"
+                  class="fixed inset-0 z-40 bg-transparent"
+                  (click)="closeUserMenu()"
+                ></div>
+
                 <button
                   type="button"
-                  (click)="toggleUserMenu()"
-                  class="relative flex h-9 w-9 items-center justify-center rounded-full border border-[#D9C3B9]/50 bg-[#FFFDFC]/90 text-[#57251C] shadow-sm transition hover:border-[#C56D5B] hover:text-[#9C4738] dark:border-[#3D302A] dark:bg-[#251F1C] dark:text-[#F4F1ED] cursor-pointer"
+                  (click)="toggleUserMenu($event)"
+                  class="relative z-50 flex h-9 w-9 items-center justify-center rounded-full border border-[#D9C3B9]/50 bg-[#FFFDFC]/90 text-[#57251C] shadow-sm transition hover:border-[#C56D5B] hover:text-[#9C4738] dark:border-[#3D302A] dark:bg-[#251F1C] dark:text-[#F4F1ED] cursor-pointer active:scale-95"
                   [title]="(authService.currentUser$ | async) ? 'My Profile & Account' : 'Sign In'"
                   aria-label="User Account"
                 >
@@ -157,10 +164,11 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
                   </div>
                 </button>
 
-                <!-- Desktop User Profile Dropdown Menu -->
+                <!-- User Profile Dropdown Menu -->
                 <div
                   *ngIf="isUserMenuOpen"
-                  class="absolute right-0 top-full mt-2 w-64 rounded-2xl bg-[#FFFDFC] dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-xl py-3 px-3 z-50 animate-in fade-in duration-150"
+                  (click)="$event.stopPropagation()"
+                  class="absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-24px)] rounded-2xl bg-[#FFFDFC] dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-2xl py-3 px-3 z-50 animate-in fade-in duration-150"
                 >
                   <ng-container *ngIf="authService.currentUser$ | async as user; else guestMenu">
                     <div class="px-2 pb-2.5 border-b border-[#EADFD2]/60 dark:border-white/10">
@@ -169,19 +177,19 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
                     </div>
 
                     <div class="py-1.5 space-y-0.5 text-xs">
-                      <a routerLink="/my-account" (click)="isUserMenuOpen = false" class="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[#4A3C31] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 font-semibold transition">
+                      <a routerLink="/my-account" (click)="closeUserMenu()" class="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[#4A3C31] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 font-semibold transition cursor-pointer">
                         <i class="fa-regular fa-user text-[#9C4738] text-xs"></i>
                         <span>My Account Dashboard</span>
                       </a>
-                      <a routerLink="/my-orders" (click)="isUserMenuOpen = false" class="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[#4A3C31] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 font-semibold transition">
+                      <a routerLink="/my-orders" (click)="closeUserMenu()" class="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[#4A3C31] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 font-semibold transition cursor-pointer">
                         <i class="fa-solid fa-truck-fast text-[#9C4738] text-xs"></i>
                         <span>My Orders &amp; Tracking</span>
                       </a>
-                      <a routerLink="/my-custom-hampers" (click)="isUserMenuOpen = false" class="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[#4A3C31] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 font-semibold transition">
+                      <a routerLink="/my-custom-hampers" (click)="closeUserMenu()" class="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[#4A3C31] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 font-semibold transition cursor-pointer">
                         <i class="fa-solid fa-wand-magic-sparkles text-[#9C4738] text-xs"></i>
                         <span>My Bespoke Hampers</span>
                       </a>
-                      <a *ngIf="user.role === 'admin'" routerLink="/admin" (click)="isUserMenuOpen = false" class="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-white/5 font-semibold transition">
+                      <a *ngIf="user.role === 'admin'" routerLink="/admin" (click)="closeUserMenu()" class="flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-white/5 font-semibold transition cursor-pointer">
                         <i class="fa-solid fa-gauge text-xs"></i>
                         <span>Store Management</span>
                       </a>
@@ -201,11 +209,11 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
 
                   <ng-template #guestMenu>
                     <div class="space-y-1 text-xs">
-                      <a routerLink="/login" (click)="isUserMenuOpen = false" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
+                      <a routerLink="/login" (click)="closeUserMenu()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition cursor-pointer">
                         <i class="fa-solid fa-arrow-right-to-bracket text-[#9C4738]"></i>
                         <span>Sign In</span>
                       </a>
-                      <a routerLink="/register" (click)="isUserMenuOpen = false" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#7A6C5E] dark:text-[#C5A393] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
+                      <a routerLink="/register" (click)="closeUserMenu()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#7A6C5E] dark:text-[#C5A393] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition cursor-pointer">
                         <i class="fa-solid fa-user-plus text-xs"></i>
                         <span>Create Account</span>
                       </a>
@@ -249,7 +257,7 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
                   <i class="fa-solid fa-download"></i>
                   <span>Install RMS Creations App</span>
                 </span>
-                <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full uppercase font-mono tracking-wider">Free PWA</span>
+                <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full uppercase font-mono tracking-wider">Web App</span>
               </button>
             </div>
 
@@ -610,7 +618,7 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
         </div>
       </div>
 
-      <!-- Global Customer Checkout & Free UPI / COD Modal -->
+      <!-- Global Customer Checkout & Order Modal -->
       <app-checkout-modal></app-checkout-modal>
 
       <!-- PWA Installation & Smart Update Notification System -->
@@ -658,7 +666,10 @@ export class SiteLayoutComponent {
   isUserMenuOpen = false;
   isScrolled = false;
 
-  toggleUserMenu() {
+  toggleUserMenu(event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
     this.isUserMenuOpen = !this.isUserMenuOpen;
   }
 

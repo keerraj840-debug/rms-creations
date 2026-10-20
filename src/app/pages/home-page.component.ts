@@ -349,7 +349,30 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
                   </span>
                 </div>
 
+                <div *ngIf="getProdCartQty(prod.id) > 0" class="flex items-center border border-[#9C4738] rounded-xl bg-[#FAF7F2] dark:bg-[#251F1C] overflow-hidden p-0.5">
+                  <button
+                    type="button"
+                    (click)="decrementBestseller(prod, $event)"
+                    class="w-7 h-7 rounded-lg bg-white dark:bg-[#1E1916] text-[#9C4738] dark:text-[#EB9D8E] font-bold text-xs flex items-center justify-center hover:bg-[#F3E7DC] active:scale-90 cursor-pointer"
+                    [attr.aria-label]="'Decrease quantity of ' + prod.name"
+                  >
+                    <i class="fa-solid fa-minus text-[9px]"></i>
+                  </button>
+                  <span class="font-mono font-bold text-xs text-[#57251C] dark:text-[#F4F1ED] px-2 select-none">
+                    {{ getProdCartQty(prod.id) }}
+                  </span>
+                  <button
+                    type="button"
+                    (click)="incrementBestseller(prod, $event)"
+                    class="w-7 h-7 rounded-lg bg-[#9C4738] text-white font-bold text-xs flex items-center justify-center hover:bg-[#883B2D] active:scale-90 cursor-pointer"
+                    [attr.aria-label]="'Increase quantity of ' + prod.name"
+                  >
+                    <i class="fa-solid fa-plus text-[9px]"></i>
+                  </button>
+                </div>
+
                 <button
+                  *ngIf="getProdCartQty(prod.id) === 0"
                   type="button"
                   (click)="addBestsellerToCart(prod)"
                   class="px-3 py-1.5 rounded-xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 hover:border-[#9C4738] hover:bg-[#9C4738] hover:text-white text-[#9C4738] dark:text-[#EB9D8E] text-[11px] font-bold transition shadow-2xs active:scale-95 cursor-pointer flex items-center gap-1"
@@ -433,7 +456,7 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
                     </div>
                     <div class="flex items-center gap-2">
                       <span class="w-5 h-5 rounded-full bg-white/15 text-white font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
-                      <span>Add free personalized message</span>
+                      <span>Add your personalized message card</span>
                     </div>
                     <div class="flex items-center gap-2">
                       <span class="w-5 h-5 rounded-full bg-white/15 text-white font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
@@ -584,7 +607,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
       },
       {
         question: 'Can I add a personalized gift message to my order?',
-        answer: 'Yes! A complimentary customized greeting card is included with every order. You can enter your message during checkout or inside the Hamper Studio.'
+        answer: 'Yes! A personalized greeting card can be included with your order. You can enter your message during checkout or inside the Hamper Studio.'
       },
       {
         question: 'What payment methods do you accept?',
@@ -784,6 +807,42 @@ export class HomePageComponent implements OnInit, OnDestroy {
       }
     }, 3000);
     this.cdr.markForCheck();
+  }
+
+  getProdCartQty(prodId: number): number {
+    const item = this.cartService.items.find(i => i.productId === prodId || i.id === `prod-${prodId}` || i.id === String(prodId));
+    return item ? item.quantity : 0;
+  }
+
+  incrementBestseller(prod: any, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    const currentQty = this.getProdCartQty(prod.id);
+    if (currentQty === 0) {
+      this.addBestsellerToCart(prod);
+    } else {
+      const item = this.cartService.items.find(i => i.productId === prod.id || i.id === `prod-${prod.id}` || i.id === String(prod.id));
+      if (item) {
+        this.cartService.updateQuantity(item.id, currentQty + 1);
+        this.cdr.markForCheck();
+      }
+    }
+  }
+
+  decrementBestseller(prod: any, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    const currentQty = this.getProdCartQty(prod.id);
+    if (currentQty <= 0) return;
+    const item = this.cartService.items.find(i => i.productId === prod.id || i.id === `prod-${prod.id}` || i.id === String(prod.id));
+    if (item) {
+      this.cartService.updateQuantity(item.id, currentQty - 1);
+      this.cdr.markForCheck();
+    }
   }
 
   async loadCategories() {

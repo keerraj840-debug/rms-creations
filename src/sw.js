@@ -3,7 +3,7 @@
  * Smart Cache Management & Version-based Cache Invalidation
  */
 
-const CACHE_VERSION = 'rms-v1.6.5';
+const CACHE_VERSION = 'rms-v1.6.10';
 const STATIC_CACHE_NAME = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE_NAME = `${CACHE_VERSION}-dynamic`;
 

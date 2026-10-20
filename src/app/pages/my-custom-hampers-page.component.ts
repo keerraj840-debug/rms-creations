@@ -240,7 +240,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
                   <label class="block text-[11px] font-bold mb-1">Payment Mode <span class="text-rose-500">*</span></label>
                   <select [(ngModel)]="selectedPaymentMode" class="w-full px-3 py-2 rounded-xl text-xs bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 focus:outline-hidden focus:border-[#9C4738]">
                     <option value="COD">Cash on Delivery (COD)</option>
-                    <option value="ONLINE_UPI">0% Free UPI Online (7350120467)</option>
+                    <option value="ONLINE_UPI">Online UPI (7350120467)</option>
                   </select>
                 </div>
               </div>

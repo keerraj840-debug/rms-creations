@@ -36,9 +36,6 @@ export interface DeliveryCheckResult {
 export class PinCodeAvailabilityService {
   private readonly supabase = inject(SupabaseService);
 
-  // Free delivery threshold across store for standard catalog items
-  public readonly freeDeliveryThreshold = 499;
-
   // Ratnagiri Taluka postal PIN codes list (H.O, Kutchery, Shirgaon, Pawas, Hatkhamba, Jaigad/Ganpatipule, Malgund, Tiware, Ranpar)
   public readonly ratnagiriTalukaPinCodes = new Set([
     '415612', // Ratnagiri H.O, City, Nachane, Kuwarbav, Shivaji Nagar, Rahatagar
@@ -142,16 +139,13 @@ export class PinCodeAvailabilityService {
         weightFee += extraKg * above1kgCharge;
       }
 
-      // Check free delivery threshold:
-      // Orders containing hampers do not qualify for storewide free shipping;
-      // PIN-code delivery charges are always applied for hampers.
-      const isFreeDelivery = !hasHamper && subtotal >= this.freeDeliveryThreshold;
-      const finalDeliveryFee = isFreeDelivery ? 0 : weightFee;
+      // PIN-code courier delivery charges are always applied
+      const finalDeliveryFee = weightFee;
 
       const locationText = [district, state].filter(Boolean).join(', ');
       const courierText = courierService ? ` via ${courierService}` : '';
-      const feeText = isFreeDelivery ? 'FREE (Special Offer)' : `₹${finalDeliveryFee}`;
-      const hamperNote = hasHamper ? ' (Hamper parcel PIN-code shipping)' : '';
+      const feeText = `₹${finalDeliveryFee}`;
+      const hamperNote = hasHamper ? ' (Hamper parcel shipping)' : '';
 
       return {
         isServiceable: true,
@@ -163,7 +157,7 @@ export class PinCodeAvailabilityService {
         above1kgCharge,
         calculatedDeliveryFee: finalDeliveryFee,
         totalWeightKg,
-        freeDeliveryApplied: isFreeDelivery,
+        freeDeliveryApplied: false,
         isHamperDelivery: hasHamper,
         message: `Delivery available to ${locationText}${courierText}. Delivery charge: ${feeText}${hamperNote}.`
       };

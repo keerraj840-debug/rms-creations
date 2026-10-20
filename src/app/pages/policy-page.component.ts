@@ -135,7 +135,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
 
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">4. Pricing, Taxes &amp; Transparent Delivery Fees</h3>
                   <p>
-                    All prices are quoted in <strong>Indian National Rupees (INR ₹)</strong> and are inclusive of all applicable taxes. Delivery charges (Free doorstep delivery on orders ₹499+, or flat ₹50 on orders below ₹499) are explicitly calculated and disclosed to you before order confirmation. There are no hidden fees or surprise markups.
+                    All prices are quoted in <strong>Indian National Rupees (INR ₹)</strong> and are inclusive of all applicable taxes. Delivery charges are calculated transparently based on your destination postal PIN code and shipment weight, and are explicitly disclosed to you before order confirmation. There are no hidden fees or surprise markups.
                   </p>
 
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">5. Order Placement &amp; Bespoke Consultation Studio</h3>
@@ -152,7 +152,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                   </p>
                   <ul class="list-disc pl-5 space-y-1">
                     <li><strong>Cash on Delivery (COD):</strong> Pay cash directly to the delivery courier upon safe parcel receipt.</li>
-                    <li><strong>Free 0% UPI Transfer:</strong> Direct payment via standard Indian UPI apps (Google Pay, PhonePe, Paytm, BHIM) to our verified merchant account <strong>7350120467&#64;upi</strong>.</li>
+                    <li><strong>Online UPI Transfer:</strong> Direct payment via standard Indian UPI apps (Google Pay, PhonePe, Paytm, BHIM) to our verified merchant account <strong>7350120467&#64;upi</strong>.</li>
                   </ul>
 
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">7. Intellectual Property</h3>
@@ -255,16 +255,15 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                     RMS Creations delivers gift hampers across all serviceable postal PIN codes in India. Every product page and checkout step features our real-time PIN code delivery checker so you can instantly verify serviceability before ordering.
                   </p>
 
-                  <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">2. Delivery Charges &amp; Free Shipping Threshold</h3>
+                  <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">2. Delivery Charges &amp; Postal Calculation</h3>
                   <div class="p-3.5 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#EADFD2] dark:border-white/10 space-y-1.5">
                     <div class="flex items-center justify-between">
-                      <span class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">Orders ₹499 and Above:</span>
-                      <span class="font-bold text-emerald-600 uppercase">FREE Doorstep Delivery</span>
+                      <span class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">Pan-India Courier Delivery:</span>
+                      <span class="font-bold text-[#9C4738] dark:text-[#EB9D8E]">Calculated by PIN Code &amp; Parcel Weight</span>
                     </div>
-                    <div class="flex items-center justify-between">
-                      <span class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">Orders Below ₹499:</span>
-                      <span class="font-bold text-[#9C4738] dark:text-[#EB9D8E]">Flat ₹50 Delivery Fee</span>
-                    </div>
+                    <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] pt-1">
+                      Delivery fees are dynamically calculated starting from ₹49 based on destination postal PIN code, distance, and total package weight to ensure secure, insured transport.
+                    </p>
                   </div>
 
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">3. Dispatch &amp; Estimated Delivery Timelines</h3>
@@ -308,7 +307,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                 <div class="space-y-4 text-xs sm:text-sm text-[#4A3C31] dark:text-[#D9C3B9] leading-relaxed">
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base">1. Order Cancellation Policy</h3>
                   <p>
-                    <strong>Standard Catalogue Hampers:</strong> You may cancel your order free of charge at any time <strong>prior to shipment dispatch</strong>. To cancel, please contact our support team immediately on WhatsApp (<strong>+91 92849 05118</strong>) or email <strong>rmsgifthampers&#64;gmail.com</strong> with your Order ID.
+                    <strong>Standard Catalogue Hampers:</strong> You may cancel your order without cancellation fee at any time <strong>prior to shipment dispatch</strong>. To cancel, please contact our support team immediately on WhatsApp (<strong>+91 92849 05118</strong>) or email <strong>rmsgifthampers&#64;gmail.com</strong> with your Order ID.
                   </p>
                   <p>
                     <strong>Custom &amp; Personalized Hampers:</strong> Because bespoke hampers involve personalized printing, names, and perishable ingredients, cancellation is permitted only <strong>prior to the commencement of artisan assembly</strong>. Once personalized materials or food seals are assembled, custom orders cannot be cancelled.
@@ -329,7 +328,7 @@ export type PolicySection = 'terms' | 'privacy' | 'shipping' | 'refunds' | 'grie
                   <ol class="list-decimal pl-5 space-y-1.5">
                     <li>Notify our support team within <strong>48 hours</strong> of parcel delivery.</li>
                     <li>Share photos or a short unboxing video illustrating the damage alongside the outer courier label via WhatsApp (<strong>+91 92849 05118</strong>) or email.</li>
-                    <li>Upon swift review by our quality team, we will immediately arrange either a <strong>free replacement dispatched via express courier</strong> or a <strong>full/partial refund</strong> per your preference.</li>
+                    <li>Upon swift review by our quality team, we will immediately arrange either an <strong>expedited replacement dispatched via courier</strong> or a <strong>full/partial refund</strong> per your preference.</li>
                   </ol>
 
                   <h3 class="font-bold text-[#2E2825] dark:text-[#F4F1ED] text-sm sm:text-base pt-2">4. Refund Processing Timelines &amp; Methods</h3>
@@ -478,7 +477,7 @@ export class PolicyPageComponent implements OnInit {
       },
       shipping: {
         title: 'Shipping & Delivery Policy | RMS Gift Hampers',
-        desc: 'Explore delivery timelines, free shipping thresholds, packaging standards, and pan-India courier fulfillment.'
+        desc: 'Explore delivery timelines, postal courier rates, packaging standards, and pan-India courier fulfillment.'
       },
       refunds: {
         title: 'Cancellation & Refund Policy | RMS Gift Hampers',

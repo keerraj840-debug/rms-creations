@@ -78,12 +78,8 @@ export class CartService {
     if (this.verifiedDeliveryFee !== null) {
       return this.verifiedDeliveryFee;
     }
-    // For orders containing hampers, PIN-code delivery applies (base ₹49 before PIN verification)
-    if (this.hasHamper) {
-      return 49;
-    }
-    // Free delivery on standard catalog orders ₹499 and above
-    return this.subtotal >= 499 ? 0 : 49;
+    // Standard PIN-code delivery applies (base ₹49 before PIN verification)
+    return 49;
   }
 
   get finalTotal(): number {

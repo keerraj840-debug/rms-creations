@@ -100,7 +100,7 @@ type AccountTab = 'profile' | 'addresses' | 'security';
                 Sign In to Account
               </a>
               <a routerLink="/register" class="px-7 py-3 rounded-full border border-[#EADFD2] dark:border-white/10 text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] hover:bg-stone-50 dark:hover:bg-white/5 transition active:scale-95 cursor-pointer">
-                Create Free Account
+                Create Account
               </a>
             </div>
           </div>
@@ -590,8 +590,8 @@ type AccountTab = 'profile' | 'addresses' | 'security';
                   <i class="fa-solid fa-qrcode"></i>
                 </div>
                 <div>
-                  <strong class="font-bold block text-[#2E2825] dark:text-[#F4F1ED]">Zero Fee Direct UPI</strong>
-                  <span class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">Free UPI to 7350120467&#64;upi or COD</span>
+                  <strong class="font-bold block text-[#2E2825] dark:text-[#F4F1ED]">Direct UPI &amp; COD</strong>
+                  <span class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">Pay to 7350120467&#64;upi or COD upon arrival</span>
                 </div>
               </div>
 
