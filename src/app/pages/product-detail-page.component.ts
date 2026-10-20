@@ -13,6 +13,7 @@ export interface HamperInclusionItem {
   id: number;
   name: string;
   quantity: number;
+  category?: string;
   description?: string;
   image?: string;
 }
@@ -166,6 +167,12 @@ export interface ProductDetail {
                             </h4>
                             <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-white dark:bg-[#251F1C] text-[#7A6C5E] dark:text-[#C5A393] border border-[#EADFD2]/60 dark:border-white/10 shrink-0">
                               {{ item.quantity }} {{ item.quantity === 1 ? 'pc' : 'pcs' }}
+                            </span>
+                          </div>
+                          <!-- Optional category tag -->
+                          <div *ngIf="item.category" class="mt-0.5">
+                            <span class="inline-flex items-center gap-1 text-[9px] font-semibold px-1.5 py-0.2 rounded-md bg-[#9C4738]/10 text-[#9C4738] dark:text-[#EB9D8E] border border-[#9C4738]/20">
+                              <i class="fa-solid fa-tag text-[8px]"></i> {{ item.category }}
                             </span>
                           </div>
                           <p *ngIf="item.description" class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] line-clamp-1 mt-0.5">
@@ -540,10 +547,21 @@ export class ProductDetailPageComponent implements OnInit, OnDestroy {
           .filter((id: any) => id !== null && id !== undefined);
 
         if (detailIds.length > 0) {
-          const { data: details } = await this.supabase
+          let details: any[] | null = null;
+          const res = await this.supabase
             .from('product_details')
-            .select('id, name, description, image')
+            .select('id, name, description, image, category')
             .in('id', detailIds);
+
+          if (res.error && (res.error.code === '42703' || res.error.message?.includes('column'))) {
+            const fallbackRes = await this.supabase
+              .from('product_details')
+              .select('id, name, description, image')
+              .in('id', detailIds);
+            details = fallbackRes.data;
+          } else {
+            details = res.data;
+          }
 
           if (details && details.length > 0) {
             const detailMap = new Map<number, any>();
@@ -554,10 +572,12 @@ export class ProductDetailPageComponent implements OnInit, OnDestroy {
               .map((m: any) => {
                 const d = detailMap.get(Number(m.product_detail_id));
                 const parsed = this.itemSourcing.extractMetadataFromDescription(d.description);
+                const category = d.category || parsed.category || undefined;
                 return {
                   id: d.id,
                   name: d.name,
                   quantity: m.quantity || 1,
+                  category: category ? String(category).trim() : undefined,
                   description: parsed.cleanDescription || '',
                   image: d.image || parsed.image || ''
                 };

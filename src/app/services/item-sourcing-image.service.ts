@@ -35,6 +35,7 @@ export interface PlatformSourcingMeta {
 export interface ItemMetadataParseResult {
   cleanDescription: string;
   image?: string;
+  category?: string;
   sourcingPlatform?: string;
   sourcingPrice?: number;
   sourcingUrl?: string;
@@ -319,6 +320,7 @@ export class ItemSourcingImageService {
         return {
           cleanDescription,
           image: parsed.image || undefined,
+          category: parsed.category || undefined,
           sourcingPlatform: parsed.sourcingPlatform || undefined,
           sourcingPrice: parsed.sourcingPrice != null ? Number(parsed.sourcingPrice) : undefined,
           sourcingUrl: parsed.sourcingUrl || undefined
@@ -336,14 +338,15 @@ export class ItemSourcingImageService {
    */
   embedMetadataIntoDescription(
     cleanDescription: string,
-    meta: { image?: string; sourcingPlatform?: string; sourcingPrice?: number; sourcingUrl?: string }
+    meta: { image?: string; category?: string; sourcingPlatform?: string; sourcingPrice?: number; sourcingUrl?: string }
   ): string {
     const base = (cleanDescription || '').replace(/<!--rms-item-meta:[\s\S]*?-->/g, '').trim();
-    const hasMeta = Boolean(meta.image || meta.sourcingPlatform || meta.sourcingPrice != null || meta.sourcingUrl);
+    const hasMeta = Boolean(meta.image || meta.category || meta.sourcingPlatform || meta.sourcingPrice != null || meta.sourcingUrl);
     if (!hasMeta) return base;
 
     const payload = JSON.stringify({
       image: meta.image || undefined,
+      category: meta.category || undefined,
       sourcingPlatform: meta.sourcingPlatform || undefined,
       sourcingPrice: meta.sourcingPrice != null ? Number(meta.sourcingPrice) : undefined,
       sourcingUrl: meta.sourcingUrl || undefined

@@ -305,7 +305,12 @@ import { ItemSourcingImageService, OnlineImageCandidate } from '../services/item
                   <a [routerLink]="['/admin/items/edit', d.id]" class="font-bold text-[#4A3C31] dark:text-[#F4F1ED] group-hover:text-[#9C4738] dark:group-hover:text-[#DD8776] transition-colors text-xs sm:text-sm text-left flex items-center gap-1.5 cursor-pointer">
                     <span class="truncate">{{ d.name }}</span>
                   </a>
-                  <p *ngIf="d._cleanDescription || d.description" class="text-[10px] text-[#A89F91] truncate max-w-xs">
+                  <div *ngIf="d.category || d._category" class="mt-0.5">
+                    <span class="inline-flex items-center gap-1 text-[9px] font-semibold px-1.5 py-0.2 rounded-md bg-[#9C4738]/10 text-[#9C4738] dark:text-[#EB9D8E] border border-[#9C4738]/20">
+                      <i class="fa-solid fa-tag text-[8px]"></i> {{ d.category || d._category }}
+                    </span>
+                  </div>
+                  <p *ngIf="d._cleanDescription || d.description" class="text-[10px] text-[#A89F91] truncate max-w-xs mt-0.5">
                     {{ d._cleanDescription || d.description }}
                   </p>
                 </div>
@@ -735,6 +740,8 @@ export class AdminProductDetailsPageComponent implements OnInit {
       const q = this.searchQuery.toLowerCase();
       list = list.filter(d =>
         (d.name && d.name.toLowerCase().includes(q)) ||
+        (d.category && d.category.toLowerCase().includes(q)) ||
+        (d._category && d._category.toLowerCase().includes(q)) ||
         (d.description && d.description.toLowerCase().includes(q))
       );
     }
@@ -903,6 +910,7 @@ export class AdminProductDetailsPageComponent implements OnInit {
           return {
             ...d,
             _image: d.image || parsed.image || '',
+            _category: d.category || parsed.category || '',
             _sourcingPlatform: d.sourcing_platform || parsed.sourcingPlatform || '',
             _sourcingPrice: d.sourcing_price != null ? Number(d.sourcing_price) : (parsed.sourcingPrice ?? null),
             _sourcingUrl: d.sourcing_url || parsed.sourcingUrl || '',

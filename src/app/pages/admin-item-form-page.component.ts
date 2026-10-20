@@ -166,6 +166,50 @@ import {
                         class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-4 py-2 text-xs text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] focus:outline-none focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738] leading-relaxed resize-y"></textarea>
             </div>
 
+            <!-- 2b. ITEM CATEGORY (OPTIONAL) -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] flex items-center gap-1.5">
+                  <i class="fa-solid fa-tags text-[#9C4738]"></i>
+                  <span>Item Category</span>
+                  <span class="text-[10px] text-[#A89F91] font-normal">(Optional — items may or may not have a category)</span>
+                </label>
+                <!-- Quick Suggestion Button based on item name -->
+                <button *ngIf="sourcingMeta.categoryLabel && item.category !== sourcingMeta.categoryLabel"
+                        type="button"
+                        (click)="item.category = sourcingMeta.categoryLabel"
+                        class="text-[10px] font-bold text-[#9C4738] dark:text-[#EB9D8E] hover:underline flex items-center gap-1 cursor-pointer">
+                  <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i>
+                  <span>Suggest "{{ sourcingMeta.categoryLabel }}"</span>
+                </button>
+              </div>
+
+              <div class="relative">
+                <input type="text" [(ngModel)]="item.category"
+                       placeholder="e.g. Dry Fruits & Nuts, Pooja & Diyas, Sweets & Snacks, Packaging... (or leave blank)"
+                       class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-4 py-2 text-xs font-medium text-[#4A3C31] dark:text-[#F4F1ED] placeholder-[#A89F91] focus:outline-none focus:ring-2 focus:ring-[#9C4738]/20 focus:border-[#9C4738]">
+              </div>
+
+              <!-- Quick category preset pills -->
+              <div class="flex items-center gap-1.5 flex-wrap mt-1.5">
+                <span class="text-[10px] font-bold text-[#A89F91]">Presets:</span>
+                <button *ngFor="let cat of commonItemCategories"
+                        type="button"
+                        (click)="item.category = (item.category === cat ? '' : cat)"
+                        [class]="item.category === cat ? 'bg-[#57251C] text-white border-[#57251C]' : 'bg-[#FAF7F2] dark:bg-white/5 border-[#EADFD2] dark:border-white/10 text-[#7A6C5E] dark:text-[#C5A393] hover:border-[#9C4738]'"
+                        class="px-2 py-0.5 rounded-lg text-[10px] font-semibold border transition cursor-pointer">
+                  {{ cat }}
+                </button>
+                <button *ngIf="item.category"
+                        type="button"
+                        (click)="item.category = ''"
+                        class="text-[10px] text-[#A89F91] hover:text-rose-500 font-semibold px-1 cursor-pointer"
+                        title="Clear category">
+                  <i class="fa-solid fa-xmark"></i> Clear
+                </button>
+              </div>
+            </div>
+
             <!-- 3. PRICING & STOCK CONTROLS -->
             <div class="p-4 bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 rounded-2xl space-y-4">
               <div class="flex items-center justify-between border-b border-[#EADFD2]/60 dark:border-white/10 pb-2">
@@ -679,6 +723,7 @@ export class AdminItemFormPageComponent implements OnInit {
   item: any = {
     name: '',
     description: '',
+    category: '',
     price: null,
     stock_quantity: null,
     is_active: true,
@@ -687,6 +732,14 @@ export class AdminItemFormPageComponent implements OnInit {
     sourcing_price: null,
     sourcing_url: ''
   };
+
+  readonly commonItemCategories = [
+    'Dry Fruits & Nuts',
+    'Sweets & Snacks',
+    'Pooja & Diyas',
+    'Candles & Aromas',
+    'Packaging & Keepsakes'
+  ];
 
   // Image Studio Tabs & State
   activeImageTab: 'online' | 'url' | 'upload' = 'online';
@@ -928,6 +981,7 @@ export class AdminItemFormPageComponent implements OnInit {
         this.item = {
           ...data,
           description: parsed.cleanDescription,
+          category: data.category || parsed.category || '',
           image: data.image || parsed.image || '',
           sourcing_platform: data.sourcing_platform || parsed.sourcingPlatform || '',
           sourcing_price: data.sourcing_price != null ? Number(data.sourcing_price) : (parsed.sourcingPrice ?? null),
@@ -971,6 +1025,7 @@ export class AdminItemFormPageComponent implements OnInit {
       const fullPayload: any = {
         name: this.item.name.trim(),
         description: this.item.description?.trim() || null,
+        category: this.item.category?.trim() || null,
         price: this.item.price != null && !isNaN(this.item.price) ? Number(this.item.price) : 0,
         stock_quantity: this.item.stock_quantity != null && !isNaN(this.item.stock_quantity) ? Number(this.item.stock_quantity) : null,
         is_active: Boolean(this.item.is_active),
@@ -993,6 +1048,7 @@ export class AdminItemFormPageComponent implements OnInit {
       if (error && (error.code === '42703' || error.message?.includes('column'))) {
         const fallbackDesc = this.itemSourcing.embedMetadataIntoDescription(this.item.description, {
           image: this.item.image,
+          category: this.item.category?.trim() || undefined,
           sourcingPlatform: this.item.sourcing_platform,
           sourcingPrice: this.item.sourcing_price,
           sourcingUrl: this.item.sourcing_url
@@ -1023,6 +1079,7 @@ export class AdminItemFormPageComponent implements OnInit {
           this.item = {
             name: '',
             description: '',
+            category: '',
             price: null,
             stock_quantity: null,
             is_active: true,

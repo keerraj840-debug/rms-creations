@@ -15,6 +15,7 @@ import {
 import { ModalComponent } from '../shared/ui/modal.component';
 import { CartService } from '../services/cart.service';
 import { LocalStorageService } from '../services/local-storage.service';
+import { ItemSourcingImageService } from '../services/item-sourcing-image.service';
 
 interface ItemVisualMeta {
   icon: string;
@@ -212,7 +213,7 @@ interface ItemVisualMeta {
                           {{ item.name }}
                         </h3>
                         <span class="text-[10px] text-stone-500 dark:text-stone-400 block truncate font-medium">
-                          {{ getItemVisual(item.name).badge }}
+                          {{ item.category || getItemVisual(item.name).badge }}
                         </span>
                       </div>
                     </div>
@@ -692,15 +693,44 @@ export class BuildHamperPageComponent implements OnInit {
   selectedRecipient = 'Family & Friends';
   mobileTab: 'catalogue' | 'box' = 'catalogue';
 
+  private itemSourcing = inject(ItemSourcingImageService);
+
   catalogueSearchQuery = '';
   selectedCategoryFilter = 'All Items';
-  readonly catalogueCategories = [
-    'All Items',
-    'Sweets & Snacks',
-    'Dry Fruits & Nuts',
-    'Pooja & Diyas',
-    'Gifts & Packaging'
-  ];
+
+  get catalogueCategories(): string[] {
+    const list = ['All Items'];
+    const standard = [
+      'Sweets & Snacks',
+      'Dry Fruits & Nuts',
+      'Pooja & Diyas',
+      'Gifts & Packaging'
+    ];
+    const presentCats = new Set<string>();
+    let hasUncategorized = false;
+
+    this.allCatalogueProducts.forEach(item => {
+      const cat = (item.category || '').trim();
+      if (cat) {
+        presentCats.add(cat);
+      } else {
+        hasUncategorized = true;
+      }
+    });
+
+    standard.forEach(s => {
+      list.push(s);
+      presentCats.delete(s);
+    });
+
+    presentCats.forEach(c => list.push(c));
+
+    if (hasUncategorized) {
+      list.push('Other / Uncategorized');
+    }
+
+    return list;
+  }
 
   readonly aiCurations = [
     {
@@ -823,20 +853,23 @@ export class BuildHamperPageComponent implements OnInit {
           const basePrice = Number(item.price || 0);
           const finalPrice = this.customHamperService.calculateCustomerItemPrice(basePrice, this.hamperMarkupConfig);
           const markupDiff = finalPrice - basePrice;
+          const parsed = this.itemSourcing.extractMetadataFromDescription(item.description);
+          const explicitCat = (item.category || parsed.category || '').trim();
+          const category = explicitCat || this.getItemVisual(item.name).category || '';
           return {
             uid: `inclusion-${item.id}`,
             itemType: 'catalogue_inclusion',
             inclusionId: Number(item.id),
             name: this.formatItemName(item.name),
-            description: item.description || '',
+            description: parsed.cleanDescription || item.description || '',
             basePrice: basePrice,
             markupAmount: markupDiff,
             price: finalPrice,
             stockQuantity: item.stock_quantity != null ? Number(item.stock_quantity) : null,
-            imageUrl: item.image || (item.description?.match(/"image":"([^"]+)"/)?.[1] ?? ''),
+            imageUrl: item.image || parsed.image || (item.description?.match(/"image":"([^"]+)"/)?.[1] ?? ''),
             isPriceConfirmed: true,
             quantity: 1,
-            category: this.getItemVisual(item.name).category
+            category: category
           };
         });
       } else {
@@ -935,7 +968,14 @@ export class BuildHamperPageComponent implements OnInit {
     return this.allCatalogueProducts.filter(item => {
       const matchesSearch = !this.catalogueSearchQuery.trim() ||
         item.name.toLowerCase().includes(this.catalogueSearchQuery.toLowerCase());
-      const matchesCat = this.selectedCategoryFilter === 'All Items' || item.category === this.selectedCategoryFilter;
+      let matchesCat = false;
+      if (this.selectedCategoryFilter === 'All Items') {
+        matchesCat = true;
+      } else if (this.selectedCategoryFilter === 'Other / Uncategorized') {
+        matchesCat = !item.category || !item.category.trim();
+      } else {
+        matchesCat = item.category === this.selectedCategoryFilter;
+      }
       return matchesSearch && matchesCat;
     });
   }

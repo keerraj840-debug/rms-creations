@@ -139,9 +139,10 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
               <app-file-upload
                 [aspectRatio]="16 / 9"
                 targetLabel="Promotional Banner"
-                bucket="banners"
+                bucket="images"
                 [existingImageUrl]="banner.image"
                 (fileUploaded)="onBannerImageUploaded($event)"
+                (removed)="banner.image = ''"
               ></app-file-upload>
             </div>
 
@@ -253,13 +254,18 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
               <!-- Live Slide Card Display -->
               <div class="overflow-hidden rounded-2xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1E1916] shadow-md">
 
-                <div class="relative aspect-[16/9] w-full overflow-hidden bg-black/10">
+                <div class="relative aspect-[16/9] w-full overflow-hidden bg-black/10 flex items-center justify-center">
                   <img
+                    *ngIf="banner.image"
                     [src]="banner.image"
                     [alt]="banner.name || 'Banner Preview'"
                     (error)="onImageError($event)"
                     class="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                   />
+                  <div *ngIf="!banner.image" class="w-full h-full flex flex-col items-center justify-center text-[#A89F91] p-6 text-center">
+                    <i class="fa-solid fa-image text-3xl mb-2 opacity-50"></i>
+                    <span class="text-xs font-semibold">Upload 16:9 banner graphic on the left</span>
+                  </div>
                   <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
 
                   <div class="absolute bottom-4 left-4 right-4 text-white">
@@ -321,7 +327,7 @@ export class AdminBannerFormPageComponent implements OnInit {
 
   banner = {
     name: '',
-    image: 'assets/banners/banner.png',
+    image: '',
     navigate_to_url_on_click: '/shop',
     is_active: true
   };
