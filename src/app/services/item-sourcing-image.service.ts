@@ -353,7 +353,8 @@ export class ItemSourcingImageService {
   }
 
   /**
-   * Downloads an external image via fetch or canvas, optimizes to <= 1MB, and saves to our Supabase storage bucket.
+   * Downloads an external image via fetch or canvas, standardizes to valid image/jpeg,
+   * optimizes to <= 1MB, and saves to our Supabase storage bucket.
    * STRICT: Always uploads to our own Supabase Storage bucket. Never saves raw external links.
    */
   async uploadOnlineImageToStorage(
@@ -370,65 +371,82 @@ export class ItemSourcingImageService {
     }
 
     try {
-      // 1. Attempt to fetch image blob
-      let blob: Blob | null = null;
-      try {
-        const res = await fetch(imageUrl, { mode: 'cors' });
-        if (res.ok) {
-          blob = await res.blob();
-        }
-      } catch {
-        blob = null;
-      }
+      let jpegBlob: Blob | null = null;
 
-      // 1b. Fallback: Download via HTML5 Image + Canvas if direct fetch encountered CORS
-      if (!blob && typeof document !== 'undefined') {
-        try {
-          blob = await new Promise<Blob | null>((resolve) => {
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = () => {
-              try {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.naturalWidth || img.width || 400;
-                canvas.height = img.naturalHeight || img.height || 400;
-                const ctx = canvas.getContext('2d');
-                if (!ctx) return resolve(null);
-                ctx.drawImage(img, 0, 0);
-                canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.9);
-              } catch {
-                resolve(null);
+      // Primary Strategy: Render through HTML5 Canvas into a clean, sanitized JPEG
+      // This completely strips any XSS or malformed headers and standardizes to image/jpeg
+      if (typeof document !== 'undefined') {
+        jpegBlob = await new Promise<Blob | null>((resolve) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              const maxDim = 800;
+              let w = img.naturalWidth || img.width || 400;
+              let h = img.naturalHeight || img.height || 400;
+              if (w > maxDim || h > maxDim) {
+                if (w > h) {
+                  h = Math.round((h * maxDim) / w);
+                  w = maxDim;
+                } else {
+                  w = Math.round((w * maxDim) / h);
+                  h = maxDim;
+                }
               }
-            };
-            img.onerror = () => resolve(null);
-            img.src = imageUrl;
-          });
+              canvas.width = w;
+              canvas.height = h;
+              const ctx = canvas.getContext('2d');
+              if (!ctx) return resolve(null);
+              ctx.drawImage(img, 0, 0, w, h);
+              canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.9);
+            } catch {
+              resolve(null);
+            }
+          };
+          img.onerror = () => resolve(null);
+          img.src = imageUrl;
+        });
+      }
+
+      // Secondary Strategy: Direct fetch if canvas was not able to load
+      if (!jpegBlob) {
+        try {
+          const res = await fetch(imageUrl, { mode: 'cors' });
+          if (res.ok) {
+            const rawBlob = await res.blob();
+            // Convert to JPEG via canvas
+            if (rawBlob && typeof document !== 'undefined') {
+              jpegBlob = await this.convertBlobToJpeg(rawBlob);
+            } else if (rawBlob) {
+              jpegBlob = rawBlob;
+            }
+          }
         } catch {
-          blob = null;
+          // Ignore
         }
       }
 
-      if (!blob || blob.size === 0) {
+      if (!jpegBlob || jpegBlob.size === 0) {
         return {
           success: false,
           url: '',
-          error: 'Could not download image file. Please choose another image or upload directly.'
+          error: 'Could not download external image to RMS storage. Please choose another image or upload directly.'
         };
       }
 
-      const ext = blob.type === 'image/png' ? 'png' : 'jpg';
       const slug = (itemName || 'item')
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '')
         .slice(0, 25);
-      const fileName = `item_${Date.now()}_${slug}.${ext}`;
-      const file = new File([blob], fileName, { type: blob.type || 'image/jpeg' });
+      const fileName = `item_${Date.now()}_${slug || 'hamper'}.jpg`;
+      const file = new File([jpegBlob], fileName, { type: 'image/jpeg' });
 
-      // 2. Validate and optimize
-      const optimized = await this.imageProcessor.processAndOptimize(file, fileName, 1, blob.size);
+      // Validate & optimize via ImageProcessor
+      const optimized = await this.imageProcessor.processAndOptimize(file, fileName, 1, file.size);
 
-      // 3. Upload to Supabase bucket
+      // Upload to RMS Creations Supabase storage bucket ('images')
       const uploadRes = await this.supabase.uploadFile('images', fileName, optimized.file);
       if (uploadRes.data && !uploadRes.error) {
         return { success: true, url: uploadRes.data };
@@ -437,14 +455,52 @@ export class ItemSourcingImageService {
       return {
         success: false,
         url: '',
-        error: uploadRes.error?.message || 'Failed to upload image file to storage.'
+        error: uploadRes.error?.message || 'Failed to upload image file to RMS storage.'
       };
     } catch (err: any) {
       return {
         success: false,
         url: '',
-        error: err?.message || 'Error uploading image to storage.'
+        error: err?.message || 'Error processing and saving image to RMS storage.'
       };
     }
+  }
+
+  private convertBlobToJpeg(blob: Blob): Promise<Blob | null> {
+    return new Promise((resolve) => {
+      try {
+        const objectUrl = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          const canvas = document.createElement('canvas');
+          const maxDim = 800;
+          let w = img.naturalWidth || img.width || 400;
+          let h = img.naturalHeight || img.height || 400;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return resolve(null);
+          ctx.drawImage(img, 0, 0, w, h);
+          canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.9);
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          resolve(null);
+        };
+        img.src = objectUrl;
+      } catch {
+        resolve(null);
+      }
+    });
   }
 }

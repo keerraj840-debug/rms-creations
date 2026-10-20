@@ -127,4 +127,19 @@ describe('ItemSourcingImageService', () => {
       expect(parsed.image).toBeUndefined();
     });
   });
+
+  describe('uploadOnlineImageToStorage', () => {
+    it('returns empty error if no imageUrl provided', async () => {
+      const res = await service.uploadOnlineImageToStorage('', 'Brass Diya');
+      expect(res.success).toBe(false);
+      expect(res.error).toBe('No image URL provided.');
+    });
+
+    it('returns directly if image is already hosted on Supabase storage', async () => {
+      const supabaseUrl = 'https://abc.supabase.co/storage/v1/object/public/images/item_123.jpg';
+      const res = await service.uploadOnlineImageToStorage(supabaseUrl, 'Brass Diya');
+      expect(res.success).toBe(true);
+      expect(res.url).toBe(supabaseUrl);
+    });
+  });
 });
