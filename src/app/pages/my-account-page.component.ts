@@ -19,7 +19,7 @@ type AccountTab = 'profile' | 'addresses' | 'security';
   imports: [CommonModule, RouterLink, FormsModule, SiteLayoutComponent],
   template: `
     <app-site-layout>
-      <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-20">
+      <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-28 sm:pb-20">
         
         <!-- HEADER OVERVIEW STRIP -->
         <div class="via-[#FAF7F2] to-transparent dark:from-white/5 py-7 md:py-10 border-b border-[#EADFD2]/60 dark:border-white/10">

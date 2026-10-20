@@ -36,7 +36,7 @@ export interface ProductDetail {
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, SiteLayoutComponent],
   template: `
-    <app-site-layout [hideBottomNav]="true">
+    <app-site-layout [hideBottomNav]="true" [hideFloatingAction]="true">
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-28">
         
         <!-- BREADCRUMBS BAR -->

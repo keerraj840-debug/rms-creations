@@ -29,14 +29,9 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
 
               <!-- Left Hero Pitch -->
               <div class="lg:col-span-7 space-y-4">
-                <div class="inline-flex items-center gap-2 rounded-full border border-[#D9C3B9]/70 dark:border-white/10 bg-white/90 dark:bg-white/5 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#9C4738] dark:text-[#EB9D8E] shadow-2xs backdrop-blur-md">
-                  <span class="inline-block h-2 w-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                  Handmade Gift Hampers &bull; All-India Delivery
-                </div>
-
                 <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#57251C] dark:text-[#F4F1ED] leading-[1.15]">
                   Beautiful Gift Hampers <br class="hidden sm:inline" />
-                  <span class="font-serif italic font-normal text-[#C56D5B] dark:text-[#EB9D8E] underline decoration-[#EB9D8E] decoration-wavy decoration-1 underline-offset-8">
+                  <span class="font-serif italic font-normal text-[#C56D5B] dark:text-[#EB9D8E] underline decoration-[#EB9D8E] decoration-1 underline-offset-8">
                     Made with Love
                   </span>
                 </h1>
@@ -76,9 +71,7 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
                       class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
                     />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4 text-white">
-                      <span class="inline-block w-fit rounded-full bg-[#9C4738] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider mb-1">
-                        Featured Collection
-                      </span>
+                     
                       <h2 class="font-serif text-sm sm:text-base font-bold leading-tight drop-shadow-xs">{{ currentSlide.title }}</h2>
                       <p class="text-[11px] text-white/90 line-clamp-1 mt-0.5">{{ currentSlide.description }}</p>
                       <span class="mt-1.5 text-xs font-bold text-amber-300 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
@@ -228,27 +221,7 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
               </div>
 
             </div>
-
-            <!-- Trust Highlights Strip -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-1 text-center">
-              <div class="p-2.5 rounded-xl bg-white dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-2xs flex items-center justify-center gap-2">
-                <i class="fa-solid fa-truck-fast text-[#9C4738] dark:text-[#EB9D8E] text-sm"></i>
-                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">Safe Pan-India Delivery</span>
-              </div>
-              <div class="p-2.5 rounded-xl bg-white dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-2xs flex items-center justify-center gap-2">
-                <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
-                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">WhatsApp Support</span>
-              </div>
-              <div class="p-2.5 rounded-xl bg-white dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-2xs flex items-center justify-center gap-2">
-                <i class="fa-solid fa-shield-heart text-[#9C4738] dark:text-[#EB9D8E] text-sm"></i>
-                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">Safe Gift Packaging</span>
-              </div>
-              <div class="p-2.5 rounded-xl bg-white dark:bg-[#1E1916] border border-[#EADFD2] dark:border-white/10 shadow-2xs flex items-center justify-center gap-2">
-                <i class="fa-solid fa-indian-rupee-sign text-[#9C4738] dark:text-[#EB9D8E] text-sm"></i>
-                <span class="text-xs font-bold text-[#4A3C31] dark:text-[#D9C3B9]">Cash on Delivery Available</span>
-              </div>
-            </div>
-
+            
           </div>
         </section>
 
@@ -381,7 +354,7 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
               routerLink="/shop"
               class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-[#9C4738] text-[#9C4738] dark:text-[#EB9D8E] hover:bg-[#9C4738] hover:text-white text-xs font-bold uppercase tracking-wider transition shadow-2xs cursor-pointer"
             >
-              <span>Explore Complete 50+ Hamper Catalog</span>
+              <span>Explore More Hamper Catalog</span>
               <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </a>
           </div>

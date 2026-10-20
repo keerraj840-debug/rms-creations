@@ -12,7 +12,7 @@ import { SupabaseService } from '../services/supabase.service';
   imports: [CommonModule, RouterLink, SiteLayoutComponent],
   template: `
     <app-site-layout>
-      <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 py-12 md:py-16">
+      <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pt-8 sm:pt-12 pb-28 sm:pb-20">
         
         <main class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
 

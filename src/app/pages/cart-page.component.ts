@@ -28,7 +28,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
     ModalComponent
   ],
   template: `
-    <app-site-layout [hideBottomNav]="true" [hideFloatingAction]="true">
+    <app-site-layout [hideBottomNav]="cartService.items.length > 0" [hideFloatingAction]="true">
       <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-44 lg:pb-24">
         
         <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-6">
@@ -220,13 +220,13 @@ import { ModalComponent } from '../shared/ui/modal.component';
               </section>
 
               <!-- 2. DELIVERY & CUSTOMER DETAILS CARD -->
-              <section id="delivery-details-section" class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-4 sm:p-7 shadow-xs space-y-5 scroll-mt-20">
+              <section id="delivery-details-section" class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-4 sm:p-7 shadow-xs space-y-4 scroll-mt-20">
                 
-                <div class="flex items-center justify-between pb-3.5 border-b border-[#EADFD2]/60 dark:border-white/10">
+                <div class="flex items-center justify-between pb-3 border-b border-[#EADFD2]/60 dark:border-white/10">
                   <div class="flex items-center gap-2.5">
                     <span class="w-6 h-6 rounded-full bg-[#9C4738] text-white text-xs font-bold flex items-center justify-center shadow-xs">2</span>
                     <h2 class="font-serif font-bold text-base sm:text-lg text-[#2E2825] dark:text-[#F4F1ED]">
-                      Delivery Address &amp; Contact Details
+                      Delivery &amp; Contact Details
                     </h2>
                   </div>
                   <span *ngIf="currentUser" class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/40 flex items-center gap-1.5">
@@ -234,161 +234,203 @@ import { ModalComponent } from '../shared/ui/modal.component';
                   </span>
                 </div>
 
-                <!-- Saved Address Quick Selector (If authenticated) -->
-                <div *ngIf="savedAddresses.length > 0" class="space-y-2.5">
-                  <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-bold text-[#7A6C5E] dark:text-[#C5A393] uppercase tracking-wider block">
-                      Saved Addresses
-                    </span>
-                    <button 
-                      type="button"
-                      (click)="useNewAddress()"
-                      class="text-[11px] font-semibold text-[#9C4738] dark:text-[#EB9D8E] hover:underline cursor-pointer"
-                    >
-                      + Add New Address
-                    </button>
-                  </div>
-
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button
-                      *ngFor="let addr of savedAddresses"
-                      type="button"
-                      (click)="selectSavedAddress(addr)"
-                      [class]="selectedAddressId === addr.customer_address_id ? 'border-[#9C4738] bg-[#FAF7F2] dark:bg-[#251F1C] ring-2 ring-[#9C4738]/20 shadow-xs' : 'border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1C1917] hover:border-[#9C4738]/50'"
-                      class="p-3.5 text-left rounded-2xl border transition-all cursor-pointer text-xs space-y-1 relative"
-                    >
-                      <div class="flex items-center justify-between font-bold">
-                        <span class="text-[#2E2825] dark:text-[#F4F1ED] flex items-center gap-1.5">
-                          <i class="fa-regular fa-building text-[11px] text-[#9C4738]"></i>
-                          {{ addr.address_type || 'Address' }}
-                        </span>
-                        <span *ngIf="addr.is_default" class="text-[9px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 px-1.5 py-0.5 rounded">Default</span>
-                      </div>
-                      <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] line-clamp-2 leading-relaxed">
-                        {{ addr.address }}, {{ addr.city }}, {{ addr.state }} - {{ addr.pin_code }}
-                      </p>
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Form Fields -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <!-- Recipient Contact Row (Always compact and easily verifiable) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <!-- Name -->
                   <div>
-                    <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">
-                      Full Name <span class="text-rose-500">*</span>
+                    <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+                      Recipient Name <span class="text-rose-500">*</span>
                     </label>
                     <input
                       type="text"
                       [(ngModel)]="customerName"
+                      autocomplete="name"
                       placeholder="e.g. Priya Sharma"
-                      class="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
+                      class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
                     />
                   </div>
 
-                  <!-- Mobile Phone -->
+                  <!-- Phone -->
                   <div>
-                    <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">
-                      Mobile / WhatsApp Number <span class="text-rose-500">*</span>
+                    <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+                      Mobile / WhatsApp <span class="text-rose-500">*</span>
                     </label>
                     <div class="relative">
-                      <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-[#7A6C5E] select-none">+91</span>
+                      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#7A6C5E] select-none">+91</span>
                       <input
                         type="tel"
                         inputmode="numeric"
+                        autocomplete="tel-national"
                         maxlength="10"
                         [(ngModel)]="customerPhone"
                         placeholder="98200 12345"
-                        class="w-full pl-12 pr-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium font-mono text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
+                        class="w-full pl-11 pr-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium font-mono text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
                       />
                     </div>
                   </div>
 
-                  <!-- Email Address -->
-                  <div class="sm:col-span-2">
-                    <div class="flex items-center justify-between mb-1.5">
-                      <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">
-                        Email Address <span class="text-rose-500">*</span>
-                      </label>
-                      <span class="text-[10px] text-[#A89F91]">Order invoice &amp; tracking updates</span>
-                    </div>
+                  <!-- Email -->
+                  <div>
+                    <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+                      Email Address <span class="text-rose-500">*</span>
+                    </label>
                     <input
                       type="email"
                       [(ngModel)]="customerEmail"
-                      placeholder="e.g. priya@example.com"
-                      class="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
+                      autocomplete="email"
+                      placeholder="priya@example.com"
+                      class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
                     />
+                  </div>
+                </div>
+
+                <!-- SMART SAVED ADDRESS SUMMARY CARD (Hidden form when address is selected) -->
+                <div *ngIf="savedAddresses.length > 0 && !isAddingNewAddress && selectedAddress" class="p-3.5 sm:p-4 rounded-2xl border border-[#9C4738]/30 bg-[#FAF7F2] dark:bg-[#251F1C] space-y-2">
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="space-y-1 min-w-0">
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-[#9C4738] dark:text-[#EB9D8E] bg-[#9C4738]/10 dark:bg-[#EB9D8E]/10 px-2 py-0.5 rounded-full">
+                          {{ selectedAddress.address_type || 'Saved Address' }}
+                        </span>
+                        <span *ngIf="selectedAddress.is_default" class="text-[9px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 px-1.5 py-0.5 rounded">
+                          Default
+                        </span>
+                      </div>
+                      <p class="text-xs text-[#2E2825] dark:text-[#F4F1ED] font-medium leading-relaxed">
+                        {{ selectedAddress.address }}, {{ selectedAddress.city }}, {{ selectedAddress.state }} - <span class="font-mono font-bold">{{ selectedAddress.pin_code }}</span>
+                      </p>
+                      <!-- Courier / Delivery availability tag -->
+                      <div *ngIf="pinResult" class="text-[11px] font-medium flex items-center gap-1.5 pt-0.5" [ngClass]="pinResult.isServiceable ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-400'">
+                        <i class="fa-solid text-[10px]" [ngClass]="pinResult.isServiceable ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                        <span>{{ pinResult.message }}</span>
+                      </div>
+                    </div>
+
+                    <!-- Change Address Action -->
+                    <div class="flex flex-col items-end gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        (click)="openAddressModal()"
+                        class="px-3 py-1.5 rounded-xl border border-[#9C4738] text-[#9C4738] dark:text-[#EB9D8E] hover:bg-[#9C4738] hover:text-white dark:hover:bg-[#EB9D8E] dark:hover:text-[#1C1816] text-xs font-bold transition cursor-pointer active:scale-95 flex items-center gap-1.5 shadow-2xs"
+                        aria-label="Change delivery address"
+                      >
+                        <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+                        <span>Change</span>
+                      </button>
+                      <button
+                        type="button"
+                        (click)="startAddNewAddress()"
+                        class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] hover:underline cursor-pointer"
+                      >
+                        + New address
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- FULL ADDRESS FORM (Displayed when adding/editing or no saved address) -->
+                <div *ngIf="isAddingNewAddress || savedAddresses.length === 0" class="space-y-3 pt-1 border-t border-[#EADFD2]/60 dark:border-white/10">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#57251C] dark:text-[#D9C3B9] flex items-center gap-1.5">
+                      <i class="fa-solid fa-location-dot text-[#9C4738]"></i>
+                      <span>Enter Delivery Destination</span>
+                    </span>
+                    <button
+                      *ngIf="savedAddresses.length > 0"
+                      type="button"
+                      (click)="cancelAddNewAddress()"
+                      class="text-xs font-semibold text-[#9C4738] dark:text-[#EB9D8E] hover:underline cursor-pointer"
+                    >
+                      Cancel &amp; Use Saved Address
+                    </button>
                   </div>
 
                   <!-- Street Address -->
-                  <div class="sm:col-span-2">
-                    <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">
-                      Delivery Address <span class="text-rose-500">*</span>
+                  <div>
+                    <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+                      Street Address / House / Flat <span class="text-rose-500">*</span>
                     </label>
                     <textarea
                       rows="2"
                       [(ngModel)]="customerAddress"
+                      autocomplete="street-address"
                       placeholder="Flat/House No., Wing, Building/Society, Street, Landmark"
-                      class="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition resize-none"
+                      class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition resize-none"
                     ></textarea>
                   </div>
 
-                  <!-- PIN Code with Instant Delivery Checker -->
-                  <div>
-                    <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">
-                      PIN Code (6 Digits) <span class="text-rose-500">*</span>
-                    </label>
-                    <div class="relative">
-                      <input
-                        type="text"
-                        inputmode="numeric"
-                        maxlength="6"
-                        [(ngModel)]="customerPin"
-                        (ngModelChange)="onPinCodeChange($event)"
-                        placeholder="e.g. 400001"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] font-mono text-xs font-bold text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
-                      />
-                      <i *ngIf="checkingPin" class="fa-solid fa-circle-notch fa-spin absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-[#9C4738]"></i>
-                    </div>
-
-                    <!-- PIN check message -->
-                    <div *ngIf="pinResult" class="mt-1.5 text-[11px] font-medium flex items-center gap-1.5" [ngClass]="pinResult.isServiceable ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-400'">
-                      <i class="fa-solid text-[10px]" [ngClass]="pinResult.isServiceable ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
-                      <span>{{ pinResult.message }}</span>
-                    </div>
-                  </div>
-
-                  <!-- City & State -->
-                  <div class="grid grid-cols-2 gap-2.5">
+                  <!-- PIN, City, State Grid -->
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <!-- PIN Code -->
                     <div>
-                      <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">City <span class="text-rose-500">*</span></label>
+                      <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">
+                        PIN Code (6 Digits) <span class="text-rose-500">*</span>
+                      </label>
+                      <div class="relative">
+                        <input
+                          type="text"
+                          inputmode="numeric"
+                          autocomplete="postal-code"
+                          maxlength="6"
+                          [(ngModel)]="customerPin"
+                          (ngModelChange)="onPinCodeChange($event)"
+                          placeholder="e.g. 400001"
+                          class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] font-mono text-xs font-bold text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
+                        />
+                        <i *ngIf="checkingPin" class="fa-solid fa-circle-notch fa-spin absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#9C4738]"></i>
+                      </div>
+                      <div *ngIf="pinResult" class="mt-1 text-[11px] font-medium flex items-center gap-1.5" [ngClass]="pinResult.isServiceable ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-400'">
+                        <i class="fa-solid text-[10px]" [ngClass]="pinResult.isServiceable ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                        <span>{{ pinResult.message }}</span>
+                      </div>
+                    </div>
+
+                    <!-- City -->
+                    <div>
+                      <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">City <span class="text-rose-500">*</span></label>
                       <input
                         type="text"
                         [(ngModel)]="customerCity"
+                        autocomplete="address-level2"
                         placeholder="e.g. Mumbai"
-                        class="w-full px-3 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
+                        class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
                       />
                     </div>
+
+                    <!-- State -->
                     <div>
-                      <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1.5">State <span class="text-rose-500">*</span></label>
+                      <label class="block text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED] mb-1">State <span class="text-rose-500">*</span></label>
                       <input
                         type="text"
                         [(ngModel)]="customerState"
+                        autocomplete="address-level1"
                         placeholder="Maharashtra"
-                        class="w-full px-3 py-2.5 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
+                        class="w-full px-3 py-2 rounded-xl border border-[#EADFD2] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1C1917] text-xs font-medium text-[#2E2825] dark:text-[#F4F1ED] outline-none focus:ring-2 focus:ring-[#9C4738]/30 focus:border-[#9C4738] transition"
                       />
                     </div>
                   </div>
 
+                  <!-- Save to Account Checkbox (Logged-in only) -->
+                  <div *ngIf="currentUser" class="pt-1 flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="save-address-checkbox"
+                      [(ngModel)]="saveAddressToAccount"
+                      class="rounded border-[#EADFD2] text-[#9C4738] focus:ring-[#9C4738]/40 h-4 w-4 cursor-pointer"
+                    />
+                    <label for="save-address-checkbox" class="text-xs text-[#57251C] dark:text-[#D9C3B9] cursor-pointer">
+                      Save this address to my account for faster checkout next time
+                    </label>
+                  </div>
                 </div>
 
               </section>
 
-              <!-- 3. PAYMENT METHOD CARD -->
-              <section class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-4 sm:p-7 shadow-xs space-y-4">
+              <!-- 3. PAYMENT METHOD CARD (COMPACT SELECTABLE ROW) -->
+              <section class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-4 sm:p-6 shadow-xs space-y-3">
                 
-                <div class="flex items-center justify-between pb-3.5 border-b border-[#EADFD2]/60 dark:border-white/10">
-                  <div class="flex items-center gap-2.5">
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#EADFD2]/60 dark:border-white/10">
+                  <div class="flex items-center gap-2">
                     <span class="w-6 h-6 rounded-full bg-[#9C4738] text-white text-xs font-bold flex items-center justify-center shadow-xs">3</span>
                     <h2 class="font-serif font-bold text-base sm:text-lg text-[#2E2825] dark:text-[#F4F1ED]">
                       Payment Method
@@ -399,29 +441,23 @@ import { ModalComponent } from '../shared/ui/modal.component';
                   </span>
                 </div>
 
-                <div class="p-4 sm:p-5 rounded-2xl border-2 border-[#9C4738] bg-[#FAF7F2] dark:bg-[#251F1C] space-y-3.5">
-                  <div class="flex items-start gap-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-[#9C4738]/15 text-[#9C4738] dark:text-[#EB9D8E] flex items-center justify-center shrink-0 mt-0.5">
-                      <i class="fa-solid fa-truck-ramp-box text-lg"></i>
+                <div class="p-3.5 sm:p-4 rounded-2xl border-2 border-[#9C4738] bg-[#FAF7F2] dark:bg-[#251F1C] flex items-center justify-between gap-3 shadow-2xs">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-[#9C4738]/15 text-[#9C4738] dark:text-[#EB9D8E] flex items-center justify-center shrink-0">
+                      <i class="fa-solid fa-truck-ramp-box text-base"></i>
                     </div>
-                    <div class="space-y-1">
+                    <div class="space-y-0.5">
                       <div class="flex items-center gap-2 flex-wrap">
-                        <span class="font-bold text-sm text-[#2E2825] dark:text-[#F4F1ED]">Cash / UPI on Delivery (COD)</span>
-                        <span class="text-[9px] font-bold bg-[#9C4738] text-white px-1.5 py-0.5 rounded">Guaranteed Safe</span>
+                        <span class="font-bold text-xs sm:text-sm text-[#2E2825] dark:text-[#F4F1ED]">Cash / UPI on Delivery (COD)</span>
+                        <span class="text-[9px] font-bold bg-[#9C4738] text-white px-1.5 py-0.5 rounded">Safe &amp; Verified</span>
                       </div>
-                      <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393] leading-relaxed">
-                        Pay conveniently with Cash or scan QR via UPI (GPay, PhonePe, Paytm) directly when your hamper is handed over.
+                      <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] leading-relaxed">
+                        Pay with Cash or scan QR via UPI (GPay, PhonePe, Paytm) upon parcel arrival.
                       </p>
                     </div>
                   </div>
-
-                  <div class="pt-3 border-t border-[#EADFD2]/80 dark:border-white/10 flex flex-wrap items-center justify-between gap-y-2 gap-x-4 text-[11px] text-[#4A3C31] dark:text-[#E0D8D0]">
-                    <span class="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-medium">
-                      <i class="fa-solid fa-circle-check text-xs"></i> Freshly Packed &amp; Inspected
-                    </span>
-                    <a href="https://wa.me/919284905118" target="_blank" class="flex items-center gap-1.5 text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738]">
-                      <i class="fa-brands fa-whatsapp text-xs text-emerald-600"></i> Help: +91 92849 05118
-                    </a>
+                  <div class="w-5 h-5 rounded-full bg-[#9C4738] text-white flex items-center justify-center shrink-0 text-[10px] shadow-xs">
+                    <i class="fa-solid fa-check"></i>
                   </div>
                 </div>
 
@@ -432,13 +468,25 @@ import { ModalComponent } from '../shared/ui/modal.component';
             <!-- RIGHT 4 COLS: ORDER SUMMARY & SWIPE BUTTON (STICKY) -->
             <div class="lg:col-span-4 space-y-4 lg:sticky lg:top-24">
               
-              <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-5 sm:p-6 shadow-xs space-y-5">
+              <div class="bg-white dark:bg-[#1E1916] rounded-3xl border border-[#EADFD2] dark:border-white/10 p-4 sm:p-6 shadow-xs space-y-4">
                 
-                <h2 class="font-serif font-bold text-lg text-[#2E2825] dark:text-[#F4F1ED] pb-3 border-b border-[#EADFD2]/60 dark:border-white/10">
-                  Order Summary
-                </h2>
+                <div class="flex items-center justify-between pb-3 border-b border-[#EADFD2]/60 dark:border-white/10">
+                  <h2 class="font-serif font-bold text-base sm:text-lg text-[#2E2825] dark:text-[#F4F1ED]">
+                    Order Summary
+                  </h2>
+                  <!-- Mobile Collapsible Toggle -->
+                  <button
+                    type="button"
+                    (click)="toggleMobileOrderBreakdown()"
+                    class="lg:hidden text-xs font-semibold text-[#9C4738] dark:text-[#EB9D8E] flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>{{ showMobileOrderBreakdown ? 'Hide details' : 'View details' }}</span>
+                    <i class="fa-solid text-[10px]" [ngClass]="showMobileOrderBreakdown ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                  </button>
+                </div>
 
-                <div class="space-y-3 text-xs">
+                <!-- Collapsible on Mobile, always expanded on Desktop -->
+                <div [ngClass]="showMobileOrderBreakdown ? 'block' : 'hidden lg:block'" class="space-y-3 text-xs">
                   <div class="flex justify-between items-center text-[#7A6C5E] dark:text-[#C5A393]">
                     <span>Items Subtotal ({{ cartService.totalItemsCount }} items):</span>
                     <span class="font-bold text-[#2E2825] dark:text-[#F4F1ED]">₹{{ cartService.subtotal }}</span>
@@ -460,13 +508,13 @@ import { ModalComponent } from '../shared/ui/modal.component';
                       ₹{{ cartService.deliveryFee }}
                     </span>
                   </div>
+                </div>
 
-                  <div class="pt-3 border-t border-[#EADFD2]/60 dark:border-white/10 flex justify-between items-baseline">
-                    <span class="font-bold text-sm text-[#2E2825] dark:text-[#F4F1ED]">Total Payable:</span>
-                    <span class="font-serif font-bold text-2xl text-[#9C4738] dark:text-[#EB9D8E]">
-                      ₹{{ cartService.finalTotal }}
-                    </span>
-                  </div>
+                <div class="pt-3 border-t border-[#EADFD2]/60 dark:border-white/10 flex justify-between items-baseline">
+                  <span class="font-bold text-sm text-[#2E2825] dark:text-[#F4F1ED]">Total Payable:</span>
+                  <span class="font-serif font-bold text-xl sm:text-2xl text-[#9C4738] dark:text-[#EB9D8E]">
+                    ₹{{ cartService.finalTotal }}
+                  </span>
                 </div>
 
                 <!-- Validation Warning Banner -->
@@ -507,7 +555,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
                 </div>
 
                 <!-- Trust Points -->
-                <div class="space-y-2.5 pt-3 border-t border-[#EADFD2]/50 dark:border-white/5 text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">
+                <div class="space-y-2 pt-3 border-t border-[#EADFD2]/50 dark:border-white/5 text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">
                   <div class="flex items-center gap-2">
                     <i class="fa-solid fa-shield-check text-emerald-600 text-xs"></i>
                     <span>100% Quality Checked Before Dispatch</span>
@@ -515,10 +563,6 @@ import { ModalComponent } from '../shared/ui/modal.component';
                   <div class="flex items-center gap-2">
                     <i class="fa-solid fa-truck-fast text-emerald-600 text-xs"></i>
                     <span>Safe Delivery &amp; Real-time WhatsApp Tracking</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-headset text-emerald-600 text-xs"></i>
-                    <span>Questions? WhatsApp Support: +91 9284905118</span>
                   </div>
                 </div>
 
@@ -530,11 +574,11 @@ import { ModalComponent } from '../shared/ui/modal.component';
 
         </main>
 
-        <!-- STICKY MOBILE BOTTOM SWIPE BAR -->
+        <!-- STICKY MOBILE BOTTOM SWIPE BAR (COORDINATED WITH SAFE-AREA INSETS) -->
         <aside 
           *ngIf="cartService.items.length > 0"
           aria-label="Mobile Order Action"
-          class="fixed bottom-0 inset-x-0 z-40 bg-[#FFFDFC]/95 dark:bg-[#1C1816]/95 backdrop-blur-md border-t border-[#D9C3B9]/50 dark:border-[#3D302A] px-4 pt-3 pb-3 lg:hidden shadow-2xl flex flex-col gap-2.5 transition-all"
+          class="fixed bottom-0 inset-x-0 z-40 bg-[#FFFDFC]/95 dark:bg-[#1C1816]/95 backdrop-blur-md border-t border-[#D9C3B9]/50 dark:border-[#3D302A] px-4 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden shadow-2xl flex flex-col gap-2 transition-all"
         >
           <div class="flex items-center justify-between text-xs">
             <div class="flex items-baseline gap-1.5">
@@ -573,6 +617,59 @@ import { ModalComponent } from '../shared/ui/modal.component';
             <a routerLink="/refund-policy" target="_blank" rel="noopener noreferrer" class="underline hover:text-[#9C4738] dark:hover:text-[#EB9D8E] font-medium">Refunds</a>.
           </p>
         </aside>
+
+        <!-- SMART SAVED ADDRESS SELECTION MODAL -->
+        <app-modal [isOpen]="showAddressPickerModal" title="Select Delivery Address" size="md" (onClose)="closeAddressModal()">
+          <div class="space-y-3 py-1">
+            <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">
+              Choose where you want your gift hampers delivered:
+            </p>
+
+            <div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+              <button
+                *ngFor="let addr of savedAddresses"
+                type="button"
+                (click)="selectSavedAddress(addr)"
+                [class]="selectedAddressId === addr.customer_address_id ? 'border-[#9C4738] bg-[#FAF7F2] dark:bg-[#251F1C] ring-2 ring-[#9C4738]/20 shadow-xs' : 'border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1C1917] hover:border-[#9C4738]/50'"
+                class="w-full p-3.5 text-left rounded-2xl border transition-all cursor-pointer text-xs space-y-1 relative block"
+              >
+                <div class="flex items-center justify-between font-bold">
+                  <span class="text-[#2E2825] dark:text-[#F4F1ED] flex items-center gap-1.5">
+                    <i class="fa-regular fa-building text-[11px] text-[#9C4738]"></i>
+                    {{ addr.address_type || 'Address' }}
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <span *ngIf="addr.is_default" class="text-[9px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 px-1.5 py-0.5 rounded">Default</span>
+                    <span *ngIf="selectedAddressId === addr.customer_address_id" class="text-[10px] text-[#9C4738] font-bold">
+                      <i class="fa-solid fa-check"></i> Selected
+                    </span>
+                  </div>
+                </div>
+                <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] leading-relaxed">
+                  {{ addr.address }}, {{ addr.city }}, {{ addr.state }} - <span class="font-mono font-bold">{{ addr.pin_code }}</span>
+                </p>
+              </button>
+            </div>
+          </div>
+
+          <div modal-footer class="w-full flex items-center justify-between gap-3">
+            <button
+              type="button"
+              (click)="startAddNewAddress()"
+              class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#FAF7F2] dark:bg-white/10 hover:bg-[#F3E7DC] text-[#4A3C31] dark:text-[#F4F1ED] font-bold text-xs border border-[#EADFD2] dark:border-white/10 text-center cursor-pointer transition flex items-center justify-center gap-1.5"
+            >
+              <i class="fa-solid fa-plus text-[10px]"></i>
+              <span>Deliver to a New Address</span>
+            </button>
+            <button
+              type="button"
+              (click)="closeAddressModal()"
+              class="px-4 py-2.5 rounded-xl bg-[#9C4738] text-white font-bold text-xs shadow-sm cursor-pointer hover:bg-[#853C2F] transition"
+            >
+              Done
+            </button>
+          </div>
+        </app-modal>
 
       </div>
 
@@ -699,6 +796,15 @@ export class CartPageComponent implements OnInit, OnDestroy {
   currentUser: UserProfile | null = null;
   savedAddresses: CustomerAddress[] = [];
   selectedAddressId: number | null = null;
+  isAddingNewAddress = false;
+  showAddressPickerModal = false;
+  showMobileOrderBreakdown = false;
+  saveAddressToAccount = false;
+
+  get selectedAddress(): CustomerAddress | null {
+    if (!this.selectedAddressId) return null;
+    return this.savedAddresses.find(a => a.customer_address_id === this.selectedAddressId) || null;
+  }
 
   // Form Fields
   customerName = '';
@@ -800,8 +906,9 @@ export class CartPageComponent implements OnInit, OnDestroy {
   async loadUserSavedAddresses(userId: number) {
     try {
       this.savedAddresses = await this.addressService.getCustomerAddresses(userId);
-      if (this.savedAddresses.length > 0 && !this.customerAddress) {
-        this.selectSavedAddress(this.savedAddresses[0]);
+      if (this.savedAddresses.length > 0) {
+        const defaultAddr = this.savedAddresses.find(a => a.is_default) || this.savedAddresses[0];
+        this.selectSavedAddress(defaultAddr);
       }
     } catch {
       // Non-blocking
@@ -814,16 +921,44 @@ export class CartPageComponent implements OnInit, OnDestroy {
     this.customerCity = addr.city;
     this.customerState = addr.state;
     this.customerPin = addr.pin_code;
+    this.isAddingNewAddress = false;
+    this.showAddressPickerModal = false;
     this.checkDeliveryAvailability(addr.pin_code);
   }
 
-  useNewAddress() {
+  openAddressModal() {
+    this.showAddressPickerModal = true;
+  }
+
+  closeAddressModal() {
+    this.showAddressPickerModal = false;
+  }
+
+  startAddNewAddress() {
+    this.isAddingNewAddress = true;
+    this.showAddressPickerModal = false;
     this.selectedAddressId = null;
     this.customerAddress = '';
     this.customerCity = '';
     this.customerState = 'Maharashtra';
     this.customerPin = '';
     this.pinResult = null;
+  }
+
+  cancelAddNewAddress() {
+    this.isAddingNewAddress = false;
+    if (this.savedAddresses.length > 0) {
+      const defaultAddr = this.savedAddresses.find(a => a.is_default) || this.savedAddresses[0];
+      this.selectSavedAddress(defaultAddr);
+    }
+  }
+
+  toggleMobileOrderBreakdown() {
+    this.showMobileOrderBreakdown = !this.showMobileOrderBreakdown;
+  }
+
+  useNewAddress() {
+    this.startAddNewAddress();
   }
 
   onPinCodeChange(pin: string) {
@@ -937,7 +1072,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
         }
       }
 
-      // 3. Cache customer profile for future checkouts
+      // 3. Cache customer profile for future checkouts & optionally persist address to account
       this.localStorage.setItem('rms_customer_profile', {
         name: this.customerName.trim(),
         phone: cleanPhone,
@@ -947,6 +1082,19 @@ export class CartPageComponent implements OnInit, OnDestroy {
         state: this.customerState.trim(),
         pin: cleanPin
       });
+
+      if (this.isAddingNewAddress && this.saveAddressToAccount && this.currentUser?.id) {
+        this.addressService.saveAddress(this.currentUser.id, {
+          user_id: this.currentUser.id,
+          address_type: 'Home',
+          address: this.customerAddress.trim(),
+          city: this.customerCity.trim(),
+          state: this.customerState.trim(),
+          country: 'India',
+          pin_code: cleanPin,
+          is_default: this.savedAddresses.length === 0
+        }).catch((err: any) => console.warn('Could not save address to account:', err));
+      }
 
       // 4. Save local order tracking history
       const orderSnapshot = {

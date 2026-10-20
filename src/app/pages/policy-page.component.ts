@@ -13,7 +13,7 @@ export type PolicySection = 'terms' | 'privacy' | 'cookies' | 'shipping' | 'refu
   imports: [CommonModule, RouterLink, SiteLayoutComponent],
   template: `
     <app-site-layout>
-      <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-24">
+      <div class="page-shell bg-[#FAF7F2] dark:bg-[#14110F] min-h-screen text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-300 pb-28 sm:pb-20">
 
         <!-- MAIN CONTENT WITH SMART FLUID 2-COLUMN LAYOUT -->
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">

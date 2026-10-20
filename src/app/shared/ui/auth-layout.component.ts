@@ -13,7 +13,7 @@ import { ThemeService } from '../../services/theme.service';
       <div class="w-full max-w-5xl bg-white dark:bg-[#251F1C] rounded-[2rem] shadow-xl overflow-hidden flex flex-col md:flex-row min-h-[600px] border border-[#EADFD2]/60 dark:border-white/10 transition-colors duration-200">
         
         <!-- Left Side: Form Area -->
-        <div class="w-full md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center bg-white dark:bg-[#251F1C] relative z-10 order-2 md:order-1 transition-colors duration-200">
+        <div class="w-full md:w-1/2 p-5 sm:p-8 md:p-12 lg:p-16 flex flex-col justify-center bg-white dark:bg-[#251F1C] relative z-10 order-2 md:order-1 transition-colors duration-200">
           
           <div class="flex items-center gap-2 mb-10 justify-between w-full">
             <a routerLink="/" class="flex items-center gap-2 group" title="Return to store">

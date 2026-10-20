@@ -28,7 +28,7 @@ interface ItemVisualMeta {
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, SiteLayoutComponent, ModalComponent],
   template: `
-    <app-site-layout [hideFooter]="true">
+    <app-site-layout [hideFooter]="true" [hideFloatingAction]="true">
       <!-- MAIN STUDIO WRAPPER: Viewport-fitted on desktop (ZERO outer page scroll), natural scroll on mobile -->
       <div class="h-full flex-1 flex flex-col min-h-0 bg-[#FAF7F2] dark:bg-[#14100E] text-[#2E2825] dark:text-[#F4F1ED] transition-colors duration-200 font-sans pb-24 lg:pb-0 overflow-x-hidden lg:overflow-hidden">
 
