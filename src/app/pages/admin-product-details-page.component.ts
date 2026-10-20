@@ -8,6 +8,7 @@ import { ModalComponent } from '../shared/ui/modal.component';
 import { InputComponent } from '../shared/ui/input.component';
 import { TableComponent, TableColumn } from '../shared/ui/table.component';
 import { CustomHamperService } from '../services/custom-hamper.service';
+import { ItemSourcingImageService, OnlineImageCandidate } from '../services/item-sourcing-image.service';
 
 @Component({
   selector: 'app-admin-product-details-page',
@@ -282,12 +283,33 @@ import { CustomHamperService } from '../services/custom-hamper.service';
         >
           <tr *ngFor="let d of paginatedDetails" class="hover:bg-[#FDFBF7] dark:hover:bg-white/5 transition-colors group">
             
-            <!-- Component Name -->
+            <!-- Component Name & Image Thumbnail -->
             <td class="px-6 py-3.5">
-              <a [routerLink]="['/admin/items/edit', d.id]" class="font-bold text-[#4A3C31] dark:text-[#F4F1ED] group-hover:text-[#9C4738] dark:group-hover:text-[#DD8776] transition-colors text-xs sm:text-sm text-left flex items-center gap-1.5 cursor-pointer">
-                <i class="fa-solid fa-box text-[#A89F91] text-xs"></i>
-                <span>{{ d.name }}</span>
-              </a>
+              <div class="flex items-center gap-2.5">
+                <!-- Thumbnail Avatar with 1-click Quick Photo Trigger -->
+                <button type="button" (click)="openQuickImageModal(d, $event)"
+                        class="w-11 h-11 rounded-xl overflow-hidden bg-[#F3E7DC] dark:bg-white/10 border-2 border-[#EADFD2]/80 dark:border-white/10 flex items-center justify-center shrink-0 group/img relative cursor-pointer shadow-2xs hover:border-[#9C4738] transition-all"
+                        [title]="d._image ? (isStorageFile(d._image) ? '📁 Stored File in Supabase Storage — Click to change' : '🌐 Web Photo — Click to change') : 'Click to pick image online'">
+                  <img *ngIf="d._image" [src]="d._image" (error)="d._image = ''" class="w-full h-full object-cover">
+                  <i *ngIf="!d._image" class="fa-solid fa-camera text-[#A89F91] text-sm"></i>
+                  <!-- Cloud file badge if saved to Supabase -->
+                  <div *ngIf="d._image && isStorageFile(d._image)" class="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[7px] shadow-xs" title="File stored in cloud bucket">
+                    <i class="fa-solid fa-check"></i>
+                  </div>
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px]">
+                    <i class="fa-solid fa-pen"></i>
+                  </div>
+                </button>
+
+                <div class="min-w-0">
+                  <a [routerLink]="['/admin/items/edit', d.id]" class="font-bold text-[#4A3C31] dark:text-[#F4F1ED] group-hover:text-[#9C4738] dark:group-hover:text-[#DD8776] transition-colors text-xs sm:text-sm text-left flex items-center gap-1.5 cursor-pointer">
+                    <span class="truncate">{{ d.name }}</span>
+                  </a>
+                  <p *ngIf="d._cleanDescription || d.description" class="text-[10px] text-[#A89F91] truncate max-w-xs">
+                    {{ d._cleanDescription || d.description }}
+                  </p>
+                </div>
+              </div>
             </td>
 
             <!-- Base Cost (₹) -->
@@ -327,17 +349,22 @@ import { CustomHamperService } from '../services/custom-hamper.service';
             <!-- Instant Status Toggle -->
             <td class="px-6 py-3.5">
               <button type="button" (click)="toggleActive(d, $event)"
-                      [class]="d.is_active ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100' : 'bg-stone-50 dark:bg-stone-900/40 border-stone-200 dark:border-stone-800/40 text-stone-500 hover:bg-stone-100'"
-                      class="px-2.5 py-1 border rounded-lg text-[10px] font-bold tracking-wide transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                      title="Click to toggle availability in hampers">
+                       [class]="d.is_active ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100' : 'bg-stone-50 dark:bg-stone-900/40 border-stone-200 dark:border-stone-800/40 text-stone-500 hover:bg-stone-100'"
+                       class="px-2.5 py-1 border rounded-lg text-[10px] font-bold tracking-wide transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                       title="Click to toggle availability in hampers">
                 <span class="w-1.5 h-1.5 rounded-full" [ngClass]="d.is_active ? 'bg-emerald-500' : 'bg-stone-400'"></span>
                 <span>{{ d.is_active ? 'ACTIVE' : 'INACTIVE' }}</span>
               </button>
             </td>
 
-            <!-- Actions: Edit & Delete -->
+            <!-- Actions: Quick Photo, Edit & Delete -->
             <td class="px-6 py-3.5 text-right">
               <div class="flex items-center justify-end gap-1">
+                <button type="button" (click)="openQuickImageModal(d, $event)"
+                        class="p-1.5 text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] dark:hover:text-[#DD8776] hover:bg-[#F3E7DC] dark:hover:bg-white/10 rounded-lg transition-all cursor-pointer"
+                        title="Pick Image Online">
+                  <i class="fa-solid fa-camera text-xs"></i>
+                </button>
                 <a [routerLink]="['/admin/items/edit', d.id]" 
                    class="p-1.5 text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] dark:hover:text-[#DD8776] hover:bg-[#F3E7DC] dark:hover:bg-white/10 rounded-lg transition-all cursor-pointer" 
                    title="Edit Component in Studio">
@@ -522,12 +549,73 @@ import { CustomHamperService } from '../services/custom-hamper.service';
         </div>
       </app-modal>
 
+      <!-- QUICK ONLINE IMAGE PICKER MODAL -->
+      <app-modal [isOpen]="showQuickImageModal" [title]="'Select Online Image: ' + (quickModalItem?.name || '')" size="md" (onClose)="closeQuickImageModal()">
+        <div class="space-y-3 py-1">
+          <!-- Search Bar -->
+          <div class="flex items-center gap-2">
+            <input type="text" [(ngModel)]="quickImageSearchQuery" (keydown.enter)="searchQuickImages()"
+                   placeholder="Search online images (e.g. Diya, Almonds, Candle)..."
+                   class="w-full bg-[#FDFBF7] dark:bg-[#1C1917] border border-[#EADFD2] dark:border-white/10 rounded-xl px-3.5 py-2 text-xs font-medium text-[#4A3C31] dark:text-[#F4F1ED] outline-none">
+            <button type="button" (click)="searchQuickImages()" [disabled]="isQuickSearching"
+                    class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#9C4738] to-[#BA5E4E] hover:from-[#883B2D] text-white text-xs font-bold transition disabled:opacity-50 shrink-0 cursor-pointer flex items-center gap-1.5 shadow-2xs">
+              <span *ngIf="isQuickSearching" class="animate-spin h-3 w-3 border-2 border-white border-t-transparent rounded-full"></span>
+              <span>{{ isQuickSearching ? 'Searching...' : 'Search' }}</span>
+            </button>
+          </div>
+
+          <!-- Spinner -->
+          <div *ngIf="isQuickSearching" class="py-8 text-center space-y-2">
+            <div class="inline-block animate-spin h-6 w-6 border-2 border-[#9C4738] border-t-transparent rounded-full"></div>
+            <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">Finding high-resolution online photos...</p>
+          </div>
+
+          <!-- Image Candidates Grid -->
+          <div *ngIf="!isQuickSearching && quickImageCandidates.length > 0" class="space-y-2">
+            <div class="flex items-center justify-between text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">
+              <span>Click an image to set it as this item's photo:</span>
+              <span class="font-bold text-[#9C4738] dark:text-[#DD8776]">{{ quickImageCandidates.length }} found</span>
+            </div>
+
+            <div class="grid grid-cols-4 gap-2 max-h-[280px] overflow-y-auto custom-scrollbar p-1">
+              <div *ngFor="let cand of quickImageCandidates"
+                   (click)="selectQuickImage(cand)"
+                   class="relative group aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer bg-white dark:bg-[#1C1917] hover:border-[#9C4738] hover:scale-105 shadow-2xs">
+                <img [src]="cand.thumbUrl" [alt]="cand.title" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-bold">
+                  <span>Select</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="!isQuickSearching && quickImageCandidates.length === 0" class="py-6 text-center space-y-2 border border-dashed border-[#EADFD2] dark:border-white/10 rounded-xl p-3">
+            <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">No online images found for this query.</p>
+            <a [href]="getGoogleImagesUrl(quickImageSearchQuery || quickModalItem?.name)" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-[#251F1C] border border-[#EADFD2] text-xs font-bold text-[#4A3C31] dark:text-[#F4F1ED]">
+              <i class="fa-brands fa-google text-red-500"></i>
+              <span>Search on Google Images</span>
+            </a>
+          </div>
+        </div>
+
+        <div modal-footer class="w-full flex justify-between items-center text-xs">
+          <span *ngIf="isQuickSavingImage" class="text-emerald-600 font-bold flex items-center gap-1.5 animate-pulse">
+            <i class="fa-solid fa-spinner animate-spin"></i> Saving photo...
+          </span>
+          <span *ngIf="!isQuickSavingImage"></span>
+          <button type="button" (click)="closeQuickImageModal()" class="px-3.5 py-2 text-xs font-bold text-[#7A6C5E] hover:text-[#4A3C31]">Close</button>
+        </div>
+      </app-modal>
+
     </div>
   `
 })
 export class AdminProductDetailsPageComponent implements OnInit {
   private supabase = inject(SupabaseService);
   private customHamperService = inject(CustomHamperService);
+  private itemSourcing = inject(ItemSourcingImageService);
   private cdr = inject(ChangeDetectorRef);
 
   readonly Number = Number;
@@ -536,6 +624,14 @@ export class AdminProductDetailsPageComponent implements OnInit {
   hamperMarkup = 0;
   savingMarkup = false;
   markupSavedToast = '';
+
+  // Quick Image Modal State
+  showQuickImageModal = false;
+  quickModalItem: any = null;
+  quickImageSearchQuery = '';
+  quickImageCandidates: OnlineImageCandidate[] = [];
+  isQuickSearching = false;
+  isQuickSavingImage = false;
 
   getMarkupDisplay(price: any): string {
     const base = Number(price) || 0;
@@ -573,6 +669,7 @@ export class AdminProductDetailsPageComponent implements OnInit {
   savingQuick = false;
   quickAddError = '';
   quickAddedToast = '';
+  lastQuickAddedItem: any = null;
 
   // Bulk Paste State
   showBulkModal = false;
@@ -606,13 +703,13 @@ export class AdminProductDetailsPageComponent implements OnInit {
   sortBy: 'name' | 'price_asc' | 'price_desc' | 'newest' = 'name';
 
   columns: TableColumn[] = [
-    { label: 'Component Name', width: '25%' },
+    { label: 'Item & Photo', width: '36%' },
     { label: 'Base Cost', width: '12%' },
     { label: 'Markup', width: '12%' },
-    { label: 'Customer Hamper Price', width: '17%' },
-    { label: 'Stock Qty', width: '12%' },
-    { label: 'Status', width: '10%' },
-    { label: 'Actions', width: '12%', align: 'right' }
+    { label: 'Hamper Price', width: '15%' },
+    { label: 'Stock Qty', width: '11%' },
+    { label: 'Status', width: '8%' },
+    { label: 'Actions', width: '6%', align: 'right' }
   ];
 
   get activeDetailsCount(): number {
@@ -801,7 +898,17 @@ export class AdminProductDetailsPageComponent implements OnInit {
         this.error = error.message;
         this.details = [];
       } else {
-        this.details = data || [];
+        this.details = (data || []).map((d: any) => {
+          const parsed = this.itemSourcing.extractMetadataFromDescription(d.description);
+          return {
+            ...d,
+            _image: d.image || parsed.image || '',
+            _sourcingPlatform: d.sourcing_platform || parsed.sourcingPlatform || '',
+            _sourcingPrice: d.sourcing_price != null ? Number(d.sourcing_price) : (parsed.sourcingPrice ?? null),
+            _sourcingUrl: d.sourcing_url || parsed.sourcingUrl || '',
+            _cleanDescription: parsed.cleanDescription
+          };
+        });
         this.error = null;
       }
     } catch (err: any) {
@@ -1031,5 +1138,97 @@ Silver Plated Coin\t85\t40\tLakshmi Ganesh coin`;
       this.deleting = false;
       this.cdr.markForCheck();
     }
+  }
+
+  // 6. QUICK ONLINE IMAGE MODAL ACTIONS
+  openQuickImageModal(item: any, event?: Event) {
+    if (event) event.stopPropagation();
+    this.quickModalItem = item;
+    this.quickImageSearchQuery = item.name || '';
+    this.quickImageCandidates = [];
+    this.showQuickImageModal = true;
+    this.cdr.markForCheck();
+    this.searchQuickImages();
+  }
+
+  closeQuickImageModal() {
+    this.showQuickImageModal = false;
+    this.quickModalItem = null;
+    this.quickImageCandidates = [];
+    this.cdr.markForCheck();
+  }
+
+  async searchQuickImages() {
+    const q = this.quickImageSearchQuery || this.quickModalItem?.name;
+    if (!q?.trim()) return;
+
+    this.isQuickSearching = true;
+    this.cdr.markForCheck();
+
+    try {
+      this.quickImageCandidates = await this.itemSourcing.searchOnlineImages(q);
+    } catch {
+      this.quickImageCandidates = [];
+    } finally {
+      this.isQuickSearching = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  async selectQuickImage(cand: OnlineImageCandidate) {
+    if (!this.quickModalItem) return;
+    this.isQuickSavingImage = true;
+    const target = this.quickModalItem;
+    this.cdr.markForCheck();
+
+    try {
+      // 1. Download image and upload strictly to Supabase storage bucket
+      const res = await this.itemSourcing.uploadOnlineImageToStorage(
+        cand.originalUrl || cand.thumbUrl,
+        target.name
+      );
+
+      if (!res.success || !res.url) {
+        alert(res.error || 'Could not save image to cloud storage. Please choose another image.');
+        return;
+      }
+
+      // 2. Save ONLY the permanent Supabase storage URL to database
+      target._image = res.url;
+
+      let { error } = await this.supabase.from('product_details').update({ image: res.url }).eq('id', target.id);
+
+      if (error && (error.code === '42703' || error.message?.includes('column'))) {
+        const fallbackDesc = this.itemSourcing.embedMetadataIntoDescription(target._cleanDescription || target.description, {
+          image: res.url,
+          sourcingPlatform: target._sourcingPlatform,
+          sourcingPrice: target._sourcingPrice,
+          sourcingUrl: target._sourcingUrl
+        });
+        await this.supabase.from('product_details').update({ description: fallbackDesc }).eq('id', target.id);
+      }
+
+      this.closeQuickImageModal();
+    } catch {
+      alert('Could not save image to cloud storage. Please try another image.');
+    } finally {
+      this.isQuickSavingImage = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  getGoogleShoppingUrl(name: string): string {
+    const q = encodeURIComponent(this.itemSourcing.cleanSearchQuery(name || 'hamper item'));
+    return `https://www.google.com/search?tbm=shop&q=${q}&tbs=p_ord:p`;
+  }
+
+  isStorageFile(url?: string | null): boolean {
+    if (!url) return false;
+    return url.includes('supabase.co/storage') || url.startsWith('blob:') || url.startsWith('data:');
+  }
+
+  getGoogleImagesUrl(name: string): string {
+    const q = encodeURIComponent(this.itemSourcing.cleanSearchQuery(name || 'hamper item'));
+    return `https://www.google.com/search?tbm=isch&q=${q}`;
   }
 }

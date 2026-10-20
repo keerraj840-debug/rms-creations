@@ -203,8 +203,9 @@ interface ItemVisualMeta {
                   >
                     <!-- Visual & Title -->
                     <div class="flex items-start gap-2 min-w-0">
-                      <div class="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm bg-[#FAF7F2] dark:bg-stone-800 text-[#57251C] dark:text-[#EB9D8E] group-hover:scale-105 transition-transform">
-                        <i [class]="getItemVisual(item.name).icon"></i>
+                      <div class="w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm bg-[#FAF7F2] dark:bg-stone-800 text-[#57251C] dark:text-[#EB9D8E] group-hover:scale-105 transition-transform overflow-hidden">
+                        <img *ngIf="item.imageUrl" [src]="item.imageUrl" class="w-full h-full object-cover">
+                        <i *ngIf="!item.imageUrl" [class]="getItemVisual(item.name).icon"></i>
                       </div>
                       <div class="min-w-0 flex-1">
                         <h3 class="text-xs font-bold text-stone-900 dark:text-stone-100 truncate" [title]="item.name">
@@ -395,8 +396,9 @@ interface ItemVisualMeta {
                   class="p-2 rounded-xl bg-white dark:bg-stone-800 border border-stone-100 dark:border-stone-700 flex items-center justify-between gap-2 text-xs shadow-2xs"
                 >
                   <div class="flex items-center gap-2 min-w-0 flex-1">
-                    <span class="w-5 h-5 rounded-md bg-stone-100 dark:bg-stone-900 flex items-center justify-center text-[9px] text-[#57251C] shrink-0">
-                      <i [class]="getItemVisual(it.name).icon"></i>
+                    <span class="w-5 h-5 rounded-md bg-stone-100 dark:bg-stone-900 flex items-center justify-center text-[9px] text-[#57251C] shrink-0 overflow-hidden">
+                      <img *ngIf="it.imageUrl" [src]="it.imageUrl" class="w-full h-full object-cover">
+                      <i *ngIf="!it.imageUrl" [class]="getItemVisual(it.name).icon"></i>
                     </span>
                     <div class="min-w-0 flex-1">
                       <h4 class="font-bold text-stone-900 dark:text-stone-100 truncate text-[11px]">{{ it.name }}</h4>
@@ -831,6 +833,7 @@ export class BuildHamperPageComponent implements OnInit {
             markupAmount: markupDiff,
             price: finalPrice,
             stockQuantity: item.stock_quantity != null ? Number(item.stock_quantity) : null,
+            imageUrl: item.image || (item.description?.match(/"image":"([^"]+)"/)?.[1] ?? ''),
             isPriceConfirmed: true,
             quantity: 1,
             category: this.getItemVisual(item.name).category

@@ -7,6 +7,15 @@ import { SeoService } from '../shared/seo.service';
 import { SupabaseService } from '../services/supabase.service';
 import { CartService } from '../services/cart.service';
 import { PinCodeAvailabilityService, DeliveryCheckResult } from '../services/pin-code-availability.service';
+import { ItemSourcingImageService } from '../services/item-sourcing-image.service';
+
+export interface HamperInclusionItem {
+  id: number;
+  name: string;
+  quantity: number;
+  description?: string;
+  image?: string;
+}
 
 export interface ProductDetail {
   id: number;
@@ -121,11 +130,63 @@ export interface ProductDetail {
                     </span>
                   </div>
 
-                  <!-- Inclusions & Description -->
-                  <div class="mt-5 pt-5 border-t border-[#EADFD2]/60 dark:border-white/10 space-y-2.5">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-[#7A6C5E] dark:text-[#C5A393]">What's Inside This Hamper</h3>
-                    <p class="text-xs sm:text-sm text-[#4A3C31] dark:text-[#D9C3B9] leading-relaxed whitespace-pre-line">
-                      {{ product.description || 'Each hamper is carefully hand-packed with premium festive packaging, satin ribbons, and protective bubble wrap for safe delivery.' }}
+                  <!-- What's Inside This Hamper: Individual Inclusions Grid (Items only, NO individual prices) -->
+                  <div class="mt-5 pt-5 border-t border-[#EADFD2]/60 dark:border-white/10 space-y-3">
+                    <div class="flex items-center justify-between">
+                      <h3 class="text-xs font-bold uppercase tracking-wider text-[#7A6C5E] dark:text-[#C5A393] flex items-center gap-2">
+                        <i class="fa-solid fa-gift text-[#9C4738] dark:text-[#EB9D8E]"></i>
+                        <span>What's Inside This Hamper</span>
+                      </h3>
+                      <span *ngIf="inclusionItems.length > 0" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#9C4738]/10 text-[#9C4738] dark:text-[#EB9D8E]">
+                        {{ totalInclusionPieces }} {{ totalInclusionPieces === 1 ? 'item' : 'items' }} included
+                      </span>
+                    </div>
+
+                    <!-- Visual Grid of Individual Items (Zero Prices Shown) -->
+                    <div *ngIf="inclusionItems.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[380px] overflow-y-auto pr-1">
+                      <div *ngFor="let item of inclusionItems"
+                           class="flex items-center gap-3 p-2.5 rounded-2xl bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2]/70 dark:border-white/10 hover:border-[#9C4738]/40 transition-all shadow-2xs group">
+                        
+                        <!-- Item Photo Thumbnail (NO PRICES) -->
+                        <div class="w-12 h-12 rounded-xl overflow-hidden bg-white dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 shrink-0 flex items-center justify-center relative shadow-2xs">
+                          <img *ngIf="item.image" [src]="item.image" (error)="item.image = ''" [alt]="item.name" class="w-full h-full object-cover">
+                          <i *ngIf="!item.image" class="fa-solid fa-gift text-[#A89F91] text-sm"></i>
+                          
+                          <!-- Quantity pill badge if item count > 1 -->
+                          <span *ngIf="item.quantity > 1" class="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-[#57251C] text-white shadow-xs">
+                            {{ item.quantity }}x
+                          </span>
+                        </div>
+
+                        <!-- Item Name & Notes (NO PRICES) -->
+                        <div class="min-w-0 flex-1">
+                          <div class="flex items-center justify-between gap-1">
+                            <h4 class="font-bold text-xs text-[#2E2825] dark:text-[#F4F1ED] truncate group-hover:text-[#9C4738] dark:group-hover:text-[#EB9D8E] transition-colors">
+                              {{ item.name }}
+                            </h4>
+                            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-white dark:bg-[#251F1C] text-[#7A6C5E] dark:text-[#C5A393] border border-[#EADFD2]/60 dark:border-white/10 shrink-0">
+                              {{ item.quantity }} {{ item.quantity === 1 ? 'pc' : 'pcs' }}
+                            </span>
+                          </div>
+                          <p *ngIf="item.description" class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] line-clamp-1 mt-0.5">
+                            {{ item.description }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Fallback: Parsed Bullet Items from Description (if no mapped items yet) -->
+                    <div *ngIf="inclusionItems.length === 0 && parsedDescriptionBullets.length > 0" class="space-y-1.5 bg-[#FAF7F2] dark:bg-white/5 p-3 rounded-2xl border border-[#EADFD2]/60 dark:border-white/10">
+                      <div *ngFor="let bullet of parsedDescriptionBullets" class="flex items-start gap-2 text-xs text-[#4A3C31] dark:text-[#D9C3B9]">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-[11px] mt-0.5 shrink-0"></i>
+                        <span>{{ bullet }}</span>
+                      </div>
+                    </div>
+
+                    <!-- General Packaging & Gift Box Notes -->
+                    <p *ngIf="product.description && (inclusionItems.length === 0 ? parsedDescriptionBullets.length === 0 : true)"
+                       class="text-xs text-[#7A6C5E] dark:text-[#C5A393] leading-relaxed whitespace-pre-line pt-1">
+                      {{ product.description }}
                     </p>
                   </div>
 
@@ -336,14 +397,31 @@ export class ProductDetailPageComponent implements OnInit, OnDestroy {
   private readonly seo = inject(SeoService);
   public readonly cartService = inject(CartService);
   private readonly pinService = inject(PinCodeAvailabilityService);
+  private readonly itemSourcing = inject(ItemSourcingImageService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   product: ProductDetail | null = null;
+  inclusionItems: HamperInclusionItem[] = [];
+  loadingItems = false;
   loading = true;
   activeImage = '';
   quantity = 1;
   personalizationNote = '';
   showImageModal = false;
+
+  get totalInclusionPieces(): number {
+    return this.inclusionItems.reduce((acc, it) => acc + (it.quantity || 1), 0);
+  }
+
+  get parsedDescriptionBullets(): string[] {
+    if (!this.product?.description) return [];
+    const lines = this.product.description.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const hasBullets = lines.some(l => /^[-*•\d+.]\s+/.test(l));
+    if (hasBullets) {
+      return lines.map(l => l.replace(/^[-*•\d+.]\s+/, '').trim()).filter(Boolean);
+    }
+    return [];
+  }
 
   pincodeQuery = '';
   checkingPincode = false;
@@ -433,13 +511,71 @@ export class ProductDetailPageComponent implements OnInit, OnDestroy {
           { name: this.product.category, url: `/shop?category=${encodeURIComponent(this.product.category)}` },
           { name: this.product.name, url: `/product/${this.product.id}` }
         ]);
+
+        await this.loadHamperItems(p.id);
       } else {
         this.product = null;
+        this.inclusionItems = [];
       }
     } catch {
       this.product = null;
+      this.inclusionItems = [];
     } finally {
       this.loading = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  async loadHamperItems(productId: number) {
+    try {
+      this.loadingItems = true;
+      const { data: mappings } = await this.supabase
+        .from('product_mappings')
+        .select('product_detail_id, quantity')
+        .eq('product_id', productId);
+
+      if (mappings && mappings.length > 0) {
+        const detailIds = mappings
+          .map((m: any) => m.product_detail_id)
+          .filter((id: any) => id !== null && id !== undefined);
+
+        if (detailIds.length > 0) {
+          const { data: details } = await this.supabase
+            .from('product_details')
+            .select('id, name, description, image')
+            .in('id', detailIds);
+
+          if (details && details.length > 0) {
+            const detailMap = new Map<number, any>();
+            details.forEach((d: any) => detailMap.set(Number(d.id), d));
+
+            this.inclusionItems = mappings
+              .filter((m: any) => detailMap.has(Number(m.product_detail_id)))
+              .map((m: any) => {
+                const d = detailMap.get(Number(m.product_detail_id));
+                const parsed = this.itemSourcing.extractMetadataFromDescription(d.description);
+                return {
+                  id: d.id,
+                  name: d.name,
+                  quantity: m.quantity || 1,
+                  description: parsed.cleanDescription || '',
+                  image: d.image || parsed.image || ''
+                };
+              });
+          } else {
+            this.inclusionItems = [];
+          }
+        } else {
+          this.inclusionItems = [];
+        }
+      } else {
+        this.inclusionItems = [];
+      }
+    } catch (err) {
+      console.warn('Could not load hamper items', err);
+      this.inclusionItems = [];
+    } finally {
+      this.loadingItems = false;
       this.cdr.markForCheck();
     }
   }

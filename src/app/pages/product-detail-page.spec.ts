@@ -30,23 +30,51 @@ describe('ProductDetailPageComponent', () => {
     };
 
     mockSupabaseService = {
-      from: vi.fn().mockImplementation((table: string) => ({
-        select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({
-              data: {
-                id: 101,
-                name: 'Festive Sweet Box',
-                description: 'Assorted artisan sweets',
-                price: 599,
-                selling_price: 599,
-                is_active: true
-              },
-              error: null
+      from: vi.fn().mockImplementation((table: string) => {
+        if (table === 'product_mappings') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({
+                data: [
+                  { product_detail_id: 201, quantity: 2 },
+                  { product_detail_id: 202, quantity: 1 }
+                ],
+                error: null
+              })
+            })
+          };
+        }
+        if (table === 'product_details') {
+          return {
+            select: vi.fn().mockReturnValue({
+              in: vi.fn().mockResolvedValue({
+                data: [
+                  { id: 201, name: 'Brass Pooja Diya', description: 'Pure handcrafted brass', image: 'diya.jpg' },
+                  { id: 202, name: 'Premium Almonds 100g', description: 'Crunchy California almonds', image: 'almonds.jpg' }
+                ],
+                error: null
+              })
+            })
+          };
+        }
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: {
+                  id: 101,
+                  name: 'Festive Sweet Box',
+                  description: 'Assorted artisan sweets',
+                  price: 599,
+                  selling_price: 599,
+                  is_active: true
+                },
+                error: null
+              })
             })
           })
-        })
-      }))
+        };
+      })
     };
 
     const cartItems: any[] = [];
@@ -129,5 +157,19 @@ describe('ProductDetailPageComponent', () => {
     );
 
     expect(component.cartItemQty).toBe(3);
+  });
+
+  it('should load individual hamper inclusion items with quantity and name but without prices', async () => {
+    await component.loadProduct(101);
+    expect(component.inclusionItems.length).toBe(2);
+    expect(component.inclusionItems[0].name).toBe('Brass Pooja Diya');
+    expect(component.inclusionItems[0].quantity).toBe(2);
+    expect((component.inclusionItems[0] as any).price).toBeUndefined();
+
+    expect(component.inclusionItems[1].name).toBe('Premium Almonds 100g');
+    expect(component.inclusionItems[1].quantity).toBe(1);
+    expect((component.inclusionItems[1] as any).price).toBeUndefined();
+
+    expect(component.totalInclusionPieces).toBe(3);
   });
 });
