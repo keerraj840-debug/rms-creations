@@ -47,9 +47,6 @@ export function isWithinDateWindow(fromDate?: string | null, toDate?: string | n
               <h1 class="font-serif text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-[#2E2825] dark:text-[#F4F1ED]">
                 Shop Gift Hampers
               </h1>
-              <p class="text-xs text-[#7A6C5E] dark:text-[#C5A393] mt-0.5">
-                Handcrafted gift hampers, festive celebrations & bespoke return favours.
-              </p>
             </div>
             <div class="hidden sm:flex items-center gap-2 text-xs text-[#7A6C5E] dark:text-[#C5A393]">
               <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-200/50 dark:border-emerald-800/40">
