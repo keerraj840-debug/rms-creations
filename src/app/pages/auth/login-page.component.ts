@@ -150,7 +150,7 @@ export class LoginPageComponent implements OnInit {
     password: ['', [Validators.required]]
   });
 
-  ngOnInit() {
+  async ngOnInit() {
     this.returnUrl = sanitizeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl'));
 
     const errorDesc = this.route.snapshot.queryParamMap.get('error_description');
@@ -163,6 +163,27 @@ export class LoginPageComponent implements OnInit {
       } else {
         this.errorMessage.set(errorDesc || errorParam || 'Google sign-in could not be completed. Please try again.');
       }
+    } else {
+      await this.checkActiveSession();
+    }
+  }
+
+  private async checkActiveSession(): Promise<void> {
+    try {
+      const { data } = await this.supabase.getSession();
+      if (data?.session?.user) {
+        const profile = await this.authService.syncUserProfile(data.session.user);
+        const role = profile?.role || 'customer';
+        this.localStorage.setItem('auth_token', data.session.access_token);
+        this.localStorage.setItem('user_role', role);
+        if (this.returnUrl) {
+          this.router.navigateByUrl(this.returnUrl);
+        } else {
+          this.router.navigate([role === 'admin' ? '/admin' : '/']);
+        }
+      }
+    } catch {
+      // Ignore if session absent
     }
   }
 

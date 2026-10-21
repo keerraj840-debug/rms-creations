@@ -1,7 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SupabaseService } from './supabase.service';
 import { LocalStorageService } from './local-storage.service';
+import { ToastService } from './toast.service';
 
 export interface UserProfile {
   id?: number;
@@ -22,13 +24,36 @@ export interface UserProfile {
 export class AuthService {
   private readonly supabase = inject(SupabaseService);
   private readonly localStorage = inject(LocalStorageService);
+  private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
 
   private readonly USER_STORAGE_KEY = 'rms_auth_user_profile';
   private currentUserSubject = new BehaviorSubject<UserProfile | null>(null);
   public currentUser$: Observable<UserProfile | null> = this.currentUserSubject.asObservable();
 
+  public readonly showLogoutModal = signal<boolean>(false);
+  public readonly isLoggingOut = signal<boolean>(false);
+
   constructor() {
     this.initSession();
+    this.initAuthStateListener();
+  }
+
+  private initAuthStateListener() {
+    try {
+      this.supabase.client.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_OUT') {
+          this.currentUserSubject.next(null);
+          this.localStorage.removeItem(this.USER_STORAGE_KEY);
+          this.localStorage.removeItem('auth_token');
+          this.localStorage.removeItem('user_role');
+        } else if (event === 'SIGNED_IN' && session?.user && !this.currentUserSubject.value) {
+          await this.syncUserProfile(session.user);
+        }
+      });
+    } catch {
+      // Ignore if auth listener unsupported in test / SSR
+    }
   }
 
   private async initSession() {
@@ -206,31 +231,64 @@ export class AuthService {
     }
   }
 
-  async signOut() {
+  promptLogout(): void {
+    this.showLogoutModal.set(true);
+  }
+
+  cancelLogout(): void {
+    if (!this.isLoggingOut()) {
+      this.showLogoutModal.set(false);
+    }
+  }
+
+  async confirmLogout(redirectPath = '/login'): Promise<void> {
+    if (this.isLoggingOut()) return;
+    this.isLoggingOut.set(true);
     try {
-      await this.supabase.signOut();
+      await this.signOut();
+      this.toastService.info('You have been signed out successfully.', 'Signed Out');
+    } catch (err) {
+      console.warn('Sign-out completed with warning:', err);
+    } finally {
+      this.isLoggingOut.set(false);
+      this.showLogoutModal.set(false);
+      this.router.navigate([redirectPath]);
+    }
+  }
+
+  async signOut(): Promise<void> {
+    // 1. Immediately reset in-memory state so router guards and UI immediately see unauthenticated user
+    this.currentUserSubject.next(null);
+
+    // 2. Clear known localStorage auth items
+    this.localStorage.removeItem(this.USER_STORAGE_KEY);
+    this.localStorage.removeItem('auth_token');
+    this.localStorage.removeItem('user_role');
+
+    // 3. Clean up any Supabase / cached auth tokens in browser localStorage
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < window.localStorage.length; i++) {
+          const key = window.localStorage.key(i);
+          if (key && (key.startsWith('sb-') || key.includes('auth-token') || key === this.USER_STORAGE_KEY || key === 'user_role')) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach((k) => window.localStorage.removeItem(k));
+      } catch {
+        // ignore
+      }
+    }
+
+    // 4. Safely call Supabase signOut with timeout protection
+    try {
+      await Promise.race([
+        this.supabase.signOut(),
+        new Promise((resolve) => setTimeout(resolve, 2000))
+      ]);
     } catch (err) {
       console.warn('Supabase sign-out encountered warning, proceeding with local clean-up:', err);
-    } finally {
-      this.currentUserSubject.next(null);
-      this.localStorage.removeItem(this.USER_STORAGE_KEY);
-      this.localStorage.removeItem('auth_token');
-      this.localStorage.removeItem('user_role');
-
-      if (typeof window !== 'undefined' && window.localStorage) {
-        try {
-          const keysToRemove: string[] = [];
-          for (let i = 0; i < window.localStorage.length; i++) {
-            const key = window.localStorage.key(i);
-            if (key && (key.startsWith('sb-') || key.includes('auth-token') || key === 'rms_auth_user_profile')) {
-              keysToRemove.push(key);
-            }
-          }
-          keysToRemove.forEach((k) => window.localStorage.removeItem(k));
-        } catch {
-          // ignore
-        }
-      }
     }
   }
 }

@@ -4,11 +4,12 @@ import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SidebarComponent } from './ui/sidebar.component';
 import { NavbarComponent } from './ui/navbar.component';
+import { LogoutModalComponent } from './ui/logout-modal.component';
 
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SidebarComponent, NavbarComponent],
+  imports: [CommonModule, RouterOutlet, SidebarComponent, NavbarComponent, LogoutModalComponent],
   template: `
     <div class="min-h-screen bg-[#FDFBF7] dark:bg-[#1C1917] text-[#4A3C31] dark:text-[#F4F1ED]
                 flex flex-col md:flex-row font-sans selection:bg-[#DD8776] selection:text-white transition-colors duration-300">
@@ -40,6 +41,9 @@ import { NavbarComponent } from './ui/navbar.component';
           <router-outlet></router-outlet>
         </main>
       </div>
+
+      <!-- Admin Logout Confirmation Modal -->
+      <app-logout-modal></app-logout-modal>
     </div>
   `
 })

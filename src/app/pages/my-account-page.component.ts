@@ -227,7 +227,7 @@ type AccountTab = 'profile' | 'addresses' | 'security';
                   <div class="pt-2 border-t border-[#EADFD2]/60 dark:border-white/10">
                     <button
                       type="button"
-                      (click)="signOut()"
+                      (click)="promptSignOut()"
                       class="w-full px-4 py-2.5 rounded-2xl text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center gap-3 transition cursor-pointer"
                     >
                       <i class="fa-solid fa-right-from-bracket text-sm"></i>
@@ -787,6 +787,10 @@ export class MyAccountPageComponent implements OnInit, OnDestroy {
     } finally {
       this.cdr.markForCheck();
     }
+  }
+
+  promptSignOut() {
+    this.authService.promptLogout();
   }
 
   async signOut() {

@@ -10,11 +10,12 @@ import { PwaInstallBannerComponent } from './ui/pwa-install-banner.component';
 import { ToastContainerComponent } from './ui/toast-container.component';
 import { CookieConsentComponent } from './ui/cookie-consent.component';
 import { CookieConsentService } from '../services/cookie-consent.service';
+import { LogoutModalComponent } from './ui/logout-modal.component';
 
 @Component({
   selector: 'app-site-layout',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, AsyncPipe, NgClass, NgIf, FormsModule, PwaInstallBannerComponent, ToastContainerComponent, CookieConsentComponent],
+  imports: [RouterLink, RouterLinkActive, AsyncPipe, NgClass, NgIf, FormsModule, PwaInstallBannerComponent, ToastContainerComponent, CookieConsentComponent, LogoutModalComponent],
   template: `
     <!-- Main Shell -->
     <div
@@ -723,6 +724,9 @@ import { CookieConsentService } from '../services/cookie-consent.service';
       <!-- PWA Installation & Smart Update Notification System -->
       <app-pwa-install-banner></app-pwa-install-banner>
 
+      <!-- Logout Confirmation Modal -->
+      <app-logout-modal></app-logout-modal>
+
     </div>
   `
 })
@@ -777,16 +781,10 @@ export class SiteLayoutComponent implements OnDestroy {
     this.isUserMenuOpen = false;
   }
 
-  async logout() {
+  logout() {
     this.closeMenu();
     this.closeUserMenu();
-    try {
-      await this.authService.signOut();
-    } catch (err) {
-      console.warn('Sign-out completed with warning:', err);
-    } finally {
-      this.router.navigate(['/login']);
-    }
+    this.authService.promptLogout();
   }
 
   constructor() {

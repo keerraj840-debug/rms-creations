@@ -58,12 +58,23 @@ export class SupabaseService {
 
     async signOut() {
         try {
-            const { error } = await this.supabase.auth.signOut();
-            if (error) {
-                // If remote sign-out returned an error (such as session missing), clear locally
-                await this.supabase.auth.signOut({ scope: 'local' }).catch(() => {});
-            }
-            return { error };
+            const timeoutPromise = new Promise<{ error: any }>((resolve) =>
+                setTimeout(() => resolve({ error: null }), 2000)
+            );
+            const signOutPromise = (async () => {
+                try {
+                    const { error } = await this.supabase.auth.signOut();
+                    if (error) {
+                        await this.supabase.auth.signOut({ scope: 'local' }).catch(() => {});
+                    }
+                    return { error };
+                } catch {
+                    await this.supabase.auth.signOut({ scope: 'local' }).catch(() => {});
+                    return { error: null };
+                }
+            })();
+
+            return await Promise.race([signOutPromise, timeoutPromise]);
         } catch (err: any) {
             try {
                 await this.supabase.auth.signOut({ scope: 'local' });

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { SupabaseService } from '../../services/supabase.service';
 import { LocalStorageService } from '../../services/local-storage.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -218,14 +219,12 @@ export class SidebarComponent {
   private supabase = inject(SupabaseService);
   private router = inject(Router);
   private localStorage = inject(LocalStorageService);
+  authService = inject(AuthService);
 
   onNavClick() { this.close.emit(); }
 
-  async logout() {
-    await this.supabase.signOut();
-    this.localStorage.removeItem('auth_token');
-    this.localStorage.removeItem('user_role');
-    this.router.navigate(['/login']);
+  logout() {
+    this.authService.promptLogout();
   }
 }
 

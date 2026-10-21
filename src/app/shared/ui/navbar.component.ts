@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { SupabaseService } from '../../services/supabase.service';
 import { ThemeService } from '../../services/theme.service';
 import { LocalStorageService } from '../../services/local-storage.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -83,14 +84,12 @@ export class NavbarComponent {
   private router = inject(Router);
   private localStorage = inject(LocalStorageService);
   themeService = inject(ThemeService);
+  authService = inject(AuthService);
 
   @Output() menuClick = new EventEmitter<void>();
 
-  async logout() {
-    await this.supabase.signOut();
-    this.localStorage.removeItem('auth_token');
-    this.localStorage.removeItem('user_role');
-    this.router.navigate(['/login']);
+  logout() {
+    this.authService.promptLogout();
   }
 }
 

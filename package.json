@@ -1,6 +1,6 @@
 {
   "name": "rms-creations",
-  "version": "1.6.26",
+  "version": "1.6.27",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
