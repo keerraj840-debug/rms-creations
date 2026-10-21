@@ -239,182 +239,183 @@ import { CookieConsentService } from '../services/cookie-consent.service';
             </div>
           </div>
         </div>
+      </header>
 
-        <!-- Backdrop & Slide-Over Navigation Drawer for Mobile/Tablet -->
-        <div
-          *ngIf="isMobileMenuOpen"
-          (click)="closeMenu()"
-          class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity duration-300 md:hidden animate-fade-in"
-          aria-hidden="true"
-        ></div>
+      <!-- Backdrop & Slide-Over Navigation Drawer for Mobile/Tablet -->
+      <div
+        *ngIf="isMobileMenuOpen"
+        (click)="closeMenu()"
+        class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 md:hidden animate-fade-in"
+        aria-hidden="true"
+      ></div>
 
-        <aside
-          class="fixed inset-y-0 left-0 z-50 w-[310px] max-w-[85vw] bg-[#FFFDFC] dark:bg-[#1C1816] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out md:hidden border-r border-[#D9C3B9]/40 dark:border-[#3D302A]"
-          [ngClass]="isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Navigation Menu"
-        >
-          <!-- Drawer Top Header -->
-          <div class="px-5 py-4 border-b border-[#D9C3B9]/40 dark:border-[#3D302A] flex items-center justify-between bg-[#FAF7F2] dark:bg-[#251F1C] shrink-0">
-            <a routerLink="/" (click)="closeMenu()" class="flex items-center gap-2.5">
-              <img src="assets/logo.png" alt="RMS Logo" class="h-9 w-9 rounded-full object-cover ring-2 ring-[#9C4738]/20" />
-              <div>
-                <span class="block text-[9px] font-bold uppercase tracking-[0.25em] text-[#9D7B6C] dark:text-[#C5A393] leading-none mb-0.5">RMS</span>
-                <span class="font-serif text-sm font-bold text-[#57251C] dark:text-[#F4F1ED] leading-none">Gift Hampers</span>
+      <aside
+        class="fixed inset-y-0 left-0 z-[70] w-[310px] max-w-[85vw] h-full h-[100dvh] bg-[#FFFDFC] dark:bg-[#1C1816] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out md:hidden border-r border-[#D9C3B9]/40 dark:border-[#3D302A]"
+        [ngClass]="isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full pointer-events-none'"
+        [attr.aria-hidden]="!isMobileMenuOpen"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation Menu"
+      >
+        <!-- Drawer Top Header -->
+        <div class="px-5 py-4 border-b border-[#D9C3B9]/40 dark:border-[#3D302A] flex items-center justify-between bg-[#FAF7F2] dark:bg-[#251F1C] shrink-0">
+          <a routerLink="/" (click)="closeMenu()" class="flex items-center gap-2.5">
+            <img src="assets/logo.png" alt="RMS Logo" class="h-9 w-9 rounded-full object-cover ring-2 ring-[#9C4738]/20" />
+            <div>
+              <span class="block text-[9px] font-bold uppercase tracking-[0.25em] text-[#9D7B6C] dark:text-[#C5A393] leading-none mb-0.5">RMS</span>
+              <span class="font-serif text-sm font-bold text-[#57251C] dark:text-[#F4F1ED] leading-none">Gift Hampers</span>
+            </div>
+          </a>
+          <button
+            type="button"
+            (click)="closeMenu()"
+            aria-label="Close menu"
+            class="w-8 h-8 rounded-full bg-white dark:bg-white/10 text-[#57251C] dark:text-[#F4F1ED] flex items-center justify-center hover:bg-[#F3E7DC] transition cursor-pointer border border-[#EADFD2] dark:border-white/10"
+          >
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <!-- Drawer Body (Organized Categorical Scroll) -->
+        <nav class="flex-1 overflow-y-auto overscroll-contain px-4 py-3 space-y-4 pb-[max(2.5rem,env(safe-area-inset-bottom,2.5rem))] text-xs">
+          
+          <!-- Customer Identity Banner / Sign-in CTA -->
+          <div *ngIf="authService.currentUser$ | async as user; else guestDrawerBlock" class="p-3 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 flex items-center justify-between">
+            <div class="min-w-0 pr-2">
+              <p class="font-bold text-[#2E2825] dark:text-[#F4F1ED] truncate">{{ user.name || 'Valued Customer' }}</p>
+              <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] truncate font-mono">{{ user.email }}</p>
+            </div>
+            <a routerLink="/my-account" (click)="closeMenu()" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-[#9C4738] text-white hover:bg-[#853C2F] shrink-0">
+              Account
+            </a>
+          </div>
+
+          <ng-template #guestDrawerBlock>
+            <div class="p-3.5 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 space-y-2">
+              <p class="font-serif font-bold text-sm text-[#2E2825] dark:text-[#F4F1ED]">Welcome to RMS Creations</p>
+              <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] leading-relaxed">
+                Sign in to track courier dispatches, save addresses, and access custom hampers.
+              </p>
+              <div class="flex gap-2 pt-1">
+                <a routerLink="/login" (click)="closeMenu()" class="flex-1 py-2 text-center rounded-xl bg-[#9C4738] text-white font-bold text-xs shadow-xs">
+                  Sign In
+                </a>
+                <a routerLink="/register" (click)="closeMenu()" class="flex-1 py-2 text-center rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-white/5 font-semibold text-xs text-[#57251C] dark:text-[#F4F1ED]">
+                  Register
+                </a>
               </div>
+            </div>
+          </ng-template>
+
+          <!-- GROUP 1: SHOPPING & CURATION -->
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#9D7B6C] dark:text-[#C5A393] px-2 block">
+              Shop &amp; Curate
+            </span>
+            <a routerLink="/shop" (click)="closeMenu()" class="flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
+              <span class="flex items-center gap-2.5"><i class="fa-solid fa-gift text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> All Gift Hampers</span>
+              <span class="text-[10px] bg-[#9C4738]/10 text-[#9C4738] dark:text-[#EB9D8E] font-bold px-2 py-0.5 rounded-full">Catalog</span>
+            </a>
+            <a routerLink="/build-hamper" (click)="closeMenu()" class="flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
+              <span class="flex items-center gap-2.5"><i class="fa-solid fa-wand-magic-sparkles text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> Build Your Own Hamper</span>
+              <span class="text-[10px] bg-amber-500/10 text-amber-700 dark:text-amber-400 font-bold px-2 py-0.5 rounded-full">Custom</span>
+            </a>
+            <a routerLink="/gallery" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
+              <i class="fa-solid fa-images text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i>
+              <span>Lookbook &amp; Gallery</span>
+            </a>
+            <a routerLink="/cart" (click)="closeMenu()" class="flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
+              <span class="flex items-center gap-2.5"><i class="fa-solid fa-cart-shopping text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> Shopping Cart</span>
+              <span *ngIf="cartService.totalItemsCount > 0" class="text-[10px] bg-[#9C4738] text-white font-bold px-2 py-0.5 rounded-full">{{ cartService.totalItemsCount }} items</span>
+            </a>
+          </div>
+
+          <!-- GROUP 2: ORDERS & ACCOUNT -->
+          <div class="space-y-1 pt-1 border-t border-[#D9C3B9]/30 dark:border-[#3D302A]">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#9D7B6C] dark:text-[#C5A393] px-2 block">
+              Orders &amp; Account
+            </span>
+            <a routerLink="/my-orders" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
+              <i class="fa-solid fa-truck-fast text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i>
+              <span>Track My Orders</span>
+            </a>
+            <a routerLink="/my-custom-hampers" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
+              <i class="fa-solid fa-box-open text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i>
+              <span>My Bespoke Hamper Requests</span>
+            </a>
+            <a *ngIf="(authService.currentUser$ | async)?.role === 'admin'" routerLink="/admin" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-amber-700 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 transition">
+              <i class="fa-solid fa-gauge text-xs"></i>
+              <span>Store Management Portal</span>
+            </a>
+          </div>
+
+          <!-- GROUP 3: CONCIERGE & WHATSAPP SUPPORT -->
+          <div class="space-y-1.5 pt-1 border-t border-[#D9C3B9]/30 dark:border-[#3D302A]">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#9D7B6C] dark:text-[#C5A393] px-2 block">
+              Help &amp; Concierge
+            </span>
+            <button
+              type="button"
+              (click)="openWhatsapp('Drawer'); closeMenu()"
+              class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition cursor-pointer"
+            >
+              <i class="fa-brands fa-whatsapp text-sm"></i>
+              <span>Chat on WhatsApp (+91 92849 05118)</span>
+            </button>
+            <a routerLink="/contact" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
+              <i class="fa-solid fa-phone text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i>
+              <span>Contact Studio</span>
+            </a>
+          </div>
+
+          <!-- GROUP 4: TRUST & LEGAL -->
+          <div class="space-y-1 pt-1 border-t border-[#D9C3B9]/30 dark:border-[#3D302A]">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-[#9D7B6C] dark:text-[#C5A393] px-2 block">
+              Trust &amp; Policies
+            </span>
+            <a routerLink="/terms" (click)="closeMenu()" class="flex items-center gap-2 px-3 py-2 rounded-xl text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] transition">
+              <i class="fa-solid fa-scale-balanced text-[11px]"></i>
+              <span>Terms &amp; Refund Policy</span>
             </a>
             <button
               type="button"
-              (click)="closeMenu()"
-              aria-label="Close menu"
-              class="w-8 h-8 rounded-full bg-white dark:bg-white/10 text-[#57251C] dark:text-[#F4F1ED] flex items-center justify-center hover:bg-[#F3E7DC] transition cursor-pointer border border-[#EADFD2] dark:border-white/10"
+              (click)="cookieConsentService.openPreferences(); closeMenu()"
+              class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] transition cursor-pointer"
             >
-              <i class="fa-solid fa-xmark text-sm"></i>
+              <i class="fa-solid fa-shield-halved text-[11px]"></i>
+              <span>Cookie &amp; Privacy Settings</span>
             </button>
           </div>
 
-          <!-- Drawer Body (Organized Categorical Scroll) -->
-          <nav class="flex-1 overflow-y-auto px-4 py-3 space-y-4 pb-[max(2rem,env(safe-area-inset-bottom))] text-xs">
-            
-            <!-- Customer Identity Banner / Sign-in CTA -->
-            <div *ngIf="authService.currentUser$ | async as user; else guestDrawerBlock" class="p-3 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 flex items-center justify-between">
-              <div class="min-w-0 pr-2">
-                <p class="font-bold text-[#2E2825] dark:text-[#F4F1ED] truncate">{{ user.name || 'Valued Customer' }}</p>
-                <p class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] truncate font-mono">{{ user.email }}</p>
-              </div>
-              <a routerLink="/my-account" (click)="closeMenu()" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-[#9C4738] text-white hover:bg-[#853C2F] shrink-0">
-                Account
-              </a>
-            </div>
-
-            <ng-template #guestDrawerBlock>
-              <div class="p-3.5 rounded-2xl bg-[#FAF7F2] dark:bg-[#251F1C] border border-[#EADFD2] dark:border-white/10 space-y-2">
-                <p class="font-serif font-bold text-sm text-[#2E2825] dark:text-[#F4F1ED]">Welcome to RMS Creations</p>
-                <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393] leading-relaxed">
-                  Sign in to track courier dispatches, save addresses, and access custom hampers.
-                </p>
-                <div class="flex gap-2 pt-1">
-                  <a routerLink="/login" (click)="closeMenu()" class="flex-1 py-2 text-center rounded-xl bg-[#9C4738] text-white font-bold text-xs shadow-xs">
-                    Sign In
-                  </a>
-                  <a routerLink="/register" (click)="closeMenu()" class="flex-1 py-2 text-center rounded-xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-white/5 font-semibold text-xs text-[#57251C] dark:text-[#F4F1ED]">
-                    Register
-                  </a>
-                </div>
-              </div>
-            </ng-template>
-
-            <!-- GROUP 1: SHOPPING & CURATION -->
-            <div class="space-y-1">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-[#9D7B6C] dark:text-[#C5A393] px-2 block">
-                Shop &amp; Curate
+          <!-- PWA App Install in Drawer -->
+          <div *ngIf="!pwaService.isInstalled()" class="pt-1">
+            <button
+              type="button"
+              (click)="pwaService.promptInstall(); closeMenu()"
+              class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl border border-[#9C4738]/30 bg-[#9C4738]/10 text-[#9C4738] dark:text-[#EB9D8E] font-bold text-xs transition cursor-pointer"
+            >
+              <span class="flex items-center gap-2">
+                <i class="fa-solid fa-download"></i>
+                <span>Install App on Device</span>
               </span>
-              <a routerLink="/shop" (click)="closeMenu()" class="flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-gift text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> All Gift Hampers</span>
-                <span class="text-[10px] bg-[#9C4738]/10 text-[#9C4738] dark:text-[#EB9D8E] font-bold px-2 py-0.5 rounded-full">Catalog</span>
-              </a>
-              <a routerLink="/build-hamper" (click)="closeMenu()" class="flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-wand-magic-sparkles text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> Build Your Own Hamper</span>
-                <span class="text-[10px] bg-amber-500/10 text-amber-700 dark:text-amber-400 font-bold px-2 py-0.5 rounded-full">Custom</span>
-              </a>
-              <a routerLink="/gallery" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
-                <i class="fa-solid fa-images text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i>
-                <span>Lookbook &amp; Gallery</span>
-              </a>
-              <a routerLink="/cart" (click)="closeMenu()" class="flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
-                <span class="flex items-center gap-2.5"><i class="fa-solid fa-cart-shopping text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i> Shopping Cart</span>
-                <span *ngIf="cartService.totalItemsCount > 0" class="text-[10px] bg-[#9C4738] text-white font-bold px-2 py-0.5 rounded-full">{{ cartService.totalItemsCount }} items</span>
-              </a>
-            </div>
+              <span class="text-[9px] bg-[#9C4738] text-white px-1.5 py-0.5 rounded">PWA</span>
+            </button>
+          </div>
 
-            <!-- GROUP 2: ORDERS & ACCOUNT -->
-            <div class="space-y-1 pt-1 border-t border-[#D9C3B9]/30 dark:border-[#3D302A]">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-[#9D7B6C] dark:text-[#C5A393] px-2 block">
-                Orders &amp; Account
-              </span>
-              <a routerLink="/my-orders" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
-                <i class="fa-solid fa-truck-fast text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i>
-                <span>Track My Orders</span>
-              </a>
-              <a routerLink="/my-custom-hampers" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
-                <i class="fa-solid fa-box-open text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i>
-                <span>My Bespoke Hamper Requests</span>
-              </a>
-              <a *ngIf="(authService.currentUser$ | async)?.role === 'admin'" routerLink="/admin" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold text-amber-700 dark:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 transition">
-                <i class="fa-solid fa-gauge text-xs"></i>
-                <span>Store Management Portal</span>
-              </a>
-            </div>
+          <!-- Sign Out in Mobile Drawer -->
+          <div *ngIf="authService.currentUser$ | async" class="pt-2">
+            <button
+              type="button"
+              (click)="logout()"
+              class="w-full flex items-center justify-center gap-2 rounded-xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900/40 px-4 py-2.5 text-xs font-bold transition hover:bg-rose-100 cursor-pointer"
+            >
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Sign Out</span>
+            </button>
+          </div>
 
-            <!-- GROUP 3: CONCIERGE & WHATSAPP SUPPORT -->
-            <div class="space-y-1.5 pt-1 border-t border-[#D9C3B9]/30 dark:border-[#3D302A]">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-[#9D7B6C] dark:text-[#C5A393] px-2 block">
-                Help &amp; Concierge
-              </span>
-              <button
-                type="button"
-                (click)="openWhatsapp('Drawer'); closeMenu()"
-                class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition cursor-pointer"
-              >
-                <i class="fa-brands fa-whatsapp text-sm"></i>
-                <span>Chat on WhatsApp (+91 92849 05118)</span>
-              </button>
-              <a routerLink="/contact" (click)="closeMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-medium text-[#57251C] dark:text-[#F4F1ED] hover:bg-[#FAF7F2] dark:hover:bg-white/5 transition">
-                <i class="fa-solid fa-phone text-xs text-[#9C4738] dark:text-[#EB9D8E]"></i>
-                <span>Contact Studio</span>
-              </a>
-            </div>
-
-            <!-- GROUP 4: TRUST & LEGAL -->
-            <div class="space-y-1 pt-1 border-t border-[#D9C3B9]/30 dark:border-[#3D302A]">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-[#9D7B6C] dark:text-[#C5A393] px-2 block">
-                Trust &amp; Policies
-              </span>
-              <a routerLink="/terms" (click)="closeMenu()" class="flex items-center gap-2 px-3 py-2 rounded-xl text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] transition">
-                <i class="fa-solid fa-scale-balanced text-[11px]"></i>
-                <span>Terms &amp; Refund Policy</span>
-              </a>
-              <button
-                type="button"
-                (click)="cookieConsentService.openPreferences(); closeMenu()"
-                class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-[#7A6C5E] dark:text-[#C5A393] hover:text-[#9C4738] transition cursor-pointer"
-              >
-                <i class="fa-solid fa-shield-halved text-[11px]"></i>
-                <span>Cookie &amp; Privacy Settings</span>
-              </button>
-            </div>
-
-            <!-- PWA App Install in Drawer -->
-            <div *ngIf="!pwaService.isInstalled()" class="pt-1">
-              <button
-                type="button"
-                (click)="pwaService.promptInstall(); closeMenu()"
-                class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl border border-[#9C4738]/30 bg-[#9C4738]/10 text-[#9C4738] dark:text-[#EB9D8E] font-bold text-xs transition cursor-pointer"
-              >
-                <span class="flex items-center gap-2">
-                  <i class="fa-solid fa-download"></i>
-                  <span>Install App on Device</span>
-                </span>
-                <span class="text-[9px] bg-[#9C4738] text-white px-1.5 py-0.5 rounded">PWA</span>
-              </button>
-            </div>
-
-            <!-- Sign Out in Mobile Drawer -->
-            <div *ngIf="authService.currentUser$ | async" class="pt-2">
-              <button
-                type="button"
-                (click)="logout()"
-                class="w-full flex items-center justify-center gap-2 rounded-xl bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900/40 px-4 py-2.5 text-xs font-bold transition hover:bg-rose-100 cursor-pointer"
-              >
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Sign Out</span>
-              </button>
-            </div>
-
-          </nav>
-        </aside>
-      </header>
+        </nav>
+      </aside>
 
       <!-- Main Outlet Container -->
       <main class="w-full flex-grow flex flex-col min-h-0" [ngClass]="hideFooter ? 'pb-0 overflow-hidden' : 'pb-16 md:pb-0'">
