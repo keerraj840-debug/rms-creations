@@ -1,6 +1,6 @@
 {
   "name": "rms-creations",
-  "version": "1.6.31",
+  "version": "1.6.32",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -11,8 +11,7 @@
     "generate-env": "node scripts/generate-env.mjs",
     "backup-db": "node scripts/backup-db.mjs",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:rms-creations": "node dist/rms-creations/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "packageManager": "npm@10.9.8",
@@ -22,13 +21,9 @@
     "@angular/core": "^22.0.0",
     "@angular/forms": "^22.0.0",
     "@angular/platform-browser": "^22.0.0",
-    "@angular/platform-server": "^22.0.0",
     "@angular/router": "^22.0.0",
-    "@angular/ssr": "^22.0.7",
     "@fortawesome/fontawesome-free": "^7.3.1",
-    "@netlify/angular-runtime": "^4.0.0",
     "@supabase/supabase-js": "^2.117.2",
-    "express": "^5.1.0",
     "ngx-image-cropper": "^9.1.7",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
@@ -38,7 +33,6 @@
     "@angular/cli": "^22.0.7",
     "@angular/compiler-cli": "^22.0.0",
     "@tailwindcss/postcss": "^4.1.12",
-    "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
     "jsdom": "^28.0.0",
     "postcss": "^8.5.3",
