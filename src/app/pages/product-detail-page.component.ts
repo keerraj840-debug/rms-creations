@@ -270,7 +270,6 @@ export interface ProductDetail {
                         </button>
                       </div>
 
-                      <!-- STRICT BUSINESS RULE: ADD TO CART ONLY (No Direct-Order Bypass) -->
                       <button 
                         type="button" 
                         (click)="onAddToCart()"
@@ -278,6 +277,16 @@ export interface ProductDetail {
                       >
                         <i class="fa-solid fa-bag-shopping text-base"></i>
                         <span>{{ cartItemQty > 0 ? ('Add (' + quantity + ' more) — ₹' + (product.price * quantity)) : ('Add ' + (quantity > 1 ? (quantity + ' Items') : 'to Cart') + ' — ₹' + (product.price * quantity)) }}</span>
+                      </button>
+
+                      <button 
+                        type="button" 
+                        (click)="inquireOnWhatsApp()"
+                        class="min-h-[48px] py-3.5 px-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 border border-emerald-600/30 font-bold text-xs sm:text-sm shadow-xs active:scale-98 transition flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
+                        title="Chat with RMS Creations on WhatsApp for custom orders or instant confirmation"
+                      >
+                        <i class="fa-brands fa-whatsapp text-lg text-emerald-600 dark:text-emerald-400"></i>
+                        <span>Order on WhatsApp</span>
                       </button>
 
                     </div>
@@ -379,6 +388,17 @@ export interface ProductDetail {
             >
               <i class="fa-solid fa-bag-shopping text-xs"></i>
               <span>{{ cartItemQty > 0 ? ('Add (' + quantity + ')') : 'Add to Cart' }}</span>
+            </button>
+
+            <!-- 1-Tap WhatsApp Mobile Action -->
+            <button
+              type="button"
+              (click)="inquireOnWhatsApp()"
+              class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-600/40 flex items-center justify-center text-lg active:scale-90 transition cursor-pointer shrink-0"
+              title="Chat or order on WhatsApp"
+              aria-label="Chat or order on WhatsApp"
+            >
+              <i class="fa-brands fa-whatsapp"></i>
             </button>
           </div>
         </aside>
@@ -659,6 +679,16 @@ export class ProductDetailPageComponent implements OnInit, OnDestroy {
 
   openImageModal() {
     this.showImageModal = true;
+  }
+
+  inquireOnWhatsApp(): void {
+    if (!this.product) return;
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : `https://rmsgifthampers.com/product/${this.product.id}`;
+    const text = `Hello RMS Creations! 👋\nI am interested in ordering / inquiring about:\n🎁 *${this.product.name}*\n💰 Price: ₹${this.product.price} (Qty: ${this.quantity})\n🔗 Link: ${currentUrl}\nCan you please share availability and delivery timeframe?`;
+    const waUrl = `https://wa.me/919284905118?text=${encodeURIComponent(text)}`;
+    if (typeof window !== 'undefined') {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }
   }
 
   ngOnDestroy() {

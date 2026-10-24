@@ -506,6 +506,69 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
           </div>
         </section>
 
+        <!-- 6. FREQUENTLY ASKED QUESTIONS (AEO & LOCAL SEO HUB) -->
+        <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+          <div class="text-center space-y-2 mb-8">
+            <span class="text-[11px] font-bold tracking-widest uppercase text-[#9C4738] dark:text-[#EB9D8E]">
+              Everything You Need to Know
+            </span>
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#57251C] dark:text-[#F4F1ED]">
+              Frequently Asked Questions
+            </h2>
+            <p class="text-xs sm:text-sm text-[#7A6C5E] dark:text-[#C5A393] max-w-xl mx-auto">
+              Got questions about our hampers, customization, delivery in Mumbai, or bulk orders? Find quick answers below.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <div
+              *ngFor="let faq of faqs; let i = index"
+              class="rounded-2xl border border-[#EADFD2] dark:border-white/10 bg-white dark:bg-[#1E1916] overflow-hidden transition-all duration-200 shadow-2xs hover:border-[#9C4738]/40"
+            >
+              <button
+                type="button"
+                (click)="toggleFaq(i)"
+                class="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
+                [attr.aria-expanded]="openFaqIndex === i"
+              >
+                <h3 class="font-serif text-sm sm:text-base font-bold text-[#57251C] dark:text-[#F4F1ED] leading-snug">
+                  {{ faq.question }}
+                </h3>
+                <span
+                  class="w-7 h-7 rounded-full bg-[#FAF7F2] dark:bg-white/5 text-[#9C4738] dark:text-[#EB9D8E] flex items-center justify-center text-xs font-bold shrink-0 transition-transform duration-200"
+                  [ngClass]="openFaqIndex === i ? 'rotate-180 bg-[#9C4738] text-white dark:bg-[#EB9D8E] dark:text-[#57251C]' : ''"
+                >
+                  <i class="fa-solid fa-chevron-down"></i>
+                </span>
+              </button>
+
+              <div
+                *ngIf="openFaqIndex === i"
+                class="px-4 pb-4 sm:px-5 sm:pb-5 text-xs sm:text-sm text-[#57251C]/80 dark:text-[#D9C3B9] leading-relaxed border-t border-[#EADFD2]/50 dark:border-white/5 pt-3"
+              >
+                <p>{{ faq.answer }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Need More Help Banner -->
+          <div class="mt-8 text-center bg-[#FAF7F2] dark:bg-white/5 rounded-2xl p-4 sm:p-5 border border-[#EADFD2] dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="text-left">
+              <h4 class="font-bold text-xs sm:text-sm text-[#57251C] dark:text-[#F4F1ED]">Have a custom request or specific date in mind?</h4>
+              <p class="text-[11px] text-[#7A6C5E] dark:text-[#C5A393]">Our hamper specialists in Vashi are always ready to help you curate the perfect gift.</p>
+            </div>
+            <a
+              href="https://wa.me/919284905118?text=Hello%20RMS%20Creations,%20I%20have%20a%20question%20about%20a%20gift%20hamper"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shrink-0"
+            >
+              <i class="fa-brands fa-whatsapp text-sm"></i>
+              <span>Ask on WhatsApp</span>
+            </a>
+          </div>
+        </section>
+
       </div>
     </app-site-layout>
   `
@@ -538,6 +601,40 @@ export class HomePageComponent implements OnInit, OnDestroy {
     route: string;
   }[] = [];
 
+  openFaqIndex: number | null = 0;
+
+  readonly faqs = [
+    {
+      question: 'How do I build a custom gift hamper with RMS Creations?',
+      answer: 'You can use our interactive Build Hamper Studio to handpick dry fruits, sweets, pooja diyas, and greeting cards. See live pricing and checkout directly online or order via WhatsApp.'
+    },
+    {
+      question: 'Where does RMS Creations deliver in India?',
+      answer: 'We deliver handcrafted gift hampers across Navi Mumbai, Mumbai, Thane, Maharashtra, and pan-India with secure partitioned protective packaging to ensure your goodies arrive fresh and undamaged.'
+    },
+    {
+      question: 'How quickly can you deliver urgent hamper orders in Navi Mumbai & Mumbai?',
+      answer: 'For Navi Mumbai (Vashi, Nerul, Belapur, Kharghar, Panvel) and Mumbai, same-day or next-day express delivery is available for in-stock hampers and festive boxes. Contact us on WhatsApp for rush timelines.'
+    },
+    {
+      question: 'Can I add a personalized greeting card or message to my hamper?',
+      answer: 'Yes! A complimentary customized greeting card can be included with every hamper. Simply enter your gift message during checkout or share it with us on WhatsApp.'
+    },
+    {
+      question: 'Do you offer bulk discounts for corporate gifting and wedding return gifts?',
+      answer: 'Yes, we specialize in bulk wedding return gifts, Diwali corporate hampers, and event favors with custom branding ribbons and tiered wholesale pricing starting from ₹99 per kit.'
+    },
+    {
+      question: 'What payment methods do you accept?',
+      answer: 'We accept instant UPI (Google Pay, PhonePe, Paytm), Net Banking, credit/debit cards, and Cash on Delivery (COD).'
+    }
+  ];
+
+  toggleFaq(index: number): void {
+    this.openFaqIndex = this.openFaqIndex === index ? null : index;
+    this.cdr.markForCheck();
+  }
+
   ngOnInit() {
     this.startAutoRotate();
     this.seo.setPageMetadata({
@@ -550,24 +647,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
       { name: 'Home', url: '/' }
     ]);
 
-    this.seo.setFaqSchema([
-      {
-        question: 'How do I build a custom gift hamper with RMS Creations?',
-        answer: 'You can use our interactive Build Hamper Studio to handpick dry fruits, sweets, pooja diyas, and greeting cards. See live pricing and checkout directly online or order via WhatsApp.'
-      },
-      {
-        question: 'Where does RMS Creations deliver in India?',
-        answer: 'We deliver handcrafted gift hampers across Navi Mumbai, Mumbai, Thane, Maharashtra, and pan-India with secure partitioned protective packaging to ensure your goodies arrive fresh and undamaged.'
-      },
-      {
-        question: 'Can I add a personalized gift message to my order?',
-        answer: 'Yes! A personalized greeting card can be included with your order. You can enter your message during checkout or inside the Hamper Studio.'
-      },
-      {
-        question: 'What payment methods do you accept?',
-        answer: 'We accept UPI (Google Pay, PhonePe, Paytm), Net Banking, major Credit/Debit cards, and Cash on Delivery (COD).'
-      }
-    ]);
+    this.seo.setFaqSchema(this.faqs);
 
     this.loadLiveBanners();
     this.loadBestsellers();

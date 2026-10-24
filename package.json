@@ -1,10 +1,10 @@
 {
   "name": "rms-creations",
-  "version": "1.6.27",
+  "version": "1.6.30",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "prebuild": "node scripts/generate-env.mjs && node scripts/bump-version.mjs",
+    "prebuild": "node scripts/generate-env.mjs && node scripts/generate-sitemap.mjs && node scripts/bump-version.mjs",
     "build": "ng build",
     "bump-version": "node scripts/bump-version.mjs",
     "sync-version": "node scripts/bump-version.mjs --sync-only",
