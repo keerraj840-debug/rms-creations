@@ -291,6 +291,29 @@ export interface ProductDetail {
 
                     </div>
 
+                    <!-- Share Strip -->
+                    <div class="flex items-center gap-2 pt-1">
+                      <span class="text-[10px] text-[#7A6C5E] dark:text-[#C5A393] font-medium">Share this hamper:</span>
+                      <button
+                        type="button"
+                        (click)="shareOnWhatsApp()"
+                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-600/20 text-emerald-700 dark:text-emerald-400 text-[11px] font-bold hover:bg-emerald-100 transition cursor-pointer"
+                        title="Share this product on WhatsApp"
+                      >
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>WhatsApp</span>
+                      </button>
+                      <button
+                        type="button"
+                        (click)="copyProductLink()"
+                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAF7F2] dark:bg-white/5 border border-[#EADFD2] dark:border-white/10 text-[#7A6C5E] dark:text-[#C5A393] text-[11px] font-bold hover:border-[#9C4738]/50 transition cursor-pointer"
+                        title="Copy product link"
+                      >
+                        <i class="fa-solid fa-link text-xs"></i>
+                        <span>{{ linkCopied ? 'Copied!' : 'Copy Link' }}</span>
+                      </button>
+                    </div>
+
                     <!-- In-cart notification badge -->
                     <div *ngIf="cartItemQty > 0" class="flex items-center gap-2 text-xs font-bold text-[#9C4738] dark:text-[#EB9D8E] bg-[#9C4738]/10 dark:bg-[#EB9D8E]/10 p-2.5 rounded-xl border border-[#9C4738]/20">
                       <i class="fa-solid fa-circle-check text-emerald-600"></i>
@@ -435,6 +458,8 @@ export class ProductDetailPageComponent implements OnInit, OnDestroy {
   quantity = 1;
   personalizationNote = '';
   showImageModal = false;
+  linkCopied = false;
+
 
   get totalInclusionPieces(): number {
     return this.inclusionItems.reduce((acc, it) => acc + (it.quantity || 1), 0);
@@ -689,6 +714,37 @@ export class ProductDetailPageComponent implements OnInit, OnDestroy {
     if (typeof window !== 'undefined') {
       window.open(waUrl, '_blank', 'noopener,noreferrer');
     }
+  }
+
+  shareOnWhatsApp(): void {
+    if (!this.product) return;
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : `https://rmsgifthampers.com/product/${this.product.id}`;
+    const text = `🎁 Check out this beautiful gift hamper from RMS Creations!\n*${this.product.name}* — only ₹${this.product.price}\n${currentUrl}\nOrder online or chat with them on WhatsApp!`;
+    const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    if (typeof window !== 'undefined') {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }
+  }
+
+  copyProductLink(): void {
+    if (typeof window === 'undefined') return;
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      this.linkCopied = true;
+      this.cdr.markForCheck();
+      setTimeout(() => { this.linkCopied = false; this.cdr.markForCheck(); }, 2000);
+    }).catch(() => {
+      // Fallback for older browsers
+      const el = document.createElement('input');
+      el.value = url;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      this.linkCopied = true;
+      this.cdr.markForCheck();
+      setTimeout(() => { this.linkCopied = false; this.cdr.markForCheck(); }, 2000);
+    });
   }
 
   ngOnDestroy() {

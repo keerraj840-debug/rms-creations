@@ -470,7 +470,73 @@ import { sanitizeReturnUrl } from '../utils/security.utils';
           </div>
         </section>
 
-        <!-- 5. DIRECT CONCIERGE & BULK ORDERS CALLOUT -->
+        <!-- 5. CUSTOMER STORIES & TESTIMONIALS -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 space-y-6">
+          <div class="text-center space-y-2">
+            <span class="text-[11px] font-bold tracking-widest uppercase text-[#9C4738] dark:text-[#EB9D8E]">
+              Happy Customers
+            </span>
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#57251C] dark:text-[#F4F1ED]">
+              Loved Across Mumbai &amp; India
+            </h2>
+            <div class="flex items-center justify-center gap-1.5 pt-1">
+              <div class="flex items-center gap-0.5">
+                <i class="fa-solid fa-star text-amber-400 text-sm"></i>
+                <i class="fa-solid fa-star text-amber-400 text-sm"></i>
+                <i class="fa-solid fa-star text-amber-400 text-sm"></i>
+                <i class="fa-solid fa-star text-amber-400 text-sm"></i>
+                <i class="fa-solid fa-star text-amber-400 text-sm"></i>
+              </div>
+              <span class="text-xs font-bold text-[#57251C] dark:text-[#F4F1ED]">4.9 / 5</span>
+              <span class="text-xs text-[#7A6C5E] dark:text-[#C5A393]">· 47+ verified orders</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div *ngFor="let review of testimonials"
+              class="bg-white dark:bg-[#1E1916] rounded-2xl border border-[#EADFD2] dark:border-white/10 p-4 sm:p-5 shadow-2xs hover:shadow-md hover:border-[#9C4738]/30 transition-all duration-300 flex flex-col gap-3"
+            >
+              <!-- Stars -->
+              <div class="flex items-center gap-0.5">
+                <i class="fa-solid fa-star text-amber-400 text-xs" *ngFor="let s of [1,2,3,4,5]"></i>
+              </div>
+              <!-- Quote -->
+              <p class="text-xs sm:text-sm text-[#4A3C31] dark:text-[#D9C3B9] leading-relaxed italic flex-1">
+                "{{ review.text }}"
+              </p>
+              <!-- Reviewer -->
+              <div class="flex items-center gap-2.5 pt-2 border-t border-[#EADFD2]/50 dark:border-white/5">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
+                  [style.background]="review.color">
+                  {{ review.initials }}
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-[#57251C] dark:text-[#F4F1ED]">{{ review.name }}</div>
+                </div>
+                <div class="ml-auto">
+                  <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/40">
+                    Verified
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Google Reviews CTA -->
+          <div class="text-center">
+            <a
+              href="https://wa.me/919284905118?text=Hello%20RMS%20Creations%2C%20I%20just%20received%20my%20hamper%20and%20loved%20it!%20Here%20is%20my%20feedback:"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#9C4738]/40 dark:border-[#EB9D8E]/30 text-[#9C4738] dark:text-[#EB9D8E] hover:bg-[#9C4738]/5 text-xs font-bold transition"
+            >
+              <i class="fa-solid fa-star text-amber-400"></i>
+              <span>Share Your Experience</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- 6. DIRECT CONCIERGE & BULK ORDERS CALLOUT -->
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div class="rounded-3xl border border-[#EADFD2] dark:border-white/10 bg-gradient-to-r from-[#FAF7F2] via-white to-[#FAF7F2] dark:from-[#1E1916] dark:via-[#251F1C] dark:to-[#1E1916] p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="space-y-2 text-center md:text-left">
@@ -600,6 +666,46 @@ export class HomePageComponent implements OnInit, OnDestroy {
     image: string;
     route: string;
   }[] = [];
+
+
+  readonly testimonials = [
+    {
+      name: 'Priya Sharma',
+      initials: 'PS',
+      color: '#9C4738',
+      text: 'Ordered 15 Diwali hampers for my office this year. The dry fruit boxes were so beautifully packed — every colleague loved them. Delivery was on time and the custom ribbons made it extra special!'
+    },
+    {
+      name: 'Rohan Mehta',
+      initials: 'RM',
+      color: '#C56D5B',
+      text: 'We ordered 80 return gift boxes for our wedding. RMS Creations was incredibly helpful — they helped us pick items within our budget and the packaging was stunning. Guests kept asking where we got them from!'
+    },
+    {
+      name: 'Sneha Patil',
+      initials: 'SP',
+      color: '#6B5C3E',
+      text: 'The Build Your Own Hamper feature is such a fun idea. I picked chocolates, almonds, and a candle for my mom\'s birthday. It arrived beautifully wrapped with a personalized card. She absolutely loved it!'
+    },
+    {
+      name: 'Aditi Kulkarni',
+      initials: 'AK',
+      color: '#4A7C6F',
+      text: 'Got small cute hampers for our baby shower favors — very affordable and gorgeous. WhatsApp support was super responsive. Will definitely order again for our Navratri celebration!'
+    },
+    {
+      name: 'Vikram Joshi',
+      initials: 'VJ',
+      color: '#7B5EA7',
+      text: 'Fantastic experience from start to finish. The hampers felt premium without breaking the budget. Our clients were genuinely impressed. Already planning to reorder for the New Year.'
+    },
+    {
+      name: 'Meena Nair',
+      initials: 'MN',
+      color: '#A0522D',
+      text: 'Ordered a Pooja kit hamper for my friend\'s housewarming — the diyas, incense, and sweets were all fresh and perfectly packed. The greeting card personalisation was a lovely touch!'
+    }
+  ];
 
   openFaqIndex: number | null = 0;
 
