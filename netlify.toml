@@ -1,3 +1,6 @@
+[[plugins]]
+  package = "@netlify/angular-runtime"
+
 [build]
   publish = "dist/rms-creations/browser"
   command = "npm run build"
